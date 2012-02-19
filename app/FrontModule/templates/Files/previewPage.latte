@@ -1,0 +1,18 @@
+<p>Name: {$file->filename}.{$file->suffix} ({$file->filesize|bytes})
+<p>Description: {$file->description}
+
+<p>Image preview: ({$file->dimensions})<br>
+<img src="{$file->previewLink()}">
+
+
+
+{if $pdf2xml}
+	<p>Text preview:<br>
+	{foreach $pdf2xml as $page}
+		<div style="position:relative;">
+		{foreach $page[1] as $text}
+			<div style="position:absolute;left:{$text[l]};top:{$text[t]}">{$text}</div>
+		{/foreach}
+		</div>
+	{/foreach}
+{/if}

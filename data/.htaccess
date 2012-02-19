@@ -1,0 +1,3 @@
+<Files config.neon>
+	Deny from all
+</Files>

@@ -1,0 +1,31 @@
+{block #content}
+<h2>Přesměrování</h2>
+
+{snippet redirecttable}
+{form redirectEditForm}
+<table>
+	<tr><th>Stará adresa <th>Nová adresa <th>
+	{foreach $redirects as $r}
+		{if $editid == $r['id']}
+			<tr><td>{input oldurl} <td>{input newurl} <td>{input submit1}
+		{else}
+			<tr><td>{$r['oldurl']} <td>{$r['newurl']} <td><a n:href="edit! $r['id']" class="ajax">upravit</a> <a n:href="delete! $r['id']" class="ajax del">×</a>
+		{/if}
+	{/foreach}
+</table>
+{/form}
+
+<h4>Přidat nové</h4>
+{control redirectAddForm}
+{*
+	{form redirectAddForm}
+	<tr><td>{input oldurl} <td>{input newurl} <td>{input submit1}
+	{/form}
+*}
+
+
+{/snippet}
+
+<p>Pozn: nová adresa může obsahovat #&lt;id-stránky&gt;-&lt;jazyk&gt;
+
+

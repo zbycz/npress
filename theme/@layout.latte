@@ -1,0 +1,147 @@
+{layout $npLayoutFile}
+
+{block layout_stylesheet}
+	<link rel="stylesheet" type="text/css" href="{$basePath}/theme/style.css" media="all" />
+{/block}
+
+{block layout_js}{/block}
+
+			{* foreach $langs as $l=>$txt}
+				<a n:href="this lang=>$l" n:class="$lang==$l?bold" class="{$l}"><span></span>{$txt}</a>
+				{sep}<span class="hidden"> | </span>{/sep}
+			{/foreach *}
+
+{block layout_body}
+<div id="wrapper">
+	<div class="langswitch">
+			{foreach $langs as $l=>$txt}
+				<a href="{$presenter->langSwitch($l)}" n:class="$lang==$l?bold" class="{$l}"><span></span>{$txt}</a>
+				{sep} | {/sep}
+			{/foreach}
+	</div>
+
+
+	<div id="logo">
+		<h1><a n:href="Pages: 1">{$config[webTitle]}</a></h1>
+		<p><em> template design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a></em></p>
+	</div>
+	<hr />
+	<!-- end #logo -->
+	<div id="header">
+		<div id="menu">
+		
+			<ul>
+				{foreach $pages->getChildNodes() as $row}
+					<li n:class='in_array($row, $crumbs) ? current_page_item'>
+							<a href='{$row->link()}' n:class="$iterator->first ? first">{$row->name}</a>
+					</li>
+				{/foreach}
+			</ul>		
+		<!--
+			<ul>
+				<li><a href="#" class="first">Home</a></li>
+				<li class="current_page_item"><a href="#">Blog</a></li>
+				<li><a href="#">Photos</a></li>
+				<li><a href="#">About</a></li>
+				<li><a href="#">Links</a></li>
+				<li><a href="#">Contact</a></li>
+			</ul>
+		-->	
+		
+		</div>
+		<!-- end #menu -->
+		<div id="search">
+			<form method="get" action="" onsubmit="return false">
+				<fieldset>
+				<input type="text" name="q" id="search-text" size="15" />
+				<input type="submit" id="search-submit" value="GO" />
+				</fieldset>
+			</form>
+		</div>
+		<!-- end #search -->
+	</div>
+	<!-- end #header -->
+	<!-- end #header-wrapper -->
+	<div id="page">
+	<div id="page-bgtop">
+		<div id="content">
+	
+		{include #content}
+		
+		<!-- 
+			<div class="post">
+				<h2 class="title"><a href="#">Welcome to Condition </a></h2>
+				<p class="meta">Sunday, April 26, 2009 7:27 AM Posted by <a href="#">Someone</a></p>
+				<div class="entry">
+					<p>This is <strong>Condition </strong>, a free, fully standards-compliant CSS template designed by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>, released for free under the <a href="http://creativecommons.org/licenses/by/2.5/">Creative Commons Attribution 2.5</a> license.  You're free to use this template for anything as long as you link back to <a href="http://www.freecsstemplates.org/">my site</a>. Enjoy :)</p>
+					<p>Sed lacus. Donec lectus. Nullam pretium nibh ut turpis. Nam bibendum. In nulla tortor, elementum ipsum. Proin imperdiet est. Phasellus dapibus semper urna. Pellentesque ornare, orci in felis. Donec ut ante. In id eros. Suspendisse lacus turpis, cursus egestas at sem.Sed lacus. </p>
+				</div>
+			</div>
+		-->
+			
+		</div>
+		<!-- end #content -->
+		<div id="sidebar">
+			<ul>
+				<li n:if="isset($crumbs[0]) && $crumbs[0]->hasChildNodes()">
+					{var $pages = $crumbs[0]}
+					<h2>Navigace</h2>
+					<ul>
+					{block #TreeView|strip}
+						{foreach $pages->getChildNodes() as $row}
+							<li n:class='$presenter->isCurrent($row->id) ? current'>
+									<a href='{$row->link()}'>{$row->name}</a>
+								{if !$row->getMeta('.category')}
+									<ul>{include #TreeView, 'pages' => $row}</ul>
+								{/if}
+							</li>
+						{/foreach}
+					{/block}
+					</ul>
+				</li>
+				<li>
+					<h2>Aliquam tempus</h2>
+					<p>Mauris vitae nisl nec metus placerat perdiet est. Phasellus dapibus semper urna. Pellentesque ornare, orci in consectetuer hendrerit, volutpat.</p>
+				</li>
+				<li>
+					<h2>Pellenteque ornare </h2>
+					<ul>
+						<li><a href="#"></a><a href="#">Nec metus sed donec</a></li>
+						<li><a href="#">Magna lacus bibendum mauris</a></li>
+						<li><a href="#">Velit semper nisi molestie</a></li>
+						<li><a href="#">Eget tempor eget nonummy</a></li>
+						<li><a href="#">Nec metus sed donec</a></li>
+					</ul>
+				</li>
+				<li>
+					<h2>Turpis nulla</h2>
+					<ul>
+						<li><a href="#"></a><a href="#">Nec metus sed donec</a></li>
+						<li><a href="#">Magna lacus bibendum mauris</a></li>
+						<li><a href="#">Velit semper nisi molestie</a></li>
+						<li><a href="#">Eget tempor eget nonummy</a></li>
+						<li><a href="#">Nec metus sed donec</a></li>
+						<li><a href="#"></a><a href="#">Nec metus sed donec</a></li>
+						<li><a href="#">Magna lacus bibendum mauris</a></li>
+						<li><a href="#">Velit semper nisi molestie</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<!-- end #sidebar -->
+		<div style="clear: both;">&nbsp;</div>
+	</div>
+	</div>
+	<!-- end #page -->
+	<div id="footer-bgcontent">
+	<div id="footer">
+		<p>Copyright (c) 2008 Sitename.com. All rights reserved. Design by <a href="http://www.freecsstemplates.org/">Free CSS Templates</a>.</p>
+	</div>
+	</div>
+	<!-- end #footer -->
+</div>
+
+
+
+
+

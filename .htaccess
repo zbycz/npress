@@ -1,0 +1,31 @@
+Options -Indexes
+
+#ErrorDocument 403 /index.php
+#ErrorDocument 404 /index.php  
+#TODO works only in root of domain
+
+
+# mod_rewrite
+RewriteEngine On
+RewriteBase /
+
+# Nette framework handles everything
+RewriteRule !^(favicon\.ico|index\.php|static/.+|data/.+|theme/.+)$ index.php [L]
+
+# Cached thumbnails served by apache
+RewriteCond %{REQUEST_URI} /data/thumbs/([^.]+)(\.[^.]+)?\.(jpg|jpeg|png|gif)$
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteRule .* index.php [NE,L]
+
+
+### php settings ##
+php_value default_charset utf-8
+php_value date.timezone Europe/Prague
+php_flag magic_quotes_gpc Off
+php_flag magic_quotes_runtime Off
+
+php_flag file_uploads On
+php_value upload_max_filesize 100M
+php_value post_max_size 100M
+##php_value upload_tmp_dir temporarydir
+

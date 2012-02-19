@@ -1,0 +1,16 @@
+
+
+{block content}
+
+<h2>Koš stránek</h2>
+
+{if !count($deletedPages)}
+	<p>Žádné smazané stránky
+{else}
+	<ul>
+	{foreach $deletedPages as $r}
+		<li><a n:href="edit $r->id" class="likeh3">{$r->name}</a>  (smazáno: {$r->getMeta('deleted')})
+	{/foreach}
+	</ul>
+{/if}
+

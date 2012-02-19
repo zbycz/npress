@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+
+	<meta name="description" content="">
+	<meta name="robots" content="{$robots}" n:ifset="$robots">
+	<meta name="generator" content="{!NPRESS|striptags}">
+
+	<title>{$config[webTitle]} &ndash; Administrace</title>
+
+	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/static/screen.css" type="text/css">
+	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
+	<script>document.write('<style>.jshidden { display:none }</style>')</script>
+
+	{if $config[preferCdnJquery]}
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	<script>window.jQuery || document.write('<script src="{!$basePath}/static/js/jquery.min.js" type="text/javascript"><\/script>');</script>
+	{else}
+	<script src="{$basePath}/static/js/jquery.min.js" type="text/javascript"></script>
+	{/if}
+
+	{block head}{/block}
+</head>
+
+<body>
+	<div id="hlavicka">
+		<div class='fright'><span id='ajax-spinner'></span>
+			Přihlášen admin | <a n:href="Admin:logout">odhlásit</a></div>
+		<h1><a n:href="Admin:default" class='npresslogo'><span>n</span>Press</a> <a n:href=":Front:Pages: lang=>$lang">{$config[webTitle]} <small>web &raquo;</small></a></h1>
+		
+		<div id='flashes'><div class='box'>
+		{snippet flashes}
+			<div n:foreach="$flashes as $flash" class="flash">
+				{$flash->message}
+				<a href='{$flash->undolink}' n:if="isset($flash->undolink)" class="ajax">vzít zpět</a>
+			</div>
+			<script>window.setTimeout(function(){ $('.flash').fadeOut(8000); }, 5000);</script> {* za 5sec už je $ inicializován *}
+		{/snippet}
+		</div></div>
+		
+	</div>
+
+
+
+	<div id="menu" data-afterUpdate="menu_reordering">
+		<p class="mover"><label for='js-menu-reordering'><span>přesouvání</span></label>
+										 <input type='checkbox' id='js-menu-reordering'>
+		<p><a n:href="Pages:add $presenter->getParam('id_page')" title="přidat podstránku">+ přidat</a>
+		
+		{snippet menu}
+			<ul class="ui-sortable-disabled" id="js-menu" data-pagesortLink="{link Admin:pagesort}">
+			{block #TreeView}
+				{foreach $pages->getChildNodes() as $row}
+					<li id='menuid-{$row->id}'>
+						<div n:class='!$row[published] ? unpublished, $presenter->isCurrent($row->id) ? current'>
+							<a n:href='Pages:edit $row->id'>{$row->name}</a>
+						</div>
+						{if !$row->getMeta('.category')}
+							<ul n:class="!in_array($row, $crumbs) ? jshidden">
+								{include #TreeView, 'pages' => $row}
+							</ul>
+						{/if}
+					</li>
+				{/foreach}
+			{/block}
+			</ul>
+		{/snippet}
+
+		<hr>
+		<ul>
+			<li><a n:href="Pages:trash">Koš stránek</a>
+			{* <li><a>Nastavení</a> *}
+			<li><a n:href="Redirect:">Přesměrování</a>
+			<li n:if="count($langs)>1"><a n:href="Translations:">Překlady</a></li>
+		</ul>
+		<hr>
+		<p><small>CMS nPress {!NPRESS}</small>
+	</div>
+	
+	<div id="obsah">
+		{block langSwitch}
+		<div class="fright" n:if="count($langs)>1">
+			{foreach $langs as $l=>$txt}
+				<a n:href="this lang=>$l" n:class="$lang==$l?bold">{$l}</a>
+			{/foreach}
+		</div>
+		{/block}
+
+		{include #content}
+
+	</div>
+
+
+
+<!-- npress frontend javascripts -->
+{include $frontjslatte}
+
+
+<!-- npress admin javascripts -->
+<script type="text/javascript" src="{$basePath}/static/js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.dump.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.nette.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.ajaxfileupload.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.ajaxform.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.cookie.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/jquery.ui.nestedSortable.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/admin.js"></script>
+
+<!-- simplemodal (needed by wysiwyg) -->
+<link rel="stylesheet" href="{$basePath}/static/jwysiwyg/lib/jquery.simplemodal.css" type="text/css"/>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/lib/jquery.simplemodal.js"></script>
+
+<!-- wysiwyg -->
+<link rel="stylesheet" href="{$basePath}/static/jwysiwyg/jquery.wysiwyg.old-school.css" type="text/css"/>
+<link rel="stylesheet" href="{$basePath}/static/jwysiwyg/jquery.wysiwyg.modal.css" type="text/css"/>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/plugins/wysiwyg.i18n.js"></script>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/i18n/lang.cs.js"></script>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/controls/wysiwyg.image.js"></script>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/controls/wysiwyg.link.js"></script>
+<script type="text/javascript" src="{$basePath}/static/jwysiwyg/controls/wysiwyg.table.js"></script>
+
+<!-- uploadify -->
+<script type="text/javascript" src="{$basePath}/static/uploadify/swfobject.js"></script>
+<script type="text/javascript" src="{$basePath}/static/uploadify/jquery.uploadify.v2.1.4.js"></script>
+<link rel="stylesheet" href="{$basePath}/static/uploadify/uploadify.css" type="text/css" />
+
+
+
+</body>
+</html>

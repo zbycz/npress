@@ -1,0 +1,65 @@
+
+
+<div id="primary_block">
+
+
+<div id="pb-right-column">
+	<!-- product img-->
+	<div id="image-block">
+		<a href="{$page->getFiles(0)->previewLink('600')}">
+			<img src="{$page->getFiles(0)->previewLink('300')}" title="{$page->name}" alt="Image" id="bigpic"></a>
+	</div>
+	<!-- thumbnails -->
+	<div id="views_block">
+		<div id="thumbs_list">
+			<ul style="width: 160px" id="thumbs_list_frame">
+			{foreach $page->getFiles() as $f}
+				<li><a href="{$f->previewLink('600')}" class="lightbox">
+						<img src="{$f->previewLink('120')}" alt="image {$iterations+1}"></a></li>
+			{/foreach}
+				{* <li id="thumbnail_667">
+					<a href="/store/24-667-thickbox/icao-presidenziale.jpg" rel="other-views" class="thickbox " title="Icaro presidenziale">
+						<img id="thumb_667" src="/store/24-667-medium/icao-presidenziale.jpg" alt="Icaro presidenziale" height="80" width="80"></a></li>
+					*}
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div id="pb-left-column">
+	<div id="short_description_block">
+		<div id="short_description_content" class="rte align_justify">
+
+			{if !$page[published]}
+				<p class="zprava2">Tato nabídka již není platná.</p>
+			{/if}
+			
+			{!$page->content}
+
+		</div>
+	</div>
+
+	<!-- add to cart form-->
+	<form id="buy_block">
+		<!-- prices -->
+		<p class="price">
+			<br>
+					{if $page->getMeta('price') > 0}
+					<span class="our_price_display">
+						€ {$page->getMeta('price')}
+					</span>
+		</p>
+					<br>
+					<p style="color:#777;text-align:right">{_'orientační cena'}: {$page->getMeta('price') * 25|number:0:',':' '} Kč</p>
+
+					{else}
+						{_'Cena na dotaz'}
+					{/if}
+			<br>
+	</form>
+</div>
+
+
+
+</div><!-- /primary-block -->
+

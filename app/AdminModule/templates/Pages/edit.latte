@@ -1,0 +1,221 @@
+{block #langSwitch}
+	<div class="fright" n:if="count($langs)>1">
+		{foreach $langs as $l=>$txt}
+			{if $p=$page->lang($l)}
+				<a n:href="this lang=>$l" n:class="$lang==$l? bold" title="{$p->name}">{$l}</a>
+			{else}
+				<a n:href="this#newpage lang=>$l, from=>$lang" title="vytvořit jazykovou mutaci">{$l}*</a>
+			{/if}
+		{/foreach}
+	</div>
+{/block}
+
+{block #content}
+
+{if $x=$page->getParent()->getMeta('.category')}
+	<p class="fright">
+		<a n:href='Pages:edit $page->getParent()->id' class='small'>složka {$page->getParent()->name}</a>
+	</p>
+	<h2>Editace {if $x=='shop'}produktu{else}příspěvku{/if}</h2>
+{elseif $x=$page->getMeta('.category')}
+	<h2>Editace {if $x=='shop'}kategorie{else}složky příspěvků{/if}</h2>
+{else}
+	<h2>Editace stránky</h2>
+{/if}
+
+{snippet editform_deleted}
+	{if $page->data[deleted]}
+		<p class="zprava">Tato stránka je smazaná, ale můžete to <a n:href="deletePage! 1" class='del ajax'>vzít zpět</a>.</p>
+
+		{var $living = $page->getFirstLivingParent()}
+		<p>Stránka bude obnovena do složky <a n:href="edit $living->id">{$living->name}</a>
+		{if $page->id_parent != $living->id} - původní složka je pravděpodobně smazaná{/if}
+
+		<div class="deletedOverlay"></div>
+	{/if}
+{/snippet}
+
+
+		
+{* Creating a new page from other language *}
+{ifset $fromPage}
+	<p><a href="#js-only" onclick="fill_headings({ heading: {$fromPage[heading]}, name: {$fromPage[name]}, seoname: {$fromPage[seoname]} });return false">
+			zkopírovat názvy z "{$fromPage->name}"</a> (#{$fromPage->lang}{$fromPage->id})
+{/ifset}
+
+<div class="editform">
+{form pageEditForm}
+	<table>
+	<tr class='heading'>
+		<th style="width:7em">{label heading /}:
+		<td>{input heading}
+	</tr>
+	<tr>
+		<th>{label name /}: 
+		<td class="small">{input name class=>inpwidth, placeholder=>'(použije se nadpis)'}
+			<noscript> prázdné pole automaticky zobrazuje nadpis</noscript>
+	</tr>
+	<tr class='inpwidth seoname' data-afterUpdate="editform_seoname_update">
+		<th>{label seoname /}: 
+	  {snippet editform_seoname td}
+			{$presenter['pageEditForm']['seoname']->control->placeholder('(automatická)')}
+			<a href="{$page->link()}">zobrazit na webu: <small>{$page->link()|truncate:40}</small></a>
+		{/snippet}
+	</tr>
+	<tr>
+		<th>{label published /}:
+		<td>{input published}
+	</tr>
+	{? $presenter->triggerEvent_filter('filterPageEditForm_render', $_form)}
+	</table>
+
+	<div id="js-linkhelp" class="hidden">
+		<p>Adresa musí být jedinečná v rámci webu (jazyka), např.: <b>/kontakt</b>
+		<p>Pokud nezačíná lomítkem '/', jedná se pouze o přesměrování, např.:
+			<br><b>http://nette.org</b> - menu odkazuje na jiný web
+			<br><b>#-p27-#</b> - menu odkazuje na jinou stránku, s ID#27
+			<br><b>#-f191-#</b> - menu odkazuje na stažení souboru, s ID#191
+	</div>
+
+	<div id="js-texteditor">
+	{if $page->getMeta('.category') || $page->getMeta('.hideTextInput')}
+		<p>{label text /}: <a href="#" onclick="$(this).parent().next().toggle(200);return false">zobrazit editační pole</a>
+		<div class="jshidden">
+			 {input text rows=>10}
+		</div>
+	{else}
+		<p>{label text /}:<br>
+			 {input text rows=>10}
+	{/if}
+	</div>
+	
+	<p class="fright" style="margin-right:1.5em">Odstavec: Enter, nový řádek: Shift+Enter, uložit: Ctrl+S
+	<p>{input submit1} <a n:href="deletePage!" class='del ajax'>smazat</a> (smaže i všechny podstránky)
+{/form}
+
+
+
+
+
+{if $page->getMeta('.category') == 'yes'}
+<h3 id="toc-subpages">výpis článků: <a n:href='add $page->id' class='small'>+ přidat</a></h3>
+<ul id="js-subpageslist" data-sortlink='{link subpagessort!}'>
+{foreach $page->getChildNodes() as $r}
+	<li id='pageid-{$r->id}'><a href="{link Pages:edit $r->id}">{$r->name}</a>
+{/foreach}
+</ul>
+<p>Tahem myší můžete změnit pořadí článků.
+{/if}
+
+{? $presenter->triggerEvent('renderAdminList')}
+
+
+
+<h3 id='toc-files'>přílohy:</h3>
+<div class='uploadform fleft' style="min-width: 120px;height:40px;">
+	<span id="np-uploadify"
+				data-uploadifyHandler="{link uploadify!}"
+				data-session="{session_id()}"
+				data-afterUploadLink='{link refreshFileList!}' />Nahrajte soubory</span>
+</div>
+{form uploadForm}
+	<div class='uploadform'>
+		<a href='#jsonly' onclick="$(this).next().toggle();return false" class="small">záložní způsob</a>
+		<span class='jshidden'>{input file} {input submit1} max: {ini_get("upload_max_filesize")}B</span>
+	</div>
+{/form}
+<div id="np-uploadify-queue" class="clear"></div>
+
+{snippet editform_editfile}
+{ifset $editFile}
+<div class='editfile clear'>
+	<a n:href="this" onclick="$(this).parent().hide(300);return false" class="close" title='zavřít'>×</a>
+	<div class='info'>
+		<img src='{$editFile->previewLink("120x120")}' class="thumbnail"><br>
+		<small>ID#{$editFile->id} {$editFile->filesize|bytes}</small><br>
+		<small>{!$editFile->getAdminInfo()}</small><br>
+		<a href="{$editFile->downloadLink()}#-f{$editFile->id}-#">odkaz na stažení</a>
+
+		{if $editFile->getType() != 'ImageFile'}
+			{form previewUploadForm}
+				<p><a href='#jsonly' onclick="$(this).parent().next().toggle();return false" class="small">změnit náhled</a><br>
+				<div class='jshidden' style="overflow-x:scroll;background:#eee">{input file size=>7}<br> {input submit1}</div>
+			{/form}
+		{/if}
+
+	</div>
+	{control editFileForm}
+</div>
+{/ifset}
+{/snippet}
+
+
+{snippet editform_filelist}
+<div id='js-filelist' data-afterUpdate="filelist" data-sortlink='{link filesort!}'>
+
+	{foreach $page->getGalleries('addBlank') as $num=>$files}
+		<h4 class="clear" n:if="$iterator->counter > 1">galerie {$num} 	<a href="#jsonly" data-embed="#-gallery-{$page->id}.{$num}-#" class='insertlink'>vložit do textu</a></h4>
+
+		{continueIf $presenter->isAjax() AND $filelistMaxNum !=-1 AND $filelistMaxNum!=$num}
+		<div class="list" n:snippet="editform_filelist-$num" data-num="{$num}">
+			{foreach $files as $f}
+				<div class="item" id='fileid-{$f->id}' n:class="$f->getType(), 'ext-'.$f->suffix">
+					<a n:href="deleteFile! $f->id" class='del ajax' title='smazat'>×</a>
+					{*<a n:href="toggleFile! $f->id, !$f->visible" class='toggle visible{$f->visible}'							 title="{$toggle[$f->visible]}"><span>{$toggle[$f->visible]}</span></a>*}
+					<div><a n:href="editFile!#toc-files $f->id" class='ajax' title='upravit'><img src='{$f->previewLink('120x120')}'></a></div>
+					<span>
+						{$f->filename}{if $f->suffix}.{$f->suffix}{/if}<br>
+						<small>{$f->description|truncate:50}</small><br>
+						<a href="{$f->previewLink('120x120')}" data-embed="{$f->getEmbedCode()}" class='insertlink'>vložit do textu</a>
+					</span>
+				</div>
+				{breakIf $iterator->counter >= $filelistMax[$num]}
+			{/foreach}
+			{if $filelistMax[$num] < count($files)}
+				<div class="infoitem"><small>Zobrazeno {$filelistMax[$num]} z {count($files)}</small><br><br>
+					<br><a n:href="filelistMore!#fileid-$f->id $num, $filelistMax[$num]+20" class="ajax">Zobrazit další</a>
+					<br><a n:href="filelistMore!#fileid-$f->id $num, count($files)" class="ajax">Zobrazit všechny</a>
+				</div>
+			{/if}
+			<div class="clearitem">&nbsp;</div>
+		</div>
+	{/foreach}
+	
+	<p class="clear" n:if="count($page->files)">
+		Klikněte na přílohu pro více možností. Tahem myší můžete změnit pořadí nebo číslo galerie.
+		<br>Náhledy dokumentů <a href="http://docs.google.com/viewer">Google</a>.<br>
+		{* TODO [check] <a n:href="sortFilesByName!" class="ajax">seřadit dle názvu</a> *}
+	</p>
+</div>
+{/snippet}
+
+{* if $page->getMeta(".filesSync")}
+	<p>Zapnuta synchronizace příloh se složkou na serveru (<a n:href="filesSync!">aktualizovat</a>)
+	{if isset($filesSyncLog)}
+		<br>Nově nalezené: {count($filesSyncLog['new'])}
+		<br>Aktualizované: {count($filesSyncLog['changed'])}
+	{/if}
+{/if *}
+
+
+			
+
+{control metaControl}
+
+
+
+<p><br><br>
+<p><br><br>
+<p><br><br>
+<p><br><br>
+
+</div> <!-- /.editform -->
+
+<script>
+function getPagesFlatJson (){
+	return {!Json::encode(PagesModel::getPagesFlat()->getPairs())};
+}
+var getPagesFlatJsonUrl = {link getPagesFlatJson!};
+</script>
+
+{/block}

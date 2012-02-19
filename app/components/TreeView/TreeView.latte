@@ -1,0 +1,22 @@
+{block #TreeView}
+{if !$firstRun}
+<ul{if $isRootNode} class="TreeView"{/if}>
+	<li {if $node->hasChildNodes()} class="TreeViewHasChildNodes"{/if}><p>{$control->renderNode($node)}</p>
+		{if $node->hasChildNodes()}
+			{foreach $node->getChildNodes() as $row}
+				{include #TreeView, 'node' => $row, 'isRootNode'=>false, 'firstRun' => FALSE}
+			{/foreach}
+		{/if}
+	</li>
+</ul>
+{/if}
+{/block}
+{if $control->hideRootNode}
+	{if $node->hasChildNodes()}
+		{foreach $node->getChildNodes() as $row}
+			{include #TreeView, 'node' => $row, 'firstRun' => FALSE}
+		{/foreach}
+	{/if}
+{else}
+	{include #TreeView, 'firstRun' => FALSE}
+{/if}

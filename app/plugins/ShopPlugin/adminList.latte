@@ -1,0 +1,18 @@
+
+
+
+<h3 id="toc-subpages">produkty: <a href='{plink Pages:add $page->id}' class='small'>+ přidat</a></h3>
+<table>
+	<tr><th>Název <th>Cena
+{foreach $page->getChildNodes() as $r}
+	<tr>
+		<td>{if !$r[published]}<img src="{$basePath}/static/images/iconEyeNo.png">{/if}
+			<a href="{plink Pages:edit $r->id}">{$r->name}</a>
+			{* TODO $basePath -- nepředává se? *}
+
+		<td>{$control->currency} {$r->getMeta('price')}
+	</tr>
+{/foreach}
+</table>
+
+

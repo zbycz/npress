@@ -1,0 +1,34 @@
+{snippet}
+{block #TreeView}
+{if !$firstRun}
+<ul{if $isRootNode} class="ExpandableTreeView"{/if}>
+	<li{if $node->hasChildNodes() && $control->isNodeExpanded($node)} class="ExpandableTreeViewHasChildNodes"{/if}>
+		<p>{if $node->hasChildNodes()}
+				{if $control->isNodeExpanded($node)}
+					<a href="{link colapseNode $node->getNodeId()}" class="ajax TreeViewControlExpanded"><span>-</span></a>
+				{else}
+					<a href="{link expandNode $node->getNodeId()}" class="ajax TreeViewControlColapsed"><span>+</span></a>
+				{/if}
+			{else}
+				<span class="TreeViewControlLeaf"></span>
+			{/if}
+			<a href="{plink Pages:edit $node->id}">{$control->renderNode($node)}</a></p>
+		{if $node->hasChildNodes() && $control->isNodeExpanded($node)}
+			{foreach $node->getChildNodes() as $row}
+				{include #TreeView, 'node' => $row, 'isRootNode'=>false, 'firstRun' => FALSE}
+			{/foreach}
+		{/if}
+	</li>
+</ul>
+{/if}
+{/block}
+{if $control->hideRootNode}
+	{if $node->hasChildNodes()}
+		{foreach $node->getChildNodes() as $row}
+			{include #TreeView, 'node' => $row, 'firstRun' => FALSE}
+		{/foreach}
+	{/if}
+{else}
+	{include #TreeView, 'firstRun' => FALSE}
+{/if}
+{/snippet}

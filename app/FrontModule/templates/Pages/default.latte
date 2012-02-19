@@ -1,0 +1,21 @@
+{block title}{$page[heading]}{/block}
+
+{block content}
+<h2>{$page[heading]}</h2>
+
+<div n:foreach="$flashes as $flash" class="flash">
+	{$flash->message}
+</div>
+
+
+{* if $lang!='cs' && strlen($page[text])<10 && strlen($page->lang('cs')->data[text]) > 20}
+	This page isn't translated yet. In the meantime, you may try using automated machine translations
+	at <a href="http://translate.google.com/translate?sl=cs&tl={$lang}&u={link //Pages: $page->id, lang=>'cs'}">Google Translator</a>
+	or see the <a n:href="this lang=>cs">Czech version</a>.
+{/if *}
+
+{if $presenter->triggerEvent('allowPageContentDisplay')}
+	{if $presenter->triggerEvent('displayPageContent')}
+		{!$page->content}
+	{/if}
+{/if}

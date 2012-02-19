@@ -1,0 +1,15 @@
+{block content}
+<h2>Chybějící stránka</h2>
+
+<p>Stránka id #{$error_id_page} v jazyce {$error_lang} nebyla nalezena v databázi.
+
+<ul>
+{foreach $langs as $l=>$ltxt}
+	{var $pg = PagesModel::getPageById($error_id_page, $l);}
+	{if $pg}
+		<li>({$l}) <a n:href="edit $pg->id, lang=>$l">{$pg->name}</a>
+	{else}
+		<li><b n:tag-if="$l==$error_lang">({$l})</b> neexistuje
+	{/if}
+{/foreach}
+</ul>

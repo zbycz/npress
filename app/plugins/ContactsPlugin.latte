@@ -1,0 +1,41 @@
+
+
+
+<div class="jshidden" n:tag-if="!isset($edit)">
+{control form}
+</div>
+<p n:if="!isset($edit)"><a href="#" onclick="$(this).parent().prev().show()">Přidat nový záznam</a></p>
+
+
+	<p>{foreach $oddily as $id=>$name}<a href="#oddil-{$id}">{$name}</a>{sep} | {/sep}{/foreach}
+	<p>Zobrazit <a n:href="adresy!">adresy</a>
+	<table class="border">
+	<tr>
+		<th>jméno</th>
+		<th>přezdívka</th>
+		<th n:if="$adresy">adresa</th>
+		<th>pevná linka</th>
+		<th>mobil</th>
+		<th>e-mail</th>
+		<th class="hidden">oddíl</th>
+		<th>poznámka</th>
+	</tr>
+
+	{var $oddil = false}
+	{foreach $adresar as $r}
+		{if $oddil != $r[oddil]}{var $oddil = $r[oddil]}
+			<tr><td colspan=9><h3 id='oddil-{$oddil}'>{$oddily[$r[oddil]]}</h3>
+		{/if}
+		<tr>
+			<td style="min-width:10em"><a n:href="edit! $r[id]">{$r[jmeno]}</a></td>
+			<td>{$r[prezdivka]}</td>
+			<td n:if="$adresy">{$r[adresa]}</td>
+			<td>{$r[pevny_telefon]}</td>
+			<td>{$r[mobilni_telefon]}</td>
+			<td>{$r[email]}</td>
+			<td class="hidden">{$oddily[$r[oddil]]}</td>
+			<td>{$r[poznamka]}</td>
+		</tr>
+	{/foreach}
+
+	</table>
