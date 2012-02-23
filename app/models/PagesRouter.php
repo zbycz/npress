@@ -91,14 +91,25 @@ class PagesRouter implements IRouter
 			return NULL;
 
 		$params = $appRequest->getParameters();
-		if(!isset($params['id_page']))
-			return NULL;
 
 		//find the friendly-url in the database
 		$lang = $params['lang'];
 		if($lang == NULL)
 			$lang = $this->getDefaultLang();
 
+		//lang base url (domain or just relative prefix?)
+		$langDomains = Environment::getVariable("langDomains");
+		if($langDomains)
+			$baseUrl = $ref->scheme . ':' . $langDomains[$lang];
+		else
+			$baseUrl = $ref->getBaseUrl() . ($lang==$this->getDefaultLang() ? '' : "$lang/");
+
+
+		//NULL page = /
+		if(!isset($params['id_page']))
+			return $baseUrl;
+
+		//nonexisting page - do not route
 		$page = PagesModel::getPageById($params['id_page'], $lang);
 		if(!$page)
 			return NULL;
@@ -107,13 +118,6 @@ class PagesRouter implements IRouter
 		unset($params['lang']);
 		unset($params['id_page']);
 		unset($params['action']);
-
-		//lang base url (domain or just relative prefix?)
-		$langDomains = Environment::getVariable("langDomains");
-		if($langDomains)
-			$baseUrl = $ref->scheme . ':' . $langDomains[$lang];
-		else
-			$baseUrl = $ref->getBaseUrl() . ($lang=='cs'?'': "$lang/");
 
 
 		// appended parameters
