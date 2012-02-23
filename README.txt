@@ -8,19 +8,22 @@ Více informací na www.npress.info
 
 Instalace
 =========
-1) Stáhněte obsah repozitáře
-2) Připravte MySQL databázi a naimportujte soubor /data/init.sql
+1) Stáhněte obsah repozitáře nebo distribuční verzi
+2) Připravte MySQL databázi a naimportujte soubor "/data/init.sql"
+   - V distribuční verzi se též nachází testovací data. Naleznete je 
+	   v "/data/npdemo.sql" a "/data/files/". 
 3) Soubor "/data/config.neon.sample" zkopírujte na "/data/config.neon" 
   - upravte připojení k databázi
   - nastavte heslo do administrace a případně další možnosti
 	- ověřte, že soubor "/data/config.neon" není dostupný z webu
-4) Pokud spouštíte aplikaci v podsložce, v .htaccess zakomentujte RewriteBase
-5) Administrace je na adrese <webova-cesta-k-npress>/admin/
-6) Enjoy!
+4) Nastavte oprávnění pro zápis do složek /data/files/, /data/thumbs/, /app/log/ a /app/temp/
+5) Pokud spouštíte aplikaci v podsložce, v .htaccess zakomentujte RewriteBase
+6) Administrace je na adrese <webova-cesta-k-npress>/admin/
+7) Enjoy!
 
-Systém je stále v beta verzi, takže jistě obsahuje množství chyb. Hlásit bugy prosím hlašte na adrese https://github.com/zbycz/nPress/issues
+Systém je stále v beta verzi, takže jistě obsahuje množství chyb. Bugy, prosím, hlašte na adrese https://github.com/zbycz/npress/issues
 
-Stejně tak budu rád za jakékoliv pull requesty či nápady.
+Stejně tak budu rád za jakékoliv pull requesty či nápady. Pokud systém někde použijete, budu rád, když mi dáte vědět.
 
 
 Požadavky
@@ -46,6 +49,6 @@ Autor
 =====
 Pavel Zbytovský (c) 2011-2012
 mail/jabber: zbytovsky@gmail.com
-www.npress.info
+http://npress.info/
 
 

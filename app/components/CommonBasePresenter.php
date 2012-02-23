@@ -25,7 +25,7 @@ abstract class CommonBasePresenter extends Presenter
 
 		//lang settings
 		$this->template->lang = PagesModel::$lang = $this->lang;
-		$this->template->langs = $this->getContext()->params["langs"];
+		$this->template->langs = $this->context->params["langs"];
 		$this->template->setTranslator(new TranslationsModel($this->lang));
 
 
@@ -35,12 +35,12 @@ abstract class CommonBasePresenter extends Presenter
 		$this->template->crumbs = array();
 
 		//configuration
-		$this->template->config = $this->getContext()->params['npress'];
-		$this->template->frontjslatte = Environment::getVariable("appDir") . '/FrontModule/templates/frontjs.latte';
-		$this->template->npLayoutFile = Environment::getVariable("appDir") . '/FrontModule/templates/@layout.latte';
+		$this->template->config = $this->context->params['npress'];
+		$this->template->frontjslatte = $this->context->params['appDir'] . '/FrontModule/templates/frontjs.latte';
+		$this->template->npLayoutFile = $this->context->params['appDir'] . '/FrontModule/templates/@layout.latte';
 	}
 
-	// Link to this page's mutation, or homepage
+	// Link to page mutation, or homepage
 	public function langSwitch($l){
 		if(isset($this->page) AND $this->page->lang($l))
 			return $this->link('this', array('lang'=>$l)); //other lang mutation
