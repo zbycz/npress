@@ -418,8 +418,8 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 	}
 
 	public function getInheritedMeta($key){
-		foreach($this->getParents() as $r)
-			if($r->getMeta($key))
+		foreach(array_reverse($this->getParents()) as $r)
+			if($r->getMeta($key) !== false)
 				return $r->getMeta($key);
 	}
 
