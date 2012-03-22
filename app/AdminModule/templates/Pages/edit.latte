@@ -131,17 +131,17 @@
 <div class='editfile clear'>
 	<a n:href="this" onclick="$(this).parent().hide(300);return false" class="close" title='zavřít'>×</a>
 	<div class='info'>
-		<img src='{$editFile->previewLink("120x120")}' class="thumbnail"><br>
+		<a href="{$editFile->previewLink("800x600")}" class='lightbox' title="zvětšený náhled">
+			<img src='{$editFile->previewLink("120x120")}' class="thumbnail"></a><br>
 		<small>ID#{$editFile->id} {$editFile->filesize|bytes}</small><br>
 		<small>{!$editFile->getAdminInfo()}</small><br>
 		<a href="{$editFile->downloadLink()}#-f{$editFile->id}-#">odkaz na stažení</a>
 
-		{if $editFile->getType() != 'ImageFile'}
-			{form previewUploadForm}
-				<p><a href='#jsonly' onclick="$(this).parent().next().toggle();return false" class="small">změnit náhled</a><br>
-				<div class='jshidden' style="overflow-x:scroll;background:#eee">{input file size=>7}<br> {input submit1}</div>
-			{/form}
-		{/if}
+		{form previewUploadForm}
+			<p><a href='#jsonly' onclick="$(this).parent().next().toggle();return false" class="small">
+				{$editFile->getType()!='ImageFile' ? 'změnit náhled' : 'změnit obrázek'}</a><br>
+			<div class='jshidden' style="overflow-x:scroll;background:#eee">{input file size=>7}<br> {input submit1}</div>
+		{/form}
 
 	</div>
 	{control editFileForm}
