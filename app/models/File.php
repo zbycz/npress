@@ -104,9 +104,10 @@ class File {
 
 	/** Link to provide original file download
 	 */
-	public function downloadLink(){
+	public function downloadLink($absolute=false){
+		$absolute = $absolute ? '//' : '';
 		return Environment::getApplication()->getPresenter()
-						->link(':Front:Files:default', array($this->id, 'lang'=>NULL));
+						->link($absolute.':Front:Files:default', array($this->id, 'lang'=>NULL));
 	}
 
 	/** Response for downloading original file
@@ -209,6 +210,13 @@ class File {
 		return get_class($this);
 	}
 
+	/** Gets this page as an PagesModelNode
+	 * @return PagesModelNode
+	 */
+	public function getPage(){
+		return PagesModel::getPageById($this->id_page);
+	}
+	
 	public function getIconImage(){
 		$icons = array();
 		@include Environment::getVariable("staticDir")."/icons/icons48.php";

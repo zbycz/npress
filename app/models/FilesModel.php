@@ -24,6 +24,9 @@ class FilesModel extends Object {
 			//TODO sourceCodeFile
 	);
 
+	/** Get files by id_page (not expanding dot syntax)
+	 * @deprecated
+	 */
 	public static function getFiles($id_page){
 		if(!isset(self::$cacheByPage[$id_page])){
 			self::$cacheByPage[$id_page] = array();
@@ -56,13 +59,30 @@ class FilesModel extends Object {
 		return $galleries;
 	}
 
+	public static function getByPageDotGallery($pid, $paginator=false, $order='ord'){
+		return self::getFilesWhere(array('id_page'=>$pid), $paginator, $order);
+	}
+
 	/** Get array of File by custom where clause
-	 * @param array $sqlwhere ex:array('deleted=0', array('id_page = %i',12))
+	 * ex: array('YEAR(timestamp)=2012', 'id_page'=>'12.1', array('filesize > %i',1000))
+	 * @param array $sqlwhere implicitly deleted=0, id_page with dot expands to gallerynum
 	 * @param [VisualPaginator] $paginator
+	 * @param string $order
 	 */
-	public static function getFilesWhere($sqlwhere, $paginator=false){
+	public static function getFilesWhere(array $sqlwhere, $paginator=false, $order='ord'){
+		if(!isset($sqlwhere['deleted']))
+			$sqlwhere['deleted'] = 0;
+
+		if(isset($sqlwhere['id_page'])){
+			$pos = strpos($sqlwhere['id_page'], '.');
+			if($pos !== false){
+				$sqlwhere['gallerynum'] = (int)substr($sqlwhere['id_page'], $pos+1);
+				$sqlwhere['id_page'] = (int)substr($sqlwhere['id_page'], 0, $pos);
+			}
+		}
+
 		$output = array();
-		$result = dibi::query('SELECT * FROM pages_files	WHERE %and',$sqlwhere,' ORDER BY ord');
+		$result = dibi::query('SELECT * FROM pages_files	WHERE %and',$sqlwhere,' ORDER BY %sql',$order);
 
 		if($paginator){
 			$paginator->itemCount = count($result);
