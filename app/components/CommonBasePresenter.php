@@ -58,7 +58,8 @@ abstract class CommonBasePresenter extends Presenter
 		return false;
 	}
 
-	//Plugins are direct components
+
+	//Allow Plugins as direct components of presenter
 	protected function createComponent($name){
 		$plugins = $this->context->plugins->getPlugins();
 		if(in_array($name, $plugins))
@@ -67,7 +68,11 @@ abstract class CommonBasePresenter extends Presenter
 		return parent::createComponent($name);
 	}
 
-	//Trigger plugin event as filter
+	/** Trigger plugin event as filter supplied value
+	 * @param $eventname
+	 * @param $filter    value to supply to filter chain
+	 * @return string    resulting value
+	 */
 	public function triggerEvent_filter($eventname, $filter){
 		$triggers = $this->context->plugins->getEventTriggers($eventname);
 		foreach($triggers as $plugin){
@@ -76,12 +81,19 @@ abstract class CommonBasePresenter extends Presenter
 		return $filter;
 	}
 
-	//Trigger plugin event, observing returned false
+	/** Trigger plugin event, observing returned false
+	 * @param $eventname
+	 * @param [$arg0]  argument to filter function 
+	 * @param [$arg1]  ...
+	 * @return bool    true if each event returned true
+	 */
 	public function triggerEvent($eventname){
+		$args = array_slice(func_get_args(), 1);
+		
 		$triggers = $this->context->plugins->getEventTriggers($eventname);
 		$ret = true;
 		foreach($triggers as $plugin){
-			$r = call_user_func(callback($this[$plugin], $eventname));
+			$r = call_user_func_array(callback($this[$plugin], $eventname), $args);
 			if($r === false)
 				$ret = false;
 		}

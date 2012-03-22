@@ -10,7 +10,7 @@
 
 /** Files presenter
  *
- * Works just as a service for @see File objects (link methods)
+ * Works just as a service for @see File objects (link() methods)
  *
  */
 class Front_FilesPresenter extends Front_BasePresenter
@@ -21,6 +21,10 @@ class Front_FilesPresenter extends Front_BasePresenter
 	public function actionDefault($id)
 	{
 		$file = FilesModel::getFile($id);
+
+		if(!$this->triggerEvent('allowFileDownload', $file))
+			throw new BadRequestException("File download forbidden", 403);
+
 		$response = $file->getDownloadHttpResponse();
 		$this->sendResponse($response);
 	}
@@ -43,12 +47,16 @@ class Front_FilesPresenter extends Front_BasePresenter
 	
 	public function actionPreviewPage($id){
 		$file = FilesModel::getFile($id);
+
+		if(!$this->triggerEvent('allowFileDownload', $file))
+			throw new BadRequestException("File download forbidden", 403);
+
 		$this->template->file = $file;
 		$this->setLayout(false);
 
-		//documentFile
+		//experimental for documentFile
 		$xml = substr($file->info,5);
-		$sxml = simplexml_load_string( $xml ); //todo: proč nefunguje?
+		$sxml = simplexml_load_string( $xml ); //TODO proč nefunguje vždy?
 		
 		$pages = array();
 		if($sxml && $sxml->page)
