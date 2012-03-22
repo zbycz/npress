@@ -32,7 +32,7 @@ CREATE TABLE `pages_files` (
   `keywords` text collate utf8_czech_ci NOT NULL,
   `info` text collate utf8_czech_ci NOT NULL,
   `dimensions` varchar(255) collate utf8_czech_ci NOT NULL default '',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `origpath` varchar(255) collate utf8_czech_ci default NULL,
   `deleted` tinyint(1) unsigned NOT NULL,
   `gallerynum` tinyint(3) unsigned NOT NULL,
