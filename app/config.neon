@@ -34,7 +34,7 @@ common:
 
 	services:
 		plugins:  Plugins(%plugins%)
-		npMacros: NpMacros
+		npMacros: NpMacros(%macros%, ...)
 		i18n:     I18n(%langs%, %defaultLang%, %langDomains%)
 
 
@@ -56,6 +56,13 @@ common:
 			#- ContactsPlugin
 			#- NewsletterPlugin
 			#- ShopPlugin
+
+		macros:
+			filelist: 		%appDir%/macros/filelist.latte
+			translatefrom: %appDir%/macros/translatefrom.latte
+			gallery: 			%appDir%/macros/gallery.latte
+			subpagesblog: %appDir%/macros/subpagesblog.latte
+			sitemap: 			%appDir%/macros/sitemap.latte
 
 		npress:
 			webTitle: Demo

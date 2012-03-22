@@ -1,0 +1,14 @@
+
+{var $from = $opts[0]}
+{var $fromPage = $page->lang($from)}
+
+{if $fromPage}
+	{var $url = rawurlencode($fromPage->link(true))}
+
+	This page hasn't been translated yet. In the meantime,
+	you may try using automated machine translations
+	at <a href="http://translate.google.com/translate?sl={$from}&tl={$lang}&u={$url}">
+	Google Translator</a> or see 
+	<a href="{$fromPage->link()}">the original</a> ({$langs[$from]}).
+
+{/if}

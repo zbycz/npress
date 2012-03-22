@@ -1,0 +1,13 @@
+
+{default $files = FilesModel::getByPageDotGallery($opts[0])}
+
+<div class='np-gallery'>
+{foreach $files as $f}
+	{* --- this is parsed by Lightbox - dont change --- *}
+	{var $href = $f->previewLink('800x600')} 
+	
+	<div><a href='{$href}' class='lightbox' title='{$f->description}'>
+		<img src='{$f->previewLink('200')}'></a></div>
+{/foreach}
+</div>
+<div class='clear'>&nbsp;</div>

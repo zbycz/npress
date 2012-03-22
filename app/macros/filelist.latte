@@ -1,0 +1,22 @@
+{* Macro filelist
+ *
+ * example: #-filelist-12.3_thumbs-#
+ *
+ * params:
+ *  - <page_id>[.<gallerynum>]
+ *  - thumbs
+ *  - size-<px>
+ *}
+
+<ul>
+{foreach FilesModel::getByPageDotGallery($opts[0]) as $f}
+	<li class='clear'>
+		<img src='{$basePath}static/icons/icons16.php?file={$f->suffix}' width='16' height='16' alt='{$f->suffix}'>
+		<a href='{$f->downloadLink()}' title='stáhnout'>{$f->filename}.{$f->suffix}</a>
+		({round($f->filesize/1000000, 1)} MB)
+		<a href="http://docs.google.com/viewer?url={urlencode($f->downloadLink('//'))}" n:if="isset($opts[gviewer])"><small>náhled on-line</small></a>
+		<img src='{$f->previewLink('100x100')}' alt='náhled' align='right' n:if="isset($opts['thumbs'])">
+		<br>
+		{$f->description}
+{/foreach}
+</ul>

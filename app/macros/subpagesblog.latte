@@ -1,0 +1,19 @@
+
+{var $page = PagesModel::getPageById($opts[0])}
+{if !$page}
+	error page_id {$opts[0]} missing
+{else}
+	
+	{foreach $page->getChildNodes() as $r}
+		<h3 id='p{$r->id}'>
+			{if $x=$r->getMeta('date')}<i class='small'>{$x}</i>{/if}
+			<a href='{$r->link()}' n:tag-if='!isset($opts[nolink])'>{$r->name}</a>
+		</h3>
+		{if isset($opts[truncate])}
+			{!$r->content|striptags|truncate:300|nl2br}
+		{else}
+			{!$r->content}
+		{/if}
+	{/foreach}
+	
+{/if}

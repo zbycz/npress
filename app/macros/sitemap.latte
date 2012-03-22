@@ -1,0 +1,12 @@
+
+{var $pages = PagesModel::getPageById(0)}
+
+<ul>
+{block #TreeView}
+	{foreach $pages->getChildNodes() as $row}
+		<li><a href='{$row->link()}'>{$row->name}</a>
+				<ul>{include #TreeView, 'pages' => $row}</ul>
+		</li>
+	{/foreach}
+{/block}
+</ul>

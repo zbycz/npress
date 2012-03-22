@@ -403,13 +403,14 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 		return $pagelink;
 	}
 
-	public function link(){
+	public function link($absolute=false){
 		$redirect = $this->getRedirectLink();
 		if($redirect)
 			return $redirect;
 
 		$presenter = Environment::getApplication()->getPresenter();
-		return $presenter->link(':Front:Pages:', array($this->id, 'lang'=>$this->lang));
+		$target = ($absolute ? '//' : '') . ':Front:Pages:';
+		return $presenter->link($target, array($this->id, 'lang'=>$this->lang));
 	}
 
 	//active record

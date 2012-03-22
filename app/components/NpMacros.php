@@ -8,26 +8,22 @@
  */
 
 
-/** Service for processing np-macros (#-p15-#)
+/** Service for processing np-macros (#-xxx-#)
  */
 class NpMacros extends Object {
-	private static $macros = array(
+	private $macros = array(
 		'file' => 'NpMacros::fileMacro',
-		'gallery' => 'NpMacros::galleryMacro',
-		'filelist' => 'NpMacros::filelistMacro',
-		'slideshow' => 'NpMacros::slideshowMacro',
-		'translatefrom' => 'NpMacros::translatefromMacro',
-		'subpagesblog' => 'NpMacros::subpagesblogMacro',
 	);
 
 
 	private $router;
 	private $url;
 	private $i18n;
-	function __construct(IRouter $router, HttpRequest $req, I18n $i18n){
+	function __construct(array $macros, IRouter $router, HttpRequest $req, I18n $i18n){
 		$this->router = $router;
 		$this->url = $req->getUrl();
 		$this->i18n = $i18n;
+		$this->macros = $this->macros + $macros;
 	}
 
 
@@ -45,12 +41,20 @@ class NpMacros extends Object {
 
 		$macro = $macroMatch[1];
 		$pos=strpos($macro, '-');
-		$macroname = $pos === false ? $macro : substr($macro, 0, $pos);
-		$macroopts = $pos === false ? '' : substr($macro, $pos+1);
+		$macroName = $pos === false ? $macro : substr($macro, 0, $pos);
+		$macroOpts = $pos === false ? '' : substr($macro, $pos+1);
 
 		//generic macro $sth-$opts
-		if(isset(self::$macros[$macroname]))
-			return call_user_func(self::$macros[$macroname], $macroopts);
+		if(isset($this->macros[$macroName])){
+			$macroTarget = $this->macros[$macroName];
+
+			//is latte macro
+			if(substr($macroTarget,-6) == '.latte')
+				return $this->processTemplateMacro($macroName, $macroTarget, $macroOpts);
+
+			//is function macro
+			return call_user_func($macroTarget, $macroOpts, $this->pageContext);
+		}
 
 		return "error:".$macro;
 	}
@@ -78,113 +82,64 @@ class NpMacros extends Object {
 		return false;
 	}
 
+	function processTemplateMacro($macro, $file, $optstr){
+		$template = new FileTemplate($file);
+		$template->registerFilter(Environment::getNette()->createLatte());
+		$template->registerHelperLoader('TemplateHelpers::loader');
+		$template->setCacheStorage(Environment::getContext()->nette->templateCacheStorage);
+
+		$template->page = $this->pageContext; //TODO disable macros in getContent()
+		$template->opts = $opts = self::parseOptions($optstr);
+
+		//from Nette\Application\UI\Control
+		$template->baseUri = $template->baseUrl = rtrim($this->url->getBaseUrl(), '/');
+		$template->basePath = preg_replace('#https?://[^/]+#A', '', $template->baseUrl);
+
+		//lang settings
+		$template->lang = $this->pageContext->lang;
+		$template->langs = $this->i18n->langs;
+		$template->setTranslator(new TranslationsModel($this->pageContext->lang));
+
+		try {
+			$template = $template->__toString(true);
+		} catch (Exception $e){
+			if(Debugger::$productionMode){
+				Debugger::log($e);
+				return "<span class='zprava'>Error: $macro not availible</span>";
+			}
+			else
+				return "<span class='zprava'>Error: ".$e->getMessage()."</span>";
+		}
+		
+		return $template;
+	}
+
+
+	/** OptsString to array
+	 * @param string $optstr  - ex: '13.2_size-20'
+	 * @return array          - array('13.2', 'size-20', '13.2'=>true, 'size'=>20)
+	 */
+	public static function parseOptions($optstr){
+		$result = explode("_", $optstr);
+		
+		foreach($result as $key){ //add associative options
+			$val = true;
+			$pos = strpos($key, '-');
+			if($pos !== false){
+				$val = substr($key, $pos+1);
+				$key = substr($key, 0, $pos);
+			}
+			$result[$key] = $val;
+		}
+		return $result;
+	}
+
 
 	//file-12_fadeframe_nocache  -> render file control (video, sound, document, ...)
 	function fileMacro($opts){
-
 		$opts = explode('_', $opts);
 		$id = array_shift($opts);
 		return FilesModel::getFile($id)->getControlHtml($opts);
 	}
-
-	function galleryMacro($opts){
-		if(!preg_match('~^(?P<id>[0-9]+)\.(?P<num>[0-9]+)$~', $opts, $m))
-			return 'error gallery syntax';
-
-		$page = PagesModel::getPageById($m['id']);
-		if(!$page)
-			return "error gallery page_id $m[id] missing";
-
-		$gallery = $page->getFilesWhere(array('gallerynum'=>$m['num']));
-
-		//render
-		$html = "<div class='np-gallery'>";
-		foreach($gallery as $f){
-			$href = $f->previewLink('800x600'); //this is parsed by Lightbox - dont change
-			$img = $f->previewLink('200');
-			$html .= "<div><a href='$href' class='lightbox' title='{$f->description}'>".
-							"<img src='$img'></a></div>";
-		}
-		$html .= "</div>";
-		$html .= "<div class='clear'>&nbsp;</div>";
-		return $html;
-	}
-
-	function filelistMacro($opts){
-		if(!preg_match('~^(?P<id>[0-9]+)\.(?P<num>[0-9]+)$~', $opts, $m))
-			return 'error filelist syntax';
-
-		$page = PagesModel::getPageById($m['id']);
-		if(!$page)
-			return "error filelist page_id $m[id] missing";
-
-		$gallery = $page->getFilesWhere(array('gallerynum'=>$m['num']));
-
-		//render
-		$html = "<ul>";
-		foreach($gallery as $f){
-			$href = $f->downloadLink();
-			$img = $this->url->getBasePath() . "static/icons/icons16.php?file=$f->suffix";
-			$b = round($f->filesize/1000/1000, 1).' MB';
-			$html .= "<li><img src='$img' width='16' height='16' alt='$f->suffix'> ".
-							"<a href='$href' title=''>$f->filename.$f->suffix</a> ($b) $f->description";
-		}
-		$html .= "</ul>";
-		return $html;
-	}
-
-	function slideshowMacro($opts){
-		if(!preg_match('~^(?P<id>[0-9]+)\.(?P<num>[0-9]+)$~', $opts, $m))
-			return 'error gallery syntax';
-		
-		$page = PagesModel::getPageById($m['id']);
-		if(!$page)
-			return "error gallery page_id $m[id] missing";
-
-		$gallery = $page->getFilesWhere(array('gallerynum'=>$m['num']));
-
-		$out = array();
-		foreach($gallery as $f){
-			$src = $f->previewLink('700x300');
-			$out[] = json_encode(array('src'=>$src));
-		}
-
-		//render
-		return '
-			<script src="/theme/modules/slide/js/jquery.cross-slide.js" type="text/javascript"></script>
-			<div id="slideshow" style="width:700px;height:300px;"></div>
-			<script type="text/javascript">
-			//$(function() {
-				$("#slideshow").crossSlide({sleep: 4,fade: 1},[ '.implode(',',$out).' ]);
-			//});
-			</script>';
-	}
-
-	function translatefromMacro($lang){
-	}
-
-	function subpagesblogMacro($opts){
-		$opts = explode('_', $opts);
-		$page = PagesModel::getPageById($opts[0]);
-		if(!$page)
-			return "error page_id $id missing";
-		
-		//render
-		$html = "";
-		foreach($page->getChildNodes() as $r){
-			$html .= "<h3>" . (($x=$r->getMeta('date')) ? "<i class='small'>$x</i> " : "");
-			if(in_array('nolink', $opts))
-				$html .= "$r->name</h3>";
-			else
-				$html .= "<a href='".$r->link()."'>$r->name</a></h3>";
-
-			if(in_array('truncate', $opts))
-				$html .= Strings::truncate($r->content, 300);
-			else
-				$html .= $r->content;
-		}
-		return $html;
-	}
-
 }
 
