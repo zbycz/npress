@@ -18,7 +18,7 @@
 					
 					{if $r->getMeta('price') > 0}
 						€ {$r->getMeta('price')}
-					<br><small style="color:#777;text-align:right;font-size:60%">{_'orientační cena'}:<br> {$r->getMeta('price') * 25 |number:0:',':' '} Kč</small>
+					<br><small style="color:#777;text-align:right;font-size:60%">{_'orientační cena'}:<br> {ceil($r->getMeta('price') * 25 / 100)*100 |number:0:',':' '} Kč</small>
 
 					{else}
 						{_'Cena na dotaz'}

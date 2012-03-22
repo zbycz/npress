@@ -1,4 +1,5 @@
 
+<h3 align="center">&nbsp;Tento adresář je zatím testovací!! Změny můžou být smazány. <br></h3>
 
 
 <div class="jshidden" n:tag-if="!isset($edit)">
@@ -8,15 +9,15 @@
 
 
 	<p>{foreach $oddily as $id=>$name}<a href="#oddil-{$id}">{$name}</a>{sep} | {/sep}{/foreach}
-	<p>Zobrazit <a n:href="adresy!">adresy</a>
-	<table class="border">
+	<p>Zobrazit <a n:href="adresy!">adresy a pevné linky</a>
+	<table n:class="border, !isset($adresy)?fullwidthtable">
 	<tr>
-		<th>jméno</th>
-		<th>přezdívka</th>
-		<th n:if="$adresy">adresa</th>
-		<th>pevná linka</th>
-		<th>mobil</th>
-		<th>e-mail</th>
+		<th width="150">jméno</th>
+		<th width="90">přezdívka</th>
+		<th n:if="isset($adresy)">adresa</th>
+		<th n:if="isset($adresy)">pevná linka</th>
+		<th width="120">mobil</th>
+		<th width="210">e-mail</th>
 		<th class="hidden">oddíl</th>
 		<th>poznámka</th>
 	</tr>
@@ -24,13 +25,13 @@
 	{var $oddil = false}
 	{foreach $adresar as $r}
 		{if $oddil != $r[oddil]}{var $oddil = $r[oddil]}
-			<tr><td colspan=9><h3 id='oddil-{$oddil}'>{$oddily[$r[oddil]]}</h3>
+			<tr><td colspan='5'><h3 id='oddil-{$oddil}'>{$oddily[$r[oddil]]}</h3>
 		{/if}
 		<tr>
 			<td style="min-width:10em"><a n:href="edit! $r[id]">{$r[jmeno]}</a></td>
 			<td>{$r[prezdivka]}</td>
-			<td n:if="$adresy">{$r[adresa]}</td>
-			<td>{$r[pevny_telefon]}</td>
+			<td n:if="isset($adresy)">{$r[adresa]}</td>
+			<td n:if="isset($adresy)">{$r[pevny_telefon]}</td>
 			<td>{$r[mobilni_telefon]}</td>
 			<td>{$r[email]}</td>
 			<td class="hidden">{$oddily[$r[oddil]]}</td>

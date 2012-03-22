@@ -35,7 +35,6 @@ class ContactsPlugin extends Control {
 
 
 		$this->template->oddily = self::$oddily;
-		$this->template->adresy = false;
 		$this->template->adresar = dibi::query('SELECT * FROM lide ORDER BY oddil');
 
 		$this->template->setFile(dirname(__FILE__).'/ContactsPlugin.latte');
@@ -62,6 +61,7 @@ class ContactsPlugin extends Control {
 		$form->addText('adresa', 'Adresa:');
 		$form->addText('pevny_telefon', 'Pevná linka:');
 		$form->addText('mobilni_telefon', 'Mobil:')->setOption('description', 'STS přidejte nakonec do závorky');
+		$form->addText('email', 'E-mail:');
 		$form->addSelect('oddil', 'Oddíl:', self::$oddily);
 		$form->addText('poznamka', 'Poznámka:');
 		$form->addSubmit('save', 'Uložit');

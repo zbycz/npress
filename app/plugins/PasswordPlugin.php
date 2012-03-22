@@ -10,7 +10,7 @@
 
 class PasswordPlugin extends Control {
 
-	static $events = array('allowPageContentDisplay');
+	static $events = array('allowPageContentDisplay', 'allowFileDownload');
 
 	function getConfig(){
 		return $this->parent->context->params['plugins']['PasswordPlugin']
@@ -38,6 +38,12 @@ class PasswordPlugin extends Control {
 		return true;
 	}
 
+	function allowFileDownload($file){
+		if($file->getPage()->getInheritedMeta('.password'))
+			return $this->isLoggedIn();
+		return true;
+	}
+
 	public function isLoggedIn(){
 		return $this->parent->session->getSection('PasswordPlugin')->logged;
 	}
@@ -46,9 +52,11 @@ class PasswordPlugin extends Control {
 		$heslo = str_replace(' ','',trim($this->parent->context->httpRequest->post['heslo']));
 		if($heslo == $this->config['password'])
 		 $this->parent->session->getSection('PasswordPlugin')->logged = true;
+		 $this->parent->redirect('this');
 	}
 	public function handleLogout(){
 		 $this->parent->session->getSection('PasswordPlugin')->logged = false;
+		 $this->parent->redirect('this');
 	}
 
 }
