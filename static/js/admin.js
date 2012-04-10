@@ -172,7 +172,7 @@ function filelist(){
 
 function np_uploadify(){
 	$('#np-uploadify').uploadify({
-		'script'         : $("#np-uploadify").attr('data-uploadifyHandler'),
+		'script'         : escape( $("#np-uploadify").attr('data-uploadifyHandler') ),  //bug in uploadify, & would splits flashvar fields
 		'uploader'       : basePath + '/static/uploadify/uploadify.swf',
 		'cancelImg'      : basePath + '/static/uploadify/cancel.png',
 		'buttonText'     : $("#np-uploadify").html(),
