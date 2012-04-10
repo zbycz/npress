@@ -13,10 +13,14 @@ div.wysiwyg ul.toolbar li.active { background-color: rgb(255, 255, 64); border: 
 
 div.wysiwyg ul.toolbar li.disabled, div.wysiwyg ul.toolbar li.wysiwyg-button-hover.disabled, div.wysiwyg ul.toolbar li.active.disabled { opacity: 0.5; filter:alpha(opacity=50); border: 0px none transparent; padding: 1px; pointer: auto; }
 
+
+
+
 div.wysiwyg ul.toolbar li.bold { background-position: 0 -16px; }
 div.wysiwyg ul.toolbar li.italic { background-position: -16px -16px; }
 div.wysiwyg ul.toolbar li.strikeThrough { background-position: -32px -16px; }
 div.wysiwyg ul.toolbar li.underline { background-position: -48px -16px; }
+div.wysiwyg ul.toolbar li.highlight { background-position: -48px -96px; }
 
 div.wysiwyg ul.toolbar li.justifyLeft { background-position: 0 0; }
 div.wysiwyg ul.toolbar li.justifyCenter { background-position: -16px 0; }
@@ -43,6 +47,10 @@ div.wysiwyg ul.toolbar li.h4 { background-position: -48px -32px; }
 div.wysiwyg ul.toolbar li.h5 { background-position: -64px -32px; }
 div.wysiwyg ul.toolbar li.h6 { background-position: -80px -32px; }
 
+div.wysiwyg ul.toolbar li.paragraph { background-position: 0px -96px; }
+div.wysiwyg ul.toolbar li.colorpicker { background-position: -16px -96px; }
+div.wysiwyg ul.toolbar li.fullscreen { background-position: -32px -96px; }
+
 div.wysiwyg ul.toolbar li.cut { background-position: -32px -64px; }
 div.wysiwyg ul.toolbar li.copy { background-position: -48px -64px; }
 div.wysiwyg ul.toolbar li.paste { background-position: -64px -64px; }
@@ -58,6 +66,11 @@ div.wysiwyg ul.toolbar li.html { background-position: -48px -48px; }
 div.wysiwyg ul.toolbar li.removeFormat { background-position: -80px -64px; }
 
 div.wysiwyg ul.toolbar li.empty { background-position: -64px -80px; }
+
+div.wysiwyg ul.toolbar li.code { background-position: -64px -96px; }
+div.wysiwyg ul.toolbar li.cssWrap { background-position: -80px -96px; }
+
+
 
 div.wysiwyg iframe { border: 0;  clear: left; margin: 4px 0 0 1px; }
 

@@ -282,6 +282,8 @@ function pageEditForm_jwysiwyg(){
 				tags: ['h4'],
 				tooltip: 'Header 4'
 			},
+			
+			paragraph: { visible: true},
 
 // 			cut   : { visible : true },
 // 			copy  : { visible : true },
