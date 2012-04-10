@@ -42,11 +42,13 @@ class Front_PagesPresenter extends Front_BasePresenter
 	function formatTemplateFiles() {
 		$list = parent::formatTemplateFiles();
 
+		array_unshift($list, $this->context->params["themeDir"]."/defaultPage.latte");
+
 		if($tpl = $this->page->getInheritedMeta(".sectionTemplate"))
-			array_unshift($list, $this->context->params["wwwDir"]."/theme/$tpl.latte");
+			array_unshift($list, $this->context->params["themeDir"]."/$tpl.latte");
 
 		if($tpl = $this->page->getMeta(".template"))
-			array_unshift($list, $this->context->params["wwwDir"]."/theme/$tpl.latte");
+			array_unshift($list, $this->context->params["themeDir"]."/$tpl.latte");
 
 		return $list;
 	}
