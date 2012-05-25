@@ -59,6 +59,9 @@ class PagesRouter implements IRouter
 			$lang = array_shift($keys);
 			$seoname = $url->pathInfo;
 		}
+		
+		if(substr($seoname, -1) == '/')
+			$seoname = substr($seoname, 0, -1);
 
 		$page = PagesModel::getPageBySeoname('/'.$seoname, $lang); //just one level
 		if(!$page){

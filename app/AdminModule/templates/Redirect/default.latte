@@ -3,29 +3,34 @@
 
 {snippet redirecttable}
 {form redirectEditForm}
-<table>
-	<tr><th>Stará adresa <th>Nová adresa <th>
+<table class="fullwidthtable smaller">
+	<tr><th>Stará adresa <th>Nová adresa <th>Návštěvy <th>
 	{foreach $redirects as $r}
 		{if $editid == $r['id']}
-			<tr><td>{input oldurl} <td>{input newurl} <td>{input submit1}
+			<tr><td>{input oldurl} <td>{input newurl} <td>{$r[hits]} <td>{input submit1}
 		{else}
-			<tr><td>{$r['oldurl']} <td>{$r['newurl']} <td><a n:href="edit! $r['id']" class="ajax">upravit</a> <a n:href="delete! $r['id']" class="ajax del">×</a>
+			<tr><td>{$r[oldurl]}
+				  <td>{if $r[page]}# <a href="{$r[page]->link()}">{$r[page]->name}</a>
+							{else}<a href="{$r[newurl]}">{$r[newurl]}</a>
+							{/if}
+					<td>{$r[hits]}
+				  <td><a n:href="edit! $r[id]" class="ajax">upravit</a>
+						  <a n:href="delete! $r[id]" class="ajax del">×</a>
 		{/if}
 	{/foreach}
 </table>
 {/form}
 
 <h4>Přidat nové</h4>
-{control redirectAddForm}
-{*
-	{form redirectAddForm}
-	<tr><td>{input oldurl} <td>{input newurl} <td>{input submit1}
-	{/form}
-*}
 
+{form redirectAddForm}
+<table>
+<tr><th>Stará adresa: <td>{input oldurl}  % zastoupí libovolné znaky, _ jeden znak, podtržítko je \_
+<tr><th>Nová adresa:  <td>{input newurl}  adresa stránky #&lt;id-stránky&gt;{if count($langs)>1}-&lt;jazyk&gt;{/if}
+<tr><td>{input submit1}
+</table>
+{/form}
 
 {/snippet}
-
-<p>Pozn: nová adresa může obsahovat #&lt;id-stránky&gt;-&lt;jazyk&gt;
 
 

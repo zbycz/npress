@@ -20,6 +20,7 @@ if(isset($_SERVER['SCRIPT_FILENAME'], $_SERVER['SCRIPT_NAME'])){
 		$_SERVER['DOCUMENT_ROOT'] = substr($_SERVER['SCRIPT_FILENAME'], 0, $pos);
 }
 
+$_SERVER['SCRIPT_NAME'] = preg_replace('~/index\.php$~', '', $_SERVER['SCRIPT_NAME']);
 
 
 // Load Nette Framework

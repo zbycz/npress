@@ -3,13 +3,20 @@ body {
 	background-color: #fff;
 	padding:0; margin:0;
 }
-body,td,th,input,select,textarea {	font: 16px/1.4 Tahoma, 'Lucida Grande CE', lucida, sans-serif;}
+body,table,input,select,textarea {	font: 16px/1.4 Tahoma, 'Lucida Grande CE', lucida, sans-serif;}
 textarea {font-size: 90%;}
 
 table {border-collapse: collapse;}
-td,th {padding: 0.1em 0.2em; line-height: 1.4;}
+td,th {padding: 0.15em 0.4em; line-height: 1.6;}
 .border td, .border th {border: 1px #ccc solid;}
 th, thead td {border:0; font-weight:bold; color: #0098cf; }
+.fullwidthtable {
+	width: 100%;
+	/*table-layout: fixed;*/
+}
+.fullwidthtable td {
+	white-space: normal;
+}
 img {vertical-align: text-top;}
 
 
@@ -28,6 +35,7 @@ hr {border:0; border-bottom: 1px #eee solid;}
 .border {border: 1px black solid;}
 .bold {font-weight: bold; text-decoration:none;}
 .small {font-size: 80%; color: #888;}
+.smaller {font-size: 95%; color: #404040;}
 input.placeholder {color: #bbb;}
 .zprava {
 	font-size: 130%;
@@ -106,6 +114,12 @@ a[href^="error:"] {
 
 
 
+
+
+.page-width-box {
+	max-width: 1000px;
+	margin: 0 auto;
+}
 
 
 #hlavicka {
