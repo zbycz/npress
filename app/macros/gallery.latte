@@ -6,8 +6,10 @@
 	{* --- this is parsed by Lightbox - dont change --- *}
 	{var $href = $f->previewLink('800x600')} 
 	
-	<div><a href='{$href}' class='lightbox' title='{$f->description}'>
-		<img src='{$f->previewLink('200')}'></a></div>
+	<div><a href='{$href}' class='lightbox'{if trim($f->description)} title='{$f->description|trim}'{/if}>
+		<img src='{$f->previewLink(isset($opts['size'])?$opts['size']:200)}'></a>
+		{ifset $opts['filenames']}<p style='text-align:center'>{$f->filename}{/ifset}
+		</div>
 {/foreach}
 </div>
 <div class='clear'>&nbsp;</div>

@@ -53,8 +53,8 @@ production < common:
 			username: production-user
 			password: production-password
 	
-	npress:
-		preferCdnJquery: true
+		npress:
+			preferCdnJquery: true
 		
 		
 

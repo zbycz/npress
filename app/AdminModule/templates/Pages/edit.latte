@@ -12,7 +12,7 @@
 
 {block #content}
 
-{if $x=$page->getParent()->getMeta('.category')}
+{if $x=$page->getParent()->getMeta('.category')}{* TODO dirty hack *}
 	<p class="fright">
 		<a n:href='Pages:edit $page->getParent()->id' class='small'>složka {$page->getParent()->name}</a>
 	</p>

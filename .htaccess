@@ -1,24 +1,49 @@
+##
+## nPress - opensource cms
+##
+## @copyright  (c) 2012 Pavel Zbytovský (pavel@zby.cz)
+## @link       http://npress.info/
+## @package    nPress
+##
+
 Options -Indexes
 
-#ErrorDocument 403 /index.php
-#ErrorDocument 404 /index.php  
-#TODO works only in root of domain
-
-
-# mod_rewrite
 RewriteEngine On
+
+
+##
+## Set the nPress directory relative to web root
+##
 RewriteBase /
 
-# Nette framework handles everything
+
+##
+## Uncomment to prefer www-prefixed domain name
+##
+#RewriteCond %{HTTP_HOST} ^npress.info$
+#RewriteRule ^.*$ http://www.npress.info/$0 [R=301,L]
+
+
+##
+## Main rewrite rule - nPress handles everything
+## - uncomment following lines to allow parallel real-directories structure
+##
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule !^(favicon\.ico|index\.php|static/.+|data/.+|theme/.+)$ index.php [L]
 
-# Cached thumbnails served by apache
+
+##
+## Cached thumbnails handled by apache, non-existent by Nette
+##
 RewriteCond %{REQUEST_URI} /data/thumbs/([^.]+)(\.[^.]+)?\.(jpg|jpeg|png|gif)$
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteRule .* index.php [NE,L]
 
 
-### php settings ##
+##
+## PHP settings - comment those when running PHP as CGI
+##
 php_value default_charset utf-8
 php_value date.timezone Europe/Prague
 php_flag magic_quotes_gpc Off
@@ -27,5 +52,5 @@ php_flag magic_quotes_runtime Off
 php_flag file_uploads On
 php_value upload_max_filesize 100M
 php_value post_max_size 100M
-##php_value upload_tmp_dir temporarydir
+#php_value upload_tmp_dir temporarydir
 
