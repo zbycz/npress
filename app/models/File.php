@@ -151,7 +151,9 @@ class File {
 		$img->width = $size[0];
 		$img->height = $size[1];
 		$img->alt = $this->filename.'.'.$this->suffix;
-		$img->title = $this->description ."\n".$this->keywords;
+		$img->title = trim($this->description . "\n" . $this->keywords);
+		if(!$img->title) unset($img->title);
+
 
 		if(isset($opts['left'])) $img->align = 'left';
 		if(isset($opts['right'])) $img->align = 'right';
@@ -308,7 +310,7 @@ class File {
 					$image->crop('50%', '20%', $opts['w'], $opts['h']);
 				}
 				else
-					$image->resize($opts['w'], $opts['h']);
+					$image->resize($opts['w'], $opts['h'], Image::SHRINK_ONLY);
 			}
 
 			//insert text
@@ -610,7 +612,12 @@ class SoundFile extends File {
 		//$link = $this->downloadLink();
 		$link = Environment::getHttpRequest()->getUrl()->getBasePath()
 						. "data/files/$this->id.orig.$this->suffix";
-		return "\n<audio src='$link' type='audio/mp3' controls='controls'></audio>\n";
+						
+		$link = rawurlencode($link);
+		return "\n<embed type='application/x-shockwave-flash' flashvars='audioUrl=$link' src='http://www.google.com/reader/ui/3523697345-audio-player.swf' width='400' height='27' quality='best'></embed>";
+				
+		//mediaelementjs flash-fallback (IE<9) can only preload the whole file first :-/
+		//return "\n<audio src='$link' type='audio/mp3' preload='none' controls='controls'></audio>\n";
 	}
 
 	public function getControlImage($opts) {
@@ -623,8 +630,7 @@ class SoundFile extends File {
 		$optstr = preg_replace('~^_\d+(?:x\d+)?(_|$)~', '\\1', $optstr);
 		return $optstr;
 	}
-
-	public function save($newdata=false) {
+public function save($newdata=false) {
 		parent::save($newdata);
 		$this->clearPreviewCache('control');
 	}
@@ -642,7 +648,7 @@ class VideoFile extends File {
 		$link = Environment::getHttpRequest()->getUrl()->getBasePath()
 						. "data/files/$this->id.orig.$this->suffix";
 
-		return "\n<video src='$link' width='480' height='330' poster='$preview'>\n"
+		return "\n<video src='$link' width='480' height='330' poster='$preview' preload='none'>\n"
 						."Pokud vidíte tento text, váš prohlížeč zřejmě neumí přehrávat video.\n"
 						."<br>Video můžete alespoň <a href='$link'>stáhnout</a> a zkusit ho přehrát mimo prohlížeč.\n"
 						."</video>\n";
