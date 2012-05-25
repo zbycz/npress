@@ -8,6 +8,7 @@
  */
 
 
+//Instantiated also in LinkHelper service
 class PagesRouter implements IRouter
 {
 	const PRESENTER = 'Pages';

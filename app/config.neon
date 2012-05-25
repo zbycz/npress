@@ -33,9 +33,10 @@ common:
 
 
 	services:
-		plugins:  Plugins(%plugins%)
-		npMacros: NpMacros(%macros%, ...)
-		i18n:     I18n(%langs%, %defaultLang%, %langDomains%)
+		linkHelper: LinkHelper
+		plugins:    Plugins(%plugins%)
+		npMacros:   NpMacros(%macros%, ...)
+		i18n:       I18n(%langs%, %defaultLang%, %langDomains%)
 
 
 	parameters:
