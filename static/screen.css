@@ -301,7 +301,7 @@ a[href^="error:"] {
 	font-size: 200%;
 	width: 80%;
 }
-.editform .seoname, .editform .seoname input {
+.editform .seoname input {
 	font-size: 80%;
 	color: #aaa;
 }

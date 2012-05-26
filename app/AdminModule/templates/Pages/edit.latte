@@ -126,6 +126,7 @@
 {/form}
 <div id="np-uploadify-queue" class="clear"></div>
 
+<div data-afterUpdate="editform_editfile_update">
 {snippet editform_editfile}
 {ifset $editFile}
 <div class='editfile clear'>
@@ -148,6 +149,7 @@
 </div>
 {/ifset}
 {/snippet}
+</div>
 
 
 {snippet editform_filelist}

@@ -387,6 +387,16 @@ function editform_seoname_update(){
 	$('#js-linkhelp').hide();
 }
 
+function editform_editfile_update(){
+	$('.lightbox').lightBox({
+			overlayBgColor: '#000',
+			overlayOpacity: 0.2,
+			containerResizeSpeed: 350,
+			txtImage: '',
+			txtOf: '/'
+		});
+}
+
 function ctrl_s_saving(){// catching ctrl+s in body and wysiwyg
 	var save = function(event){
 		if(event.ctrlKey && event.keyCode == 83 && !event.shiftKey && !event.altKey){

@@ -13,7 +13,7 @@
 
 {block layout_body}
 <div id="wrapper">
-	<div class="langswitch">
+	<div class="langswitch" n:if="count($langs)>1">
 			{foreach $langs as $l=>$txt}
 				<a href="{$presenter->langSwitch($l)}" n:class="$lang==$l?bold" class="{$l}"><span></span>{$txt}</a>
 				{sep} | {/sep}
@@ -50,7 +50,7 @@
 		
 		</div>
 		<!-- end #menu -->
-		<div id="search">
+		<!-- <div id="search">
 			<form method="get" action="" onsubmit="return false">
 				<fieldset>
 				<input type="text" name="q" id="search-text" size="15" />
@@ -100,6 +100,8 @@
 					</ul>
 				</li>
 				<li>
+					{* !PagesModel::getPageById(5)->content *}
+
 					<h2>Aliquam tempus</h2>
 					<p>Mauris vitae nisl nec metus placerat perdiet est. Phasellus dapibus semper urna. Pellentesque ornare, orci in consectetuer hendrerit, volutpat.</p>
 				</li>
