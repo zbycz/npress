@@ -1,4 +1,4 @@
-form.wysiwyg {
+.ui-dialog form.wysiwyg {
 	background:#fff;
 	padding:1em;
 	border:1px solid #eee;
@@ -6,29 +6,29 @@ form.wysiwyg {
 	width:25em;
 }
 
-form.wysiwyg fieldset div {
+.ui-dialog form.wysiwyg fieldset div {
 	margin:0.3em 0;
 	clear:both;
 	margin-bottom:5px;
 }
 
-form.wysiwyg label {
+.ui-dialog form.wysiwyg label {
 	display: block;
 	text-align:right;
 	margin-right:1em;
 }
 
-form.wysiwyg legend {
+.ui-dialog .ui-dialog form.wysiwyg legend {
 	color:#0b77b7;
 	font-size:1.2em;
 }
 
-form.wysiwyg legend span {
+.ui-dialog form.wysiwyg legend span {
 	width:10em;
 	text-align:right;
 }
 
-form.wysiwyg input {
+.ui-dialog form.wysiwyg input {
 	padding:0.15em;
 	width:10em;
 	border:1px solid #ddd;
@@ -39,24 +39,24 @@ form.wysiwyg input {
 	-khtml-border-radius:0.4em;
 }
 
-form.wysiwyg input.width, form.wysiwyg input.height {
+.ui-dialog form.wysiwyg input.width, .ui-dialog form.wysiwyg input.height {
 	width: 4em;
 }
 
-form.wysiwyg input:hover, form.wysiwyg input:focus {
+.ui-dialog form.wysiwyg input:hover, .ui-dialog form.wysiwyg input:focus {
 	border-color:#c5c5c5;
 	background:#f6f6f6;
 }
 
-form.wysiwyg .button{
+.ui-dialog form.wysiwyg .button{
 	margin-top:8px;
 }
 
-form.wysiwyg fieldset {
+.ui-dialog form.wysiwyg fieldset {
 	border:1px solid #ddd;
 	padding:0 0.5em 0.5em;
 }
 
-form.wysiwyg input.default {
+.ui-dialog form.wysiwyg input.default {
 	color:#bbb;
 }

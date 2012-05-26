@@ -10,13 +10,24 @@
 // and using http://api.jquery.com/on/
 
 
+if (!Array.prototype.indexOf) {
+	Array.prototype.indexOf = function(obj, start) {
+     for (var i = (start || 0), j = this.length; i < j; i++) {
+         if (this[i] === obj) { return i; }
+     }
+     return -1;
+	}
+}
+
+
+
 function tag2npmacro(newContent){
 	//newContent = newContent.replace(/<img src="[^#"]*#-file-(\d+)(_[^_#]+)*-#">/gi, "#-file-$1$2-#");
 	newContent = newContent.replace(/<[^#>]*#-(file-.+?)-#[^>]*>/gi, function(tag, macro){
 		var matches, size, align, pos;
 		var opts = macro.split("_");
 
-		//match html attribute or css style
+		//match html attribute or css style (width)
 		if( matches = /width[^0-9]{1,2}([0-9]+)/.exec(tag) ){
 			size = matches[1];
 			//if( matches = /height[^0-9]{1,2}([0-9]+)/.exec(tag) ) //TODO smazat - pamatujeme si jen šířku
@@ -33,8 +44,8 @@ function tag2npmacro(newContent){
 		if( (pos = opts.indexOf("right")) != -1)	opts.splice(pos, 1);
 
 		//add align from html attribute
-		if( matches = /align=[^0-9](left|right)/.exec(tag) )
-				opts.push(matches[1]);
+		if( matches = /(float|align)[^a-z]+(left|right)/i.exec(tag) )
+				opts.push(matches[2]);
 
 		return "#-"+opts.join("_")+'-#';
 	});
@@ -53,11 +64,11 @@ function npmacro2tag(newContent){
 		//remove align from url opts and write the html attribute
 		if( (pos = opts.indexOf("left")) != -1){
 			opts.splice(pos, 1);
-			html += ' align="left"';
+			html += ' style="float: left"';
 		}
 		else if( (pos = opts.indexOf("right")) != -1){
 			opts.splice(pos, 1);
-			html += ' align="right"';
+			html += ' style="float: right"';
 		}
 
 		//construct url
@@ -230,7 +241,9 @@ function ajax_upload(){
 function pageEditForm_jwysiwyg(){
 	if(!wysiwygConfig) wysiwygConfig = {contentStyle: false, minHtmlHeading: 2};
 
-	$('#frmpageEditForm-text').wysiwyg({
+
+
+	var wysiwyg = $('#frmpageEditForm-text').wysiwyg({
 		css: basePath + wysiwygConfig.contentStyle,
 		//autoGrow: true, //nefunguje dobře
 		//autoSave: true,
@@ -288,7 +301,6 @@ function pageEditForm_jwysiwyg(){
 // 			cut   : { visible : true },
 // 			copy  : { visible : true },
 // 			paste : { visible : true },
-			html  : { visible: true },
 // 			increaseFontSize : { visible : true },
 // 			decreaseFontSize : { visible : true },
 //			exam_html: {
@@ -297,23 +309,14 @@ function pageEditForm_jwysiwyg(){
 //					return true;
 //				},
 //				visible: true
-//			}
-		},
-
-		events: {  // doesnt work, needs jwysiwyg modification
-//			//when inputing in wysiwyg
-//			getContent: function (orig) {
-//				alert(orig);
-//				return orig;
 //			},
-//
-//			//on written char, after setContent
-//			save: function(event) {
-//
-//			}
-		}
+			html  : { visible: true }
+		},
+		events: {}  // these are html events on editorDoc
+	})//.getWysiwyg();
 
-	});
+	//wysiwyg.events.bind("getContent", tag2npmacro);
+	//wysiwyg.events.bind("setContent", npmacro2tag);
 }
 
 function fill_headings(s){

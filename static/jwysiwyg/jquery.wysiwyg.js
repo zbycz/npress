@@ -67,6 +67,15 @@
 				tags: ["a"],
 				tooltip: "Create link"
 			},
+			
+			unLink : {
+				groupIndex: 6,
+				visible: true,
+				exec : function() {
+					this.editorDoc.execCommand("unlink", false, null);
+				},
+				tooltip: "Remove link"
+			},
 
 			cut: {
 				groupIndex: 8,
@@ -321,6 +330,14 @@
 				groupIndex: 1,
 				visible: true,
 				tags: ["center"],
+				exec: function(){
+					var img = this.dom.getElement("img");
+					var range = this.getInternalRange();
+					if( img !== null && range.endContainer == range.startContainer ){
+						   $(img).css("float", "none")
+					}
+					this.editorDoc.execCommand("justifyCenter", false, null);
+				},
 				css: {
 					textAlign: "center"
 				},
@@ -330,6 +347,16 @@
 			justifyFull: {
 				groupIndex: 1,
 				visible: true,
+				exec: function(){
+					var img = this.dom.getElement("img");
+					var range = this.getInternalRange();
+					if( img !== null && range.endContainer == range.startContainer ){
+						$(img).css("float", "none")
+					}
+					else {
+						this.editorDoc.execCommand("justifyBlock", false, null);
+					}
+				},
 				css: {
 					textAlign: "justify"
 				},
@@ -339,8 +366,19 @@
 			justifyLeft: {
 				visible: true,
 				groupIndex: 1,
+				exec: function(){
+					var img = this.dom.getElement("img");
+					var range = this.getInternalRange();
+					if( img !== null && range.endContainer == range.startContainer ){
+						$(img).css("float", "left");
+					}
+					else {
+						this.editorDoc.execCommand("justifyLeft", false, null);
+					}
+				},
 				css: {
-					textAlign: "left"
+					textAlign: "left",
+					float:"left"
 				},
 				tooltip: "Justify Left"
 			},
@@ -348,8 +386,19 @@
 			justifyRight: {
 				groupIndex: 1,
 				visible: true,
+				exec: function(){
+					var img = this.dom.getElement("img");
+					var range = this.getInternalRange();
+					if( img !== null && range.endContainer == range.startContainer ){
+						$(img).css("float", "right")
+					}
+					else {
+						this.editorDoc.execCommand("justifyRight", false, null);
+					}
+				},
 				css: {
-					textAlign: "right"
+					textAlign: "right",
+					float:"right"
 				},
 				tooltip: "Justify Right"
 			},
@@ -560,7 +609,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 		this.editorDoc		= null;
 		this.element		= null;
 		this.options		= {};
-		this.original		= null; //original textarea
+		this.original		= null;
 		this.savedRange		= null;
 		this.timers			= [];
 		this.validKeyCodes	= [8, 9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 45, 46];
@@ -772,13 +821,25 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				.addClass(className)
 				.attr("title", tooltip)
 				.hover(this.addHoverClass, this.removeHoverClass)
-				.click(function () {
+				.click(function (event) {
 					if ($(this).hasClass("disabled")) {
 						return false;
 					}
 
 					self.triggerControl.apply(self, [name, control]);
 
+					/**
+					* @link https://github.com/akzhan/jwysiwyg/issues/219
+					*/
+					var $target = $(event.target);
+					for (var controlName in self.controls) {
+						if ($target.hasClass(controlName)) {
+							self.ui.toolbar.find("." + controlName).toggleClass("active");
+							self.editorDoc.rememberCommand = true;
+							break;
+						}
+					}
+                    
 					this.blur();
 					self.ui.returnRange();
 					self.ui.focus();
@@ -917,7 +978,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 
 					attempts -= 1;
 					if (attempts > 0) {
-						self.timers.designMode = window.setTimeout(function () {runner(attempts);}, 100);
+						self.timers.designMode = window.setTimeout(function () { runner(attempts); }, 100);
 					}
 				};
 
@@ -1079,7 +1140,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			if (this.viewHTML) {
 				this.setContent(this.original.value);
 			}
-
 			var newContent = tag2npmacro(this.editorDoc.body.innerHTML);
 			return this.events.filter('getContent', newContent);
 		};
@@ -1239,8 +1299,8 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 		this.init = function (element, options) {
 			var self = this,
 				$form = $(element).closest("form"),
-				newX = element.width || element.clientWidth || 0,
-				newY = element.height || element.clientHeight || 0
+				newX = (element.width || element.clientWidth || 0),
+				newY = (element.height || element.clientHeight || 0)
 				;
 
 			this.options	= this.extendOptions(options);
@@ -1266,12 +1326,23 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				this.editor.css({
 					minHeight: (newY - 6).toString() + "px",
 					// fix for issue 12 ( http://github.com/akzhan/jwysiwyg/issues/issue/12 )
-					width: (newX > 50) ? (newX - 8).toString() + "px" : ""
+					width: (newX > 50) ? newX.toString() + "px" : ""
 				});
 				if ($.browser.msie && parseInt($.browser.version, 10) < 7) {
 					this.editor.css("height", newY.toString() + "px");
 				}
 			}
+			/** 
+			 * Automagically add id to iframe if textarea has its own when possible 
+			 * ( http://github.com/akzhan/jwysiwyg/issues/245 )
+			 */
+			if (element.id) {
+				var proposedId = element.id + '-wysiwyg-iframe';
+				if (! document.getElementById(proposedId)) {
+					this.editor.attr('id', proposedId);
+				}
+			}
+
 			/**
 			 * http://code.google.com/p/jwysiwyg/issues/detail?id=96
 			 */
@@ -1294,7 +1365,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			 */
 			this.initialContent = $(element).val();
 			this.ui.initFrame();
-			this.setContent($(element).val());
 
 			if (this.options.resizeOptions && $.fn.resizable) {
 				this.element.resizable($.extend(true, {
@@ -1303,10 +1373,10 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			}
 
 			if (this.options.autoSave) {
-				$form.bind("submit.wysiwyg", function () {self.autoSaveFunction();});
+				$form.bind("submit.wysiwyg", function () { self.autoSaveFunction(); });
 			}
 
-			$form.bind("reset.wysiwyg", function () {self.resetFunction();});
+			$form.bind("reset.wysiwyg", function () { self.resetFunction(); });
 		};
 
 		this.ui.initFrame = function () {
@@ -1332,12 +1402,12 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			self.ui.designMode();
 			self.editorDoc.open();
 			self.editorDoc.write(
-				self.options.html
+				npmacro2tag(self.options.html
 					/**
 					 * @link http://code.google.com/p/jwysiwyg/issues/detail?id=144
 					 */
-					.replace(/INITIAL_CONTENT/, function () {return self.wrapInitialContent();})
-			);
+					.replace(/INITIAL_CONTENT/, function () { return self.wrapInitialContent(); })
+			));
 			self.editorDoc.close();
 
 			$.wysiwyg.plugin.bind(self);
@@ -1348,6 +1418,29 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				self.ui.checkTargets(event.target ? event.target : event.srcElement);
 			});
 
+            /**
+             * @link https://github.com/akzhan/jwysiwyg/issues/251
+             */
+            setInterval(function () {
+                var offset = null;
+
+                try {
+                    var range = self.getInternalRange();
+                    if (range) {
+                        offset = {
+                            range: range,
+                            parent: $.browser.msie ? range.parentElement() : range.endContainer.parentNode,
+                            width: ($.browser.msie ? range.boundingWidth : range.startOffset - range.endOffset) || 0
+                        };
+                    }
+                }
+                catch (e) { console.error(e); }
+
+                if (offset && offset.width == 0 && !self.editorDoc.rememberCommand) {
+                    self.ui.checkTargets(offset.parent);
+                }
+            }, 400);
+            
 			/**
 			 * @link http://code.google.com/p/jwysiwyg/issues/detail?id=20
 			 */
@@ -1367,26 +1460,29 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 						return false;
 					}
 				}
+                
+                self.editorDoc.rememberCommand = false;
 				return true;
 			});
 
 			if (!$.browser.msie) {
 				$(self.editorDoc).keydown(function (event) {
 					var controlName;
+                    			var control;
 
 					/* Meta for Macs. tom@punkave.com */
 					if (event.ctrlKey || event.metaKey) {
-						for (controlName in self.controls) {
-							if (self.controls[controlName].hotkey && self.controls[controlName].hotkey.ctrl) {
-								if (event.keyCode === self.controls[controlName].hotkey.key) {
-									self.triggerControl.apply(self, [controlName, self.controls[controlName]]);
+						for (controlName in self.options.controls) {
+                            				control = self.options.controls[controlName];
+							if (control.hotkey && control.hotkey.ctrl) {
+								if (event.keyCode === control.hotkey.key) {
+									self.triggerControl.apply(self, [controlName, control]);
 
 									return false;
 								}
 							}
 						}
 					}
-
 					return true;
 				});
 			} else if (self.options.brIE) {
@@ -1411,9 +1507,9 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 						if (86 === event.keyCode) {
 							if ($.wysiwyg.rmFormat) {
 								if ("object" === typeof (self.options.plugins.rmFormat.rmMsWordMarkup)) {
-									$.wysiwyg.rmFormat.run(self, {rules: {msWordMarkup: self.options.plugins.rmFormat.rmMsWordMarkup}});
+									$.wysiwyg.rmFormat.run(self, {rules: { msWordMarkup: self.options.plugins.rmFormat.rmMsWordMarkup }});
 								} else {
-									$.wysiwyg.rmFormat.run(self, {rules: {msWordMarkup: {enabled: true}}});
+									$.wysiwyg.rmFormat.run(self, {rules: { msWordMarkup: { enabled: true }}});
 								}
 							}
 						}
@@ -1422,10 +1518,10 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			}
 
 			if (self.options.autoSave) {
-				$(self.editorDoc).keydown(function () {self.autoSaveFunction();})
-					.keyup(function () {self.autoSaveFunction();})
-					.mousedown(function () {self.autoSaveFunction();})
-					.bind($.support.noCloneEvent ? "input.wysiwyg" : "paste.wysiwyg", function () {self.autoSaveFunction();});
+				$(self.editorDoc).keydown(function () { self.autoSaveFunction(); })
+					.keyup(function () { self.autoSaveFunction(); })
+					.mousedown(function () { self.autoSaveFunction(); })
+					.bind($.support.noCloneEvent ? "input.wysiwyg" : "paste.wysiwyg", function () { self.autoSaveFunction(); });
 			}
 
 			if (self.options.autoGrow) {
@@ -1649,9 +1745,9 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 
 			if ($.wysiwyg.rmFormat && $.wysiwyg.rmFormat.enabled) {
 				if ("object" === typeof (this.options.plugins.rmFormat.rmMsWordMarkup)) {
-					$.wysiwyg.rmFormat.run(this, {rules: {msWordMarkup: this.options.plugins.rmFormat.rmMsWordMarkup}});
+					$.wysiwyg.rmFormat.run(this, {rules: { msWordMarkup: this.options.plugins.rmFormat.rmMsWordMarkup }});
 				} else {
-					$.wysiwyg.rmFormat.run(this, {rules: {msWordMarkup: {enabled: true}}});
+					$.wysiwyg.rmFormat.run(this, {rules: { msWordMarkup: { enabled: true }}});
 				}
 			}
 
@@ -1666,9 +1762,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			this.setContent(this.initialContent);
 		};
 
-		//save the edited content back to textarea. Called after every keypress
 		this.saveContent = function () {
-			//$('#toc-files').append('!');
 			if (this.viewHTML)
 			{
 				return; // no need
@@ -1706,7 +1800,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 					content = newContent.html();
 				}
 
-				$(this.original).val(content);
+				$(this.original).val(content).change();
 
 				if (this.options.events && this.options.events.save) {
 					this.options.events.save.call(this);
@@ -1732,7 +1826,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 				control.exec.apply(this);  //custom exec function in control, allows DOM changing
 			} else {
 				this.ui.focus();
-				this.ui.withoutCss(); //TODO doesnt work //disable style="" attr inserting in mozzila's designMode
+				this.ui.withoutCss(); //disable style="" attr inserting in mozzila's designMode
 				// when click <Cut>, <Copy> or <Paste> got "Access to XPConnect service denied" code: "1011"
 				// in Firefox untrusted JavaScript is not allowed to access the clipboard
 				try {
@@ -1861,6 +1955,17 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 
 			return oWysiwyg.getContent();
 		},
+    
+    		getSelection: function (object) {
+  			// no chains because of return
+			var oWysiwyg = object.data("wysiwyg");
+
+			if (!oWysiwyg) {
+				return undefined;
+			}
+
+			return oWysiwyg.getRangeText();
+		},
 
 		init: function (object, options) {
 			return object.each(function () {
@@ -1877,7 +1982,6 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 
 				obj = new Wysiwyg();
 				obj.init(this, opts);
-				obj.ui.withoutCss();
 				$.data(this, "wysiwyg", obj);
 
 				$(obj.editorDoc).trigger("afterInit.wysiwyg");
@@ -2170,7 +2274,8 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			obj.destroy.apply(that, []);
 			
 			$that.trigger("afterClose", [$dialog]);
-			
+
+			jWysiwyg.ui.focus();
 		};
 
 		if (this.options.open) {
@@ -2333,13 +2438,13 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 					
 					that._$dialog.find("div.wysiwyg-dialog-topbar").bind("mousedown", function (e) {
 						e.preventDefault();
-						$(this).css({"cursor": "move"});
+						$(this).css({ "cursor": "move" });
 						var $topbar = $(this),
 							_dialog = $(this).parents(".wysiwyg-dialog"),
 							offsetX = (e.pageX - parseInt(_dialog.css("left"), 10)),
 							offsetY = (e.pageY - parseInt(_dialog.css("top"), 10));
 						mouseDown = true;
-						$(this).css({"cursor": "move"});
+						$(this).css({ "cursor": "move" });
 						
 						$(document).bind("mousemove", function (e) {
 							e.preventDefault();
@@ -2352,7 +2457,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 						}).bind("mouseup", function (e) {
 							e.preventDefault();
 							mouseDown = false;
-							$topbar.css({"cursor": "auto"});
+							$topbar.css({ "cursor": "auto" });
 							$(document).unbind("mousemove").unbind("mouseup");
 						});
 					

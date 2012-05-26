@@ -2,7 +2,7 @@
 body {
 	color: #000;
 	background-color: #fff;
-	padding:0; margin:0;
+	padding:0.2em 0.3em; margin:0;
 }
 body,td,th,input,select,textarea {	font: 16px/1.4 Tahoma, 'Lucida Grande CE', lucida, sans-serif;}
 textarea {font-size: 90%;}
@@ -11,7 +11,14 @@ table {border-collapse: collapse;}
 td,th {padding: 0.1em 0.2em; border: 1px #aaa solid; line-height: 1.4;}
 th, thead td {background-color: #ACE;}
 img {vertical-align: bottom;}
-
+img {
+	border:0;
+	margin: 0.5em;
+	margin-top: 0.2em;
+	margin-bottom: 0;
+}
+img[align=left], img[style*="left"] {	margin-left: 0;}
+img[align=right], img[style*="right"] {	margin-right: 0;}
 
 hr {border:0; border-bottom: 2px #3678cf solid;}
 
