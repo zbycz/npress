@@ -81,6 +81,8 @@
 	<div class="span3">
 	<div class="well sidebar-nav">
 
+
+{*
 		<div class="sidebar-head">
 			<button id="js-menu-reordering" class="btn pull-right btn-mini btn-info" data-toggle="button">upravit</button>
 
@@ -91,7 +93,22 @@
 				<li class="divider"></li>
 				<li><a href="">Novinky</a></li>
 			</ul>
+		</div>*}
+
+		<div class="btn-group pull-right spacer spacerr">
+			<button id="js-menu-reordering" class="btn btn-mini btn-info" data-toggle="button">upravit</button>
+
+			<a class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
+			<ul class="dropdown-menu">
+				<li><a n:href="Pages:add $presenter->getParam('id_page')">přidat stránku</a></li>
+				<li><a n:href="Pages:add $presenter->getParam('id_page')">přidat podstránku</a></li>
+				<li class="divider"></li>
+				<li><a href="">Novinky</a></li>
+			</ul>
 		</div>
+
+		<h2 class="nav-header spacer">Stránky</h2>
+
 
 		<div id="menu" n:snippet="menu" data-afterUpdate="menu_reordering">
 			<ul id="js-menu" data-pagesortLink="{link Admin:pagesort}" class="ui-sortable-disabled">
@@ -113,7 +130,7 @@
 		</div>{*/snippet #menu*}
 
 
-		<ul class="nav nav-list">
+		<ul class="nav nav-list spacer">
 			<li class="nav-header">Nastavení</li>
 			<li><a n:href="Pages:trash"><i class="icon-trash"></i> Koš stránek</a>
 			{* <li><a>Nastavení</a> *}

@@ -3,6 +3,8 @@ body {
 	padding-top: 60px;
 	padding-bottom: 40px;
 }
+.spacer {margin-top: 9px;}
+.spacer {margin-right: 9px;}
 .sidebar-nav {
 	padding: 0 0 9px 0;
 }
@@ -59,9 +61,6 @@ body {
 
 
 
-#menu {
-	padding: 9px 0;
-}
 #menu ul {
 	position: relative;
 	margin: 0;
@@ -111,9 +110,17 @@ body {
 #menu .unpublished.current a {color: #fff; }
 #menu .unpublished:before {content: url(images/iconEyeNo.png); position:absolute; right:12px; margin-top: 3px;}
 
-
-
 #menu ul a:hover {background-color: #eeeeee;}
 
 
+.nav-header {
+  display: block;
+  padding: 3px 15px;
+  font-size: 11px;
+  font-weight: bold;
+  line-height: 18px;
+  color: #999999;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  text-transform: uppercase;
+}
 
