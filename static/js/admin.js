@@ -409,46 +409,50 @@ function ctrl_s_saving(){// catching ctrl+s in body and wysiwyg
 	if(doc) doc.keydown(save);
 }
 
+function foldable_helper(){
+	$this = $(this);
+
+	//do not fold empty UL
+	if($this.children().length == 0)
+		return;
+
+	//folding (+)/(-)
+	var span = $('<span>+</span>').click(function(){
+		$ul = $(this).parent().next();
+		if($ul.css('display') == 'none'){
+			$ul.show();
+			$(this).html('&ndash;');
+
+		}
+		else{
+			$ul.hide();
+			$(this).html('+');
+		}
+	});
+
+	//displayed UL - show (-)
+	if($this.css('display') != 'none')
+			span.html('&ndash;');
+
+	$this.prev().addClass('foldable').prepend(span);
+}
+
 function menu_reordering(){
+	var $jsmenu = $('#js-menu');
+
 	//menu folding
-	$('#js-menu ul').each(function(){
-		$this = $(this);
-
-		//do not fold empty UL
-		if($this.children().length == 0)
-			return;
-
-		//folding (+)/(-)
-		var span = $('<span>+</span>').click(function(){
-			$ul = $(this).parent().next();
-			if($ul.css('display') == 'none'){
-				$ul.show();
-				$(this).html('&ndash;');
-
-			}
-			else{
-				$ul.hide();
-				$(this).html('+');
-			}
-		});
-
-		//displayed UL - show (-)
-		if($this.css('display') != 'none')
-				span.html('&ndash;');
-
-		$this.prev().addClass('foldable').prepend(span);
-	})
+	$jsmenu.find('ul').each(foldable_helper);
 
 	// activating of reordering
 	$('#js-menu-reordering').click(function(){
 		var state = ! $(this).hasClass('active');
 		$.cookie("menu-ordering", state, {path: '/'});
-		$('#js-menu').nestedSortable(state ? "enable" : "disable");
+		$jsmenu.nestedSortable(state ? "enable" : "disable");
 
 	});
 
 	// reordering
-	var $jsmenu = $('#js-menu').nestedSortable({
+	$jsmenu.nestedSortable({
 			disableNesting: 'no-nest',
 			forcePlaceholderSize: true,
 			handle: 'div',  //TODO inner <a> not catchable
@@ -464,8 +468,12 @@ function menu_reordering(){
 			listType: 'ul',
 			disabled: true,
 			stop: function(event, ui){
-				var data = $('#js-menu').nestedSortable("serialize");
-				$.post($('#js-menu').attr('data-pagesortLink'), data);
+				var data = $jsmenu.nestedSortable("serialize");
+				$.post($jsmenu.attr('data-pagesortLink'), data);
+
+				$jsmenu.find('span').remove();
+				$jsmenu.find('.foldable').removeClass('foldable');
+				$jsmenu.find('ul').each(foldable_helper);
 			}
 		});
 		
