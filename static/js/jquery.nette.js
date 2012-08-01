@@ -12,7 +12,7 @@ jQuery.extend({
         updateSnippet: function (id, html) {
           var snippet = $("#" + id).html(html);
 
-					var fnc = snippet.parent().attr("data-afterUpdate");
+					var fnc = snippet.attr("data-afterUpdate");
 					if(window[fnc])
 						window[fnc]();
         },

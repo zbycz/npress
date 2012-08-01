@@ -12,6 +12,7 @@
 
 {block #content}
 
+<div class="page-header">
 {if $x=$page->getParent()->getMeta('.category')}{* TODO dirty hack *}
 	<p class="fright">
 		<a n:href='Pages:edit $page->getParent()->id' class='small'>složka {$page->getParent()->name}</a>
@@ -22,6 +23,7 @@
 {else}
 	<h2>Editace stránky</h2>
 {/if}
+</div>
 
 {snippet editform_deleted}
 	{if $page->data[deleted]}
@@ -43,31 +45,31 @@
 			zkopírovat názvy z "{$fromPage->name}"</a> (#{$fromPage->lang}{$fromPage->id})
 {/ifset}
 
-<div class="editform">
-{form pageEditForm}
-	<table>
-	<tr class='heading'>
-		<th style="width:7em">{label heading /}:
-		<td>{input heading}
-	</tr>
-	<tr>
-		<th>{label name /}: 
-		<td class="small">{input name class=>inpwidth, placeholder=>'(použije se nadpis)'}
+{form pageEditForm "class"=>"form-horizontal"}
+	<div class="control-group">
+		{label heading "class"=>"control-label" /}
+		<div class="controls">{input heading "class"=>"fontxx"}
+	</div></div>
+	
+	<div class="control-group">
+		{label name "class"=>"control-label" /}
+		<div class="controls">{input name class=>inpwidth, placeholder=>'(použije se nadpis)'}
 			<noscript> prázdné pole automaticky zobrazuje nadpis</noscript>
-	</tr>
-	<tr class='inpwidth seoname' data-afterUpdate="editform_seoname_update">
-		<th>{label seoname /}: 
-	  {snippet editform_seoname td}
+	</div></div>
+
+	<div class="control-group">
+		{label seoname "class"=>"control-label" /}
+		<div class="controls" n:snippet="editform_seoname" data-afterUpdate="editform_seoname_update">
 			{$presenter['pageEditForm']['seoname']->control->placeholder('(automatická)')}
 			<a href="{$page->link()}">zobrazit na webu: <small>{$page->link()|truncate:40}</small></a>
-		{/snippet}
-	</tr>
-	<tr>
-		<th>{label published /}:
-		<td>{input published}
-	</tr>
+	</div></div>
+
+	<div class="control-group">
+		{label published "class"=>"control-label" /}
+		<div class="controls">{input published}
+	</div></div>
+
 	{? $presenter->triggerEvent_filter('filterPageEditForm_render', $_form)}
-	</table>
 
 	<div id="js-linkhelp" class="hidden">
 		<p>Adresa musí být jedinečná v rámci webu (jazyka), např.: <b>/kontakt</b>
@@ -94,6 +96,7 @@
 {/form}
 
 
+<div class="editform">
 
 
 
@@ -126,8 +129,7 @@
 {/form}
 <div id="np-uploadify-queue" class="clear"></div>
 
-<div data-afterUpdate="editform_editfile_update">
-{snippet editform_editfile}
+<div n:snippet="editform_editfile" data-afterUpdate="editform_editfile_update">
 {ifset $editFile}
 <div class='editfile clear'>
 	<a n:href="this" onclick="$(this).parent().hide(300);return false" class="close" title='zavřít'>×</a>
@@ -148,8 +150,7 @@
 	{control editFileForm}
 </div>
 {/ifset}
-{/snippet}
-</div>
+</div> {*/snippet*}
 
 
 {snippet editform_filelist}

@@ -9,7 +9,8 @@
 
 	<title>{$config[webTitle]} &ndash; Administrace</title>
 
-	<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/static/screen.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/static/bootstrap.css" type="text/css">
+	<link rel="stylesheet" href="{$basePath}/static/screen.css" type="text/css">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
 	<script>document.write('<style>.jshidden { display:none }</style>')</script>
 
@@ -24,32 +25,76 @@
 </head>
 
 <body>
-	<div id="hlavicka">
-		<div class='fright'><span id='ajax-spinner'></span>
-			Přihlášen admin | <a n:href="Admin:logout">odhlásit</a></div>
-		<h1><a n:href="Admin:default" class='npresslogo'><span>n</span>Press</a> <a n:href=":Front:Pages: lang=>$lang">{$config[webTitle]} <small>web &raquo;</small></a></h1>
-		
-		<div id='flashes'><div class='box'>
-		{snippet flashes}
-			<div n:foreach="$flashes as $flash" class="flash">
+<div class="navbar navbar-fixed-top">
+<div class="navbar-inner">
+	<div class="container">
+		<span id='ajax-spinner pull-right'></span>
+
+		<div class="btn-group pull-right">
+			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+				<i class="icon-user"></i> admin
+				<span class="caret"></span>
+			</a>
+			<ul class="dropdown-menu">
+				<li><a n:href="Admin:logout">odhlásit</a></li>
+				<li class="divider"></li>
+				<li class="inline">Jazyk administrace:<br /> <a href="#">cs</a> / <a href="#">en</a></li>
+			</ul>
+		</div>
+
+		<!-- lang switch -->
+		<ul class="nav pull-right" n:if="count($langs)>1">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i> {$lang} <b class="caret"></b></a>
+				<ul class="dropdown-menu">
+					{foreach $langs as $l=>$txt}
+						<li><a n:href="this lang=>$l" n:class="$lang==$l?bold">{$txt} ({$l})</a></li>
+					{/foreach}
+				</ul>
+			</li>
+		</ul>
+			
+
+		<a n:href="Admin:default" class='npresslogo navbar-text pull-left'><span>n</span>Press</a>
+
+		<div class="navbar-text pull-left span">
+			<a n:href=":Front:Pages: lang=>$lang" class="brand">{$config[webTitle]} <small>web &raquo;</small></a>
+		</div>
+
+		<div id='flashes'><div class='box' n:snippet="flashes">
+			<div n:foreach="$flashes as $flash" class="flash alert">
 				{$flash->message}
 				<a href='{$flash->undolink}' n:if="isset($flash->undolink)" class="ajax">vzít zpět</a>
 			</div>
 			<script>window.setTimeout(function(){ $('.flash').fadeOut(8000); }, 5000);</script> {* za 5sec už je $ inicializován *}
-		{/snippet}
 		</div></div>
-		
-	</div>
+
+	 </div>
+</div>
+</div> <!-- /navbar -->
 
 
+<div class="container">
+<div class="row">
 
-	<div id="menu" data-afterUpdate="menu_reordering">
-		<p class="mover"><label for='js-menu-reordering'><span>přesouvání</span></label>
-										 <input type='checkbox' id='js-menu-reordering'>
-		<p><a n:href="Pages:add $presenter->getParam('id_page')" title="přidat podstránku">+ přidat</a>
-		
-		{snippet menu}
-			<ul class="ui-sortable-disabled" id="js-menu" data-pagesortLink="{link Admin:pagesort}">
+	<!-- left sidebar -->
+	<div class="span3">
+	<div class="well sidebar-nav">
+
+		<div class="sidebar-head">
+			<button id="js-menu-reordering" class="btn pull-right btn-mini btn-info" data-toggle="button">upravit</button>
+
+			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i> přidat <span class="caret"></span></a>
+			<ul class="dropdown-menu">
+				<li><a n:href="Pages:add $presenter->getParam('id_page')">stránku</a></li>
+				<li><a n:href="Pages:add $presenter->getParam('id_page')">podstránku</a></li>
+				<li class="divider"></li>
+				<li><a href="">Novinky</a></li>
+			</ul>
+		</div>
+
+		<div id="menu" n:snippet="menu" data-afterUpdate="menu_reordering">
+			<ul id="js-menu" data-pagesortLink="{link Admin:pagesort}" class="ui-sortable-disabled">
 			{block #TreeView}
 				{foreach $pages->getChildNodes() as $row}
 					<li id='menuid-{$row->id}'>
@@ -65,33 +110,40 @@
 				{/foreach}
 			{/block}
 			</ul>
-		{/snippet}
+		</div>{*/snippet #menu*}
 
-		<hr>
-		<ul>
-			<li><a n:href="Pages:trash">Koš stránek</a>
+
+		<ul class="nav nav-list">
+			<li class="nav-header">Nastavení</li>
+			<li><a n:href="Pages:trash"><i class="icon-trash"></i> Koš stránek</a>
 			{* <li><a>Nastavení</a> *}
-			<li><a n:href="Redirect:">Přesměrování</a>
-			<li n:if="count($langs)>1"><a n:href="Translations:">Překlady</a></li>
+			<li><a n:href="Redirect:"><i class="icon-retweet"></i> Přesměrování</a>
+			<li n:if="count($langs)>1"><a n:href="Translations:"><i class="icon-globe"></i> Překlady</a></li>
 		</ul>
-		<hr>
-		<p><a href="http://npress.info/"><small>CMS nPress {!NPRESS}</small></a>
-	</div>
-	
-	<div id="obsah">
-		{block langSwitch}
-		<div class="fright" n:if="count($langs)>1">
-			{foreach $langs as $l=>$txt}
-				<a n:href="this lang=>$l" n:class="$lang==$l?bold">{$l}</a>
-			{/foreach}
-		</div>
-		{/block}
+
+	</div><!--/.well -->
+	</div><!--/span -->
+
+
+
+		<div class="span9">
+
+
+	<div id="xobsah">
+
 
 		{include #content}
 
 	</div>
 
+        </div><!--/span-->
+      </div><!--/row-->
 
+      <hr>
+
+      <footer>
+        <p><a href="http://npress.info/"><small>CMS nPress {!NPRESS}</small></a></p>
+      </footer>
 
 <!-- npress frontend javascripts -->
 {include $frontjslatte}
@@ -107,7 +159,7 @@
 <script type="text/javascript" src="{$basePath}/static/js/jquery.ui.nestedSortable.js"></script>
 <script type="text/javascript" src="{$basePath}/static/js/admin.js"></script>
 
-<!-- simplemodal (needed by wysiwyg) -->
+<!-- simplemodal (needed by wysiwyg) -- >
 <link rel="stylesheet" href="{$basePath}/static/jwysiwyg/lib/jquery.simplemodal.css" type="text/css"/>
 <script type="text/javascript" src="{$basePath}/static/jwysiwyg/lib/jquery.simplemodal.js"></script>
 
@@ -125,6 +177,11 @@
 <script type="text/javascript" src="{$basePath}/static/uploadify/swfobject.js"></script>
 <script type="text/javascript" src="{$basePath}/static/uploadify/jquery.uploadify.v2.1.4.js"></script>
 <link rel="stylesheet" href="{$basePath}/static/uploadify/uploadify.css" type="text/css" />
+
+
+<!-- twitter bootstrap UI -->
+<script type="text/javascript" src="{$basePath}/static/js/bootstrap-dropdown.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/bootstrap-button.js"></script>
 
 
 

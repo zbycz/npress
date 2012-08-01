@@ -410,6 +410,7 @@ function ctrl_s_saving(){// catching ctrl+s in body and wysiwyg
 }
 
 function menu_reordering(){
+	//menu folding
 	$('#js-menu ul').each(function(){
 		$this = $(this);
 
@@ -423,6 +424,7 @@ function menu_reordering(){
 			if($ul.css('display') == 'none'){
 				$ul.show();
 				$(this).html('&ndash;');
+
 			}
 			else{
 				$ul.hide();
@@ -437,36 +439,43 @@ function menu_reordering(){
 		$this.prev().addClass('foldable').prepend(span);
 	})
 
-	// de/activating of reordering
+	// activating of reordering
 	$('#js-menu-reordering').click(function(){
-		$.cookie("menu-ordering", this.checked, {path: '/'});
-		$('#js-menu').nestedSortable(this.checked ? "enable" : "disable");
+		var state = ! $(this).hasClass('active');
+		$.cookie("menu-ordering", state, {path: '/'});
+		$('#js-menu').nestedSortable(state ? "enable" : "disable");
+
 	});
 
 	// reordering
-	$('#js-menu').nestedSortable({
-		disableNesting: 'no-nest',
-		forcePlaceholderSize: true,
-		handle: 'div',  //TODO inner <a> not catchable
-		helper:	'clone',
-		items: 'li',
-		maxLevels: 6,
-		opacity: .6,
-		placeholder: 'placeholder',
-		revert: 250,
-		tabSize: 15,
-		tolerance: 'pointer',
-		toleranceElement: '> div',
-		listType: 'ul',
-		disabled: true,
-		stop: function(event, ui){
-			var data = $('#js-menu').nestedSortable("serialize");
-			$.post($('#js-menu').attr('data-pagesortLink'), data);
-		}
-	});
+	var $jsmenu = $('#js-menu').nestedSortable({
+			disableNesting: 'no-nest',
+			forcePlaceholderSize: true,
+			handle: 'div',  //TODO inner <a> not catchable
+			helper:	'clone',
+			items: 'li',
+			maxLevels: 6,
+			opacity: .6,
+			placeholder: 'placeholder',
+			revert: 250,
+			tabSize: 15,
+			tolerance: 'pointer',
+			toleranceElement: '> div',
+			listType: 'ul',
+			disabled: true,
+			stop: function(event, ui){
+				var data = $('#js-menu').nestedSortable("serialize");
+				$.post($('#js-menu').attr('data-pagesortLink'), data);
+			}
+		});
+		
+		$jsmenu.on('click', 'a', function(){
+				if(!$jsmenu.nestedSortable('option','disabled')) return false;
+			});
+
 	if($.cookie("menu-ordering") == 'true'){  //remember the choice
 		$('#js-menu').nestedSortable("enable");
-		$('#js-menu-reordering').prop("checked", true);
+		$('#js-menu-reordering').addClass("active");
 	}
 }
 

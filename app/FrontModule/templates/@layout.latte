@@ -39,8 +39,7 @@
 
 	<h1 class="main">{$config[webTitle]}</h1>
 
-	<div id="menu">
-		{snippet menu}
+	<div id="menu" n:snippet="menu">
 			<ul>
 			{block #TreeView}
 				{foreach $pages->getChildNodes() as $row}
@@ -51,7 +50,6 @@
 				{/foreach}
 			{/block}
 			</ul>
-		{/snippet}
 	</div>
 
 	<div id="obsah">
