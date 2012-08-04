@@ -48,7 +48,7 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-globe icon-white"></i> {$lang} <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					{foreach $langs as $l=>$txt}
-						<li><a n:href="this lang=>$l" n:class="$lang==$l?bold">{$txt} ({$l})</a></li>
+						<li><a n:href="this lang=>$l"><b n:tag-if="$lang==$l">{$txt} ({$l})</b></a></li>
 					{/foreach}
 				</ul>
 			</li>
@@ -81,26 +81,13 @@
 	<div class="span3">
 	<div class="well sidebar-nav">
 
-
-{*
-		<div class="sidebar-head">
-			<button id="js-menu-reordering" class="btn pull-right btn-mini btn-info" data-toggle="button">upravit</button>
-
-			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i> přidat <span class="caret"></span></a>
-			<ul class="dropdown-menu">
-				<li><a n:href="Pages:add $presenter->getParam('id_page')">stránku</a></li>
-				<li><a n:href="Pages:add $presenter->getParam('id_page')">podstránku</a></li>
-				<li class="divider"></li>
-				<li><a href="">Novinky</a></li>
-			</ul>
-		</div>*}
-
+		<!-- pages menu edit buttons -->
 		<div class="btn-group pull-right spacer spacerr">
 			<button id="js-menu-reordering" class="btn btn-mini btn-info" data-toggle="button">upravit</button>
 
-			<a class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus"></i></a>
+			<a class="btn btn-mini btn-info dropdown-toggle" data-toggle="dropdown" href="#"><i class="icon-plus icon-white"></i></a>
 			<ul class="dropdown-menu">
-				<li><a n:href="Pages:add $presenter->getParam('id_page')">přidat stránku</a></li>
+				<li><a n:href="Pages:add $presenter->getParam('id_page'),1">přidat stránku</a></li>
 				<li><a n:href="Pages:add $presenter->getParam('id_page')">přidat podstránku</a></li>
 				<li class="divider"></li>
 				<li><a href="">Novinky</a></li>
@@ -110,7 +97,7 @@
 		<h2 class="nav-header spacer">Stránky</h2>
 
 
-		<div id="menu" n:snippet="menu" data-afterUpdate="menu_reordering">
+		<div class="menu" n:snippet="menu" data-afterUpdate="menu_reordering">
 			<ul id="js-menu" data-pagesortLink="{link Admin:pagesort}" class="ui-sortable-disabled">
 			{block #TreeView}
 				{foreach $pages->getChildNodes() as $row}
@@ -134,33 +121,26 @@
 			<li class="nav-header">Nastavení</li>
 			<li><a n:href="Pages:trash"><i class="icon-trash"></i> Koš stránek</a>
 			{* <li><a>Nastavení</a> *}
-			<li><a n:href="Redirect:"><i class="icon-retweet"></i> Přesměrování</a>
+			<li><a n:href="Redirect:"><i class="icon-random"></i> Přesměrování</a>
 			<li n:if="count($langs)>1"><a n:href="Translations:"><i class="icon-globe"></i> Překlady</a></li>
 		</ul>
 
 	</div><!--/.well -->
 	</div><!--/span -->
 
+	<div class="span9" id="content">
+	{include #content}
+	</div><!--/span-->
+	
 
+</div><!--/row-->
+</div><!--/container-->
 
-		<div class="span9">
+<hr>
 
-
-	<div id="xobsah">
-
-
-		{include #content}
-
-	</div>
-
-        </div><!--/span-->
-      </div><!--/row-->
-
-      <hr>
-
-      <footer>
-        <p><a href="http://npress.info/"><small>CMS nPress {!NPRESS}</small></a></p>
-      </footer>
+<footer>
+	<p><a href="http://npress.info/"><small>CMS nPress {!NPRESS}</small></a></p>
+</footer>
 
 <!-- npress frontend javascripts -->
 {include $frontjslatte}
@@ -197,8 +177,7 @@
 
 
 <!-- twitter bootstrap UI -->
-<script type="text/javascript" src="{$basePath}/static/js/bootstrap-dropdown.js"></script>
-<script type="text/javascript" src="{$basePath}/static/js/bootstrap-button.js"></script>
+<script type="text/javascript" src="{$basePath}/static/js/bootstrap.min.js"></script>
 
 
 

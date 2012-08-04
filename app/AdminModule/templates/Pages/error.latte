@@ -1,15 +1,24 @@
 {block content}
 <h2>Chybějící stránka</h2>
 
-<p>Stránka id #{$error_id_page} v jazyce {$error_lang} nebyla nalezena v databázi.
-
+<p>Stránka id #{$error_id_page} v jazyce <b>{$langs[$error_lang]} ({$error_lang})</b> zatím nebyla vytvořena.
 <ul>
 {foreach $langs as $l=>$ltxt}
-	{var $pg = PagesModel::getPageById($error_id_page, $l);}
+	{var $pg = PagesModel::getPageById($error_id_page, $l)}
 	{if $pg}
-		<li>({$l}) <a n:href="edit $pg->id, lang=>$l">{$pg->name}</a>
+		{var $parent = $pg->getFirstParentInLang($error_lang)}
+		<li><span class="label">{$langs[$l]} ({$l})</span>
+				{foreach $pg->getParents() as $p}
+					<a n:href="edit $p->id, lang=>$l">{$p->name}</a>
+					{sep} &raquo; {/sep}
+				{/foreach}
+			<p class="spacer offset1">
+			<a n:href="edit#newpage $error_id_page, from=>$l " class="btn btn-info">Vytvořit</a>
+			jako potomka
+			{if $parent->id == 0} první úrovně {else} <a n:href="edit $parent->id">{$parent->lang($l)->name}</a> {/if}
 	{else}
-		<li><b n:tag-if="$l==$error_lang">({$l})</b> neexistuje
 	{/if}
 {/foreach}
 </ul>
+
+				 

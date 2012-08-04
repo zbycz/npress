@@ -27,56 +27,60 @@
 
 {snippet editform_deleted}
 	{if $page->data[deleted]}
-		<p class="zprava">Tato stránka je smazaná, ale můžete to <a n:href="deletePage! 1" class='del ajax'>vzít zpět</a>.</p>
+		<p class="alert alert-error"><i class="icon-trash"></i> <strong>Tato stránka je smazaná</strong>, ale můžete to <a n:href="deletePage! 1" class='ajax'>vzít zpět</a>.</p>
 
 		{var $living = $page->getFirstLivingParent()}
-		<p>Stránka bude obnovena do složky <a n:href="edit $living->id">{$living->name}</a>
-		{if $page->id_parent != $living->id} - původní složka je pravděpodobně smazaná{/if}
+		<p>Stránka bude obnovena pod stránku: <a n:href="edit $living->id">{$living->name}</a>
+		{if $page->id_parent != $living->id} - původní rodičovská stránka je pravděpodobně smazaná{/if}
 
-		<div class="deletedOverlay"></div>
+		<div id="deletedOverlay"></div>
+		<script></script>
 	{/if}
 {/snippet}
 
 
-		
-{* Creating a new page from other language *}
-{ifset $fromPage}
-	<p><a href="#js-only" onclick="fill_headings({ heading: {$fromPage[heading]}, name: {$fromPage[name]}, seoname: {$fromPage[seoname]} });return false">
-			zkopírovat názvy z "{$fromPage->name}"</a> (#{$fromPage->lang}{$fromPage->id})
-{/ifset}
 
-{form pageEditForm "class"=>"form-horizontal"}
+{form pageEditForm class=>"ajax form-horizontal"}
 	<div class="control-group">
 		{label heading "class"=>"control-label" /}
-		<div class="controls">{input heading "class"=>"fontxx"}
+		<div class="controls">{input heading class=>xxl}
 	</div></div>
 	
 	<div class="control-group">
 		{label name "class"=>"control-label" /}
-		<div class="controls">{input name class=>inpwidth, placeholder=>'(použije se nadpis)'}
-			<noscript> prázdné pole automaticky zobrazuje nadpis</noscript>
+		<div class="controls">
+			<div class="input-prepend">
+        <span class="add-on">{input published}</span
+				><input n:input="name" {if $page->published}readonly="readonly"{/if}>
+			</div>
+			<p class="help-inline" id="js-published-helper" n:class="$page->published?hide"><small>Tato stránka se nebude zobrazovat v menu</small>
 	</div></div>
 
 	<div class="control-group">
 		{label seoname "class"=>"control-label" /}
 		<div class="controls" n:snippet="editform_seoname" data-afterUpdate="editform_seoname_update">
-			{$presenter['pageEditForm']['seoname']->control->placeholder('(automatická)')}
-			<a href="{$page->link()}">zobrazit na webu: <small>{$page->link()|truncate:40}</small></a>
+			<div class="input-prepend">
+        <span class="add-on"><i class="icon-wrench"></i></span
+				>{$presenter['pageEditForm']['seoname']->control}
+			</div>
+			<p class="help-inline"><a href="{$page->link()}" rel="tooltip" title="{$page->link(true)}" class="btn btn-success">zobrazit na webu</a>
 	</div></div>
 
-	<div class="control-group">
+	{*<div class="control-group">
 		{label published "class"=>"control-label" /}
 		<div class="controls">{input published}
-	</div></div>
+	</div></div>*}
 
 	{? $presenter->triggerEvent_filter('filterPageEditForm_render', $_form)}
 
-	<div id="js-linkhelp" class="hidden">
-		<p>Adresa musí být jedinečná v rámci webu (jazyka), např.: <b>/kontakt</b>
-		<p>Pokud nezačíná lomítkem '/', jedná se pouze o přesměrování, např.:
-			<br><b>http://nette.org</b> - menu odkazuje na jiný web
-			<br><b>#-p27-#</b> - menu odkazuje na jinou stránku, s ID#27
-			<br><b>#-f191-#</b> - menu odkazuje na stažení souboru, s ID#191
+	<div id="js-linkhelp" class="jshidden">
+		<p>Adresa stránky začíná / <small>(např.: <b>/kontakt</b>)</small>
+		<p class="spacer">Přesměrování vypadá takto:
+		<ul>
+			<li><b>http://google.com</b> - menu odkazuje na jiný web
+			<li><b>#-p27-#</b> - menu odkazuje na jinou stránku, s ID# 27
+			<li><b>#-f191-#</b> - menu odkazuje na stažení souboru, s ID# 191
+		</ul>
 	</div>
 
 	<div id="js-texteditor">
@@ -86,13 +90,17 @@
 			 {input text rows=>10}
 		</div>
 	{else}
-		<p>{label text /}:<br>
-			 {input text rows=>10}
+		<p class="pull-right"><small>nový řádek: Shift+Enter</small>
+		<p>{label text /}
+			 {input text rows=>10,style=>"width:100%;height:300px"}
 	{/if}
 	</div>
 	
-	<p class="fright" style="margin-right:1.5em">Odstavec: Enter, nový řádek: Shift+Enter, uložit: Ctrl+S
-	<p>{input submit1} <a n:href="deletePage!" class='del ajax'>smazat</a> (smaže i všechny podstránky)
+
+	<div class="form-actions">
+		{input submit1 class=>"btn btn-primary btn-large", title=>"Ctrl + s"}
+		<a n:href="deletePage!" class='ajax del' title="vyhodí do koše i všechny podstránky">smazat</a>
+	</div>
 {/form}
 
 

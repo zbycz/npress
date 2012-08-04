@@ -20,7 +20,7 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 	public function actionTrash(){
 		$this->template->deletedPages = PagesModel::getDeletedPages();
 	}
-	public function actionAdd($id_parent){
+	public function actionAdd($id_parent, $sibling=false){
 		$newid = PagesModel::addPage(array(
 				'id_parent' => intval($id_parent) ? intval($id_parent) : 0,
 				'lang' => $this->lang,
@@ -85,11 +85,13 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 				
 		$form->addText("heading", "nadpis");
 		$form->addText("name", "v menu");
-		$form->addText("seoname", "adresa");
+		$form->addText("seoname", "adresa")
+						->setAttribute('placeholder', '(automatická)');
 
-		$form->addCheckbox("published", "zobrazeno");
+		$form->addCheckbox("published", "zobrazeno v menu");
+
 		
-		$form->addTextArea("text", "text");
+		$form->addTextArea("text", "obsah stránky");
 		$form['text']->getControlPrototype()->class('textarea');
 
 		$form->addSubmit("submit1", "Uložit");
@@ -104,12 +106,11 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 		$values = (array) $form->values;
 		$values['text'] = preg_replace_callback('~#-(.+?)-#~', array($this, 'npMacroControlOptions'), $values['text']);
 
+		//name field may be 'disabled' by checkbox
+		if(!$values['name']) $values['name'] = $values['heading'];
+
 		//handle additional input values
 		$values = $this->triggerEvent_filter('filterPageEditForm_values', $values);
-
-		//instead of blank menu, we display heading
-		if($values['name'] == $values['heading'])
-			$values['name'] = '';
 
 		//menu control changes only sometimes
 		if($this->page['published'] != $values['published']	OR $this->page['name'] != $values['name'] OR $this->page['heading'] != $values['heading'])

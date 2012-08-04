@@ -4,23 +4,10 @@ body {
 	padding-bottom: 40px;
 }
 .spacer {margin-top: 9px;}
-.spacer {margin-right: 9px;}
+.spacerr {margin-right: 9px;}
 .sidebar-nav {
 	padding: 0 0 9px 0;
 }
-
-/* supplements .btn-group */
-.sidebar-head {
-	padding: 9px;
-	position: relative; 
-}
-.sidebar-head.open .dropdown-toggle {
-  background-image: none;
-  -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-     -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-          box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-.sidebar-head.open .btn.dropdown-toggle {  background-color: #e6e6e6;}
 
 
 /* --------------  header -------------- */
@@ -35,7 +22,12 @@ body {
 }
 .dropdown-menu .inline {padding-left: 12px;}
 .dropdown-menu .inline a {display: inline;}
-.fontxx {font-size: 200%}
+input.xxl {font-size: 200%; height: 200%; width: 450px;}
+input.likeprep {width: 235px;}
+.add-on input {margin-top: -3px;}
+a.del {padding: 0 0.2em;}
+a.del:hover {background: #fd4239; color: #fff;}
+
 
 
 #flashes {
@@ -61,28 +53,28 @@ body {
 
 
 
-#menu ul {
+.menu ul {
 	position: relative;
 	margin: 0;
 	padding: 0;
 	list-style-type: none;
 }
-#menu ul ul {margin-left: 10px;}
+.menu ul ul {margin-left: 10px;}
 
-#menu ul a {
+.menu ul a {
 	display: block;
 	text-decoration: none;
 	padding: 3px 20px 3px 18px;
 }
-#menu ul a:before, #menu ul .placeholder:before {
+.menu ul a:before, .menu ul .placeholder:before {
 	content: url(images/dot.gif); position:absolute; left:7px; margin-top:-4px;
 }
-#menu ul a:hover {cursor: move; background: url(images/handle.gif) no-repeat right center;}
-#menu ul.ui-sortable-disabled a:hover {cursor: pointer; background-image: none;}
-#menu .ui-sortable-helper a {background: none;}
+.menu ul a:hover {cursor: move; background: url(images/handle.gif) no-repeat right center;}
+.menu ul.ui-sortable-disabled a:hover {cursor: pointer; background-image: none;}
+.menu .ui-sortable-helper a {background: none;}
 
 
-#menu ul .foldable span {
+.menu ul .foldable span {
 	left: 7px;
 	position: absolute;
 	margin: 4px 0 0 -5px;
@@ -95,22 +87,22 @@ body {
      -moz-border-radius: 4px;
           border-radius: 4px;
 }
-#menu ul .foldable span:hover {background: #685de7; color: #fff;cursor:pointer;}
-#menu ul .foldable a:before {content: ''}
+.menu ul .foldable span:hover {background: #685de7; color: #fff;cursor:pointer;}
+.menu ul .foldable a:before {content: ''}
 
-#menu .current > a,
-#menu .current > a:hover {
+.menu .current > a,
+.menu .current > a:hover {
   color: #ffffff;
   text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.2);
   background-color: #0088cc;
 }
 
-#menu .unpublished a {color: #888; }
-#menu .unpublished a:hover {color: #555; }
-#menu .unpublished.current a {color: #fff; }
-#menu .unpublished:before {content: url(images/iconEyeNo.png); position:absolute; right:12px; margin-top: 3px;}
+.menu .unpublished a {color: #888; }
+.menu .unpublished a:hover {color: #555; }
+.menu .unpublished.current a {color: #fff; }
+.menu .unpublished:before {content: url(images/iconEyeNo.png); position:absolute; right:12px; margin-top: 3px;}
 
-#menu ul a:hover {background-color: #eeeeee;}
+.menu ul a:hover {background-color: #eeeeee;}
 
 
 .nav-header {
@@ -122,5 +114,19 @@ body {
   color: #999999;
   text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
   text-transform: uppercase;
+}
+
+
+#content {position:relative}
+
+#deletedOverlay {
+	position: absolute;
+	width: 101%;
+	height: 101%;
+	background: #000;
+	border-left: 10px #000 solid;
+	margin: -5px 0 0 -3px;
+	opacity: 0.3;
+	z-index: 1000;
 }
 

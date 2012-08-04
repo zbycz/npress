@@ -342,49 +342,44 @@ function live_typing(){ //live typing (on newly created page)
 			if(make_url(fheadingPrevVal) == fseoname.val().substr(1)){
 				fseoname.val('/'+make_url(this.value));
 			}
+			if(fname.val() == fheadingPrevVal)
+				fname.val(fheading.val());
 			fheadingPrevVal = fheading.val();
 		});
 	}
 
-	//prefill the heading when editing "in menu" name
-	fname.focus(function(){
-		if(!fname.val()) fname.val(fheading.val());
-	}).blur(function(){
-		if(fname.val() == fheading.val()) fname.val('');
+	//copy heading text in menu, stop when in-menu is focused
+	fheading.on('keyup blur', function(){
+		if(fname.val() == fheadingPrevVal)
+			fname.val(fheadingPrevVal = fheading.val());
 	});
-	if(fname.val() == fheading.val()) fname.val('');
+	fname.focus(function(){ fheading.off('keyup blur'); });
 
-	if( !('placeholder' in document.createElement('input')) ){ //html5 compatibility
-		fname.focus(function() {
-			if (fname.val() == fname.attr('placeholder')) {
-				fname.val('');
-				fname.removeClass('placeholder');
-			}
-		}).blur(function() {
-			if (fname.val() == '' || fname.val() == fname.attr('placeholder')) {
-				fname.addClass('placeholder');
-				fname.val(fname.attr('placeholder'));
-			}
-		}).blur();
-		fname.parents('form').submit(function() {
-			if (fname.val() == fname.attr('placeholder')) {
-				fname.val('');
-			}
-		});
+	//un-published disables in-menu text field
+	var helptext = $('#js-published-helper');
+	var fpublished = $('#frmpageEditForm-published')
+	function published_helper(){
+		if (fpublished.attr('checked')) {fname.removeAttr('readonly'); helptext.addClass('hide')}
+    else {fname.attr('readonly', 'readonly'); helptext.removeClass('hide')}
 	}
+	fpublished.click(published_helper);
+	published_helper();
 
-	//help box for link
-	$('#frm-pageEditForm')
-		.delegate('#frmpageEditForm-seoname', 'focus', function(){ $('#js-linkhelp').show();})
-		.delegate('#frmpageEditForm-seoname', 'blur', function(){ $('#js-linkhelp').hide();})
 
 }
 
 function editform_seoname_update(){
-	$('#frm-pageEditForm').each(function() {
-			$(this).data('initialForm', $(this).serialize()); //TODO update just the seoname
+	var $frm = $('#frm-pageEditForm');
+			$frm.data('initialForm', $frm.serialize());
+		
+	$('#frmpageEditForm-seoname').popover({
+		content: $('#js-linkhelp').html(),
+		trigger: 'focus',
+		placement: 'bottom'
 	});
-	$('#js-linkhelp').hide();
+
+	$('#snippet--editform_seoname a').tooltip();
+
 }
 
 function editform_editfile_update(){
@@ -544,6 +539,7 @@ $(function(){
 
 	pageEditForm_jwysiwyg();
 	pageEditForm_changes_catcher();
+	editform_seoname_update();
 	ctrl_s_saving();
 
 	subpageslist();

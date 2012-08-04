@@ -273,6 +273,10 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 	public function __construct($data, $meta){
 		$this->data = (array) $data;
 		$this->meta = (array) $meta;
+
+		//avoiding duplicity in database
+		if($this->data['name'] == '')
+			$this->data['name'] = $this->data['heading'];
 	}
 
 	public function getId(){ return $this->data['id_page']; }
@@ -288,6 +292,7 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 	public function getContent(){
 		return Environment::getNpMacros()->process($this->data['text'], $this);
 	}
+	public function getPublished(){ return $this->data['published']; }
 
 
 
@@ -469,6 +474,16 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 	}
 
 	public function save($newdata){
+		//merge changes to orig data array
+		foreach($newdata as $k=>$v){
+			if($this->data[$k] == $v) unset($newdata[$k]);
+			else $this->data[$k] = $v;
+		}
+
+		//strip duplicate column from database
+		if(isset($newdata['name']) AND $newdata['name'] == $this->data['heading'])
+			$newdata['name'] = '';
+
 		dibi::query('
 			UPDATE pages
 			SET',$newdata,'
@@ -476,9 +491,6 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 				AND lang = %s',$this->data['lang'],'
 		');
 
-		//merge changes to orig data array
-		foreach($newdata as $k=>$v)
-			$this->data[$k] = $v;
 	}
 
 	// returns first parent who is not deleted
