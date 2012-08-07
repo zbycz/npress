@@ -1,0 +1,302 @@
+body {
+	color: #000;
+	background-color: #fff;
+	padding:0; margin:0;
+}
+body,table,input,select,textarea {	font: 16px/1.4 Tahoma, 'Lucida Grande CE', lucida, sans-serif;}
+textarea {font-size: 90%;}
+
+
+table {border-collapse: collapse;}
+td,th {padding: 0.15em 0.4em; line-height: 1.6;}
+.border td, .border th {border: 1px #ccc solid;}
+th, thead td {border:0; font-weight:bold; color: #0098cf; }
+.fullwidthtable {
+	width: 100%;
+}
+.fullwidthtable td {
+	white-space: normal;
+}
+img {vertical-align: text-top;}
+
+
+hr {border:0; border-bottom: 1px #eee solid;}
+
+/*tridy*/
+.hidden {display: none;}
+.red {color: red;}
+.fleft {float: left;}
+.mar1 {margin: 1em;}
+.fright {float: right;}
+.aright {text-align: right;}
+.acenter {text-align: center;}
+.aleft {text-align: left;}
+.clear {clear: both;}
+.border {border: 1px black solid;}
+.bold {font-weight: bold; text-decoration:none;}
+.small {font-size: 80%; color: #888;}
+.smaller {font-size: 95%; color: #404040;}
+input.placeholder {color: #bbb;}
+.zprava {
+	font-size: 130%;
+	font-weight: bold;
+  background: #ef0000;
+	color: #fff;
+  margin: 1em 0.5em;
+  padding: 0.5em;
+  border-radius: 11px;
+}
+.zprava a {color: #fff;}
+.half {width: 48%;}
+
+#obsah .title {
+  border-bottom: 1px dashed #aaa;
+  cursor: help;
+}
+.pointer{cursor:pointer;}
+/*odkazy*/
+a {color: #222; text-decoration: underline;}
+a:hover {color: #22d;}
+a img {
+  border: 0px white solid;
+  /*border-bottom: 1px blue solid;*/
+  text-decoration: none;
+}
+a:hover img {
+  /*border-bottom: 1px black solid;*/
+  text-decoration: none;
+}
+div a.as-text {
+  color: black;
+  text-decoration: none;
+}
+div a.as-text:hover {
+  color: black;
+  text-decoration: underline;
+}
+.like-a {
+  color: blue;
+  text-decoration: none;
+  cursor: pointer;
+}
+.like-a:hover {color: black;}
+
+a img.smilie {text-decoration: underline; border: 0;}
+
+/*nadpisy*/
+h1,h2,h3,h4,h5 {
+  font-family: Arial, sans-serif;
+  margin: 1em auto 0.2em auto;
+	color: #666
+}
+h1.main {font-size: 100%; color: #0098cf; font-weight:normal; margin: 0.2em 0.5em;}
+h2 {font-size: 160%;}
+h3, .likeh3 {font-size: 145%; color: #0098cf; font-weight:bold; text-decoration:none}
+h4 {font-size: 130%;}
+h5 {font-size: 110%;}
+
+/*nette*/
+#ajax-spinner {float:left;width: 50px; height: 30px; background: url(images/ajax-spinner.gif) no-repeat 300px;}
+#ajax-spinner.show {background-position: center left;}
+
+div.flash {
+	color: black;
+	background: #FFF9D7;
+	border: 1px solid #E2C822;
+	padding: 1em;
+	margin: 1em 0;
+}
+
+a[href^="error:"] {
+	background: red !important;
+	color: #fff  !important;
+}
+
+
+
+
+
+.page-width-box {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+
+.npresslogo{color: #888 !important; font-variant: small-caps; font-size: 90%;}
+.npresslogo span {color: #485dc5; font-variant: normal; font-weight: bold; font-size: 110%;}
+/*a.npresslogo:hover {text-decoration: underline !important;}*/
+
+#flashes {
+	overflow:hidden;
+	position:relative;
+}
+#flashes .box {
+	clear:left;
+	float:left;
+	position:relative;
+	left:50%;
+}
+#flashes .box .flash {
+	display:block;
+	position:relative;
+	right:50%;
+
+	margin: 0 1em; padding: 0 1em;
+	border: 0;
+	background: #ffff66;
+	color: #000;
+}
+
+	
+x#menu {
+	position: absolute;
+	left:0; top: 33px; 
+	width: 190px;
+	padding-bottom: 0;
+	border-right: 1px #eee solid;
+	font-size: 90%;
+}
+#menu {padding: 1em 0;}
+#menu.fright {position: static; border:0; border-left: 1px #eee solid;}
+#menu p {margin: 0.5em; font-size: 80%;}
+#menu p a {text-decoration:none;}
+#menu ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+	margin-left: 0.5em;
+}
+#menu ul ul {margin-left: 10px;}
+#menu ul span {
+	position: absolute;
+	margin-left: -5px;
+	padding: 3px 3px;
+	color: #b41313;
+	font-size: 10px;
+}
+#menu ul span:hover {background: #685de7; color: #fff;cursor:pointer;}
+#menu ul a {
+	display: inline;
+	margin-right: 12px;
+	text-decoration: none;
+	background: url(images/dot.gif) no-repeat 0 0.6em;
+	padding-left: 10px;
+	padding-right: 20px;
+	color:#000
+}
+#menu ul .foldable a {background:none;}
+#menu ul.ui-sortable-disabled a {display: block; padding-right:0;}
+#menu .current > a {text-decoration: underline;}
+#menu .unpublished a {color: #888; }
+#menu .unpublished:before {content: url(images/iconEyeNo.png); position:absolute; right:12px;}
+
+#menu ul div:hover {
+	cursor: move;
+	background: url(images/handle.gif) no-repeat right center;
+}
+#menu ul.ui-sortable-disabled div {cursor: auto; background: none;}
+#menu .placeholder {background: url(images/dot.gif) no-repeat 0 0.6em;}
+#menu .ui-sortable-helper a {background: none;}
+
+#menu ul a:hover {background-color: #ffffba}
+
+
+#menu .ui-nestedSortable-error {
+	background:#fbe3e4;
+	color:#8a1f11;
+}
+#mover {float:right;}
+#mover label {
+	display:block;
+	float:left;
+	width: 20px;
+	height: 20px;
+	background: url(images/mover.gif) no-repeat top left;
+}
+#mover label span {display: none;}
+#menu small {color: #aaa}
+
+#obsah {
+	position: absolute;
+	left:210px; top: 43px;
+	right: 10px;
+	min-width: 500px;
+	max-width: 800px;
+}
+#obsah .deletedOverlay {
+	position: absolute;
+	left: -10px;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	border-left: 10px #000 solid;
+	opacity: 0.3;
+	z-index: 1000;
+}
+#obsah h3 { /*anchor fix*/
+  padding-top: 2em;
+  margin-top:0;
+}
+
+
+.editform table {width:100%;}
+.editform td,.editform th {border:0; padding:0; padding-right:0.2em;}
+.editform th {font-weight: normal; color: #aaa; background:none; text-align:left; line-height: 1.8}
+.editform p {color: #aaa; margin: 1em 0 0 0 ;}
+.editform h3 .small {font-size: 50%; font-weight:normal;  color: #0098cf;}
+.editform b {color: #000; font-weight: normal;}
+.editform input[type=text] {padding: 0.3em; border:0; border-bottom: 1px #ddd solid;}
+.editform input[type=text]:hover,.editform input[type=text]:focus {background: #ffffba}
+.editform input.inpwidth, .editform .inpwidth input  {width: 200px;}
+.editform .heading input {
+	font-size: 200%;
+	width: 80%;
+}
+.editform .seoname input {
+	font-size: 80%;
+	color: #aaa;
+}
+.editform .textarea {width:95%;height:300px}
+
+.editform a {	text-decoration: none;}
+.editform a.del {padding: 0 0.2em;}
+.editform a.del:hover {background: #fd4239; color: #fff;}
+
+.uploadform {margin:0;text-indent: 0.5em;}
+
+
+
+
+#js-meta ul, #js-meta-sql {
+	line-height: 1.8;
+	font-size:80%;
+	margin:0;
+	padding:0;
+	list-style-type: none;
+}
+#js-meta ul label, #js-meta-sql label {min-width:100px;float:left;line-height: 1.8;}
+
+#js-linkhelp {
+	position: absolute;
+	margin-left: 5em;
+	margin-top: -1em;
+	background: #eee;
+	padding: 1em 2em 2em 2em;
+	z-index: 100;
+}
+
+/*frontend IE8+*/
+.np-gallery div {float: left;	margin: 10px 10px 0 0;}
+.np-gallery a {
+	display: table-cell;
+	width: 200px;
+	height: 200px;
+	text-align: center;
+	vertical-align: middle;
+	padding:0;margin:0;
+}
+.np-gallery a img {
+	vertical-align: middle;
+	margin:0;
+}
+

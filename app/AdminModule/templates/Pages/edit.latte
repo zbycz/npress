@@ -90,7 +90,7 @@
 			 {input text rows=>10}
 		</div>
 	{else}
-		<p class="pull-right"><small>nový řádek: Shift+Enter</small>
+		<p class="pull-right"><small><i class="icon-info-sign"></i> nový řádek: Shift+Enter</small>
 		<p>{label text /}
 			 {input text rows=>10,style=>"width:100%;height:300px"}
 	{/if}
@@ -121,93 +121,8 @@
 {? $presenter->triggerEvent('renderAdminList')}
 
 
-
-<h3 id='toc-files'>přílohy:</h3>
-<div class='uploadform fleft' style="min-width: 120px;height:40px;">
-	<span id="np-uploadify"
-				data-uploadifyHandler="{link uploadify!}"
-				data-session="{session_id()}"
-				data-afterUploadLink='{link refreshFileList!}' />Nahrajte soubory</span>
-</div>
-{form uploadForm}
-	<div class='uploadform'>
-		<a href='#jsonly' onclick="$(this).next().toggle();return false" class="small">záložní způsob</a>
-		<span class='jshidden'>{input file} {input submit1} max: {ini_get("upload_max_filesize")}B</span>
-	</div>
-{/form}
-<div id="np-uploadify-queue" class="clear"></div>
-
-<div n:snippet="editform_editfile" data-afterUpdate="editform_editfile_update">
-{ifset $editFile}
-<div class='editfile clear'>
-	<a n:href="this" onclick="$(this).parent().hide(300);return false" class="close" title='zavřít'>×</a>
-	<div class='info'>
-		<a href="{$editFile->previewLink("800x600")}" class='lightbox' title="zvětšený náhled">
-			<img src='{$editFile->previewLink("120x120")}' class="thumbnail"></a><br>
-		<small>ID#{$editFile->id} {$editFile->filesize|bytes}</small><br>
-		<small>{!$editFile->getAdminInfo()}</small><br>
-		<a href="{$editFile->downloadLink()}#-f{$editFile->id}-#">odkaz na stažení</a>
-
-		{form previewUploadForm}
-			<p><a href='#jsonly' onclick="$(this).parent().next().toggle();return false" class="small">
-				{$editFile->getType()!='ImageFile' ? 'změnit náhled' : 'změnit obrázek'}</a><br>
-			<div class='jshidden' style="overflow-x:scroll;background:#eee">{input file size=>7}<br> {input submit1}</div>
-		{/form}
-
-	</div>
-	{control editFileForm}
-</div>
-{/ifset}
-</div> {*/snippet*}
-
-
-{snippet editform_filelist}
-<div id='js-filelist' data-afterUpdate="filelist" data-sortlink='{link filesort!}'>
-
-	{foreach $page->getGalleries('addBlank') as $num=>$files}
-		<h4 class="clear" n:if="$iterator->counter > 1">galerie {$num} 	<a href="#jsonly" data-embed="#-gallery-{$page->id}.{$num}-#" class='insertlink'>vložit do textu</a></h4>
-
-		{continueIf $presenter->isAjax() AND $filelistMaxNum !=-1 AND $filelistMaxNum!=$num}
-		<div class="list" n:snippet="editform_filelist-$num" data-num="{$num}">
-			{foreach $files as $f}
-				<div class="item" id='fileid-{$f->id}' n:class="$f->getType(), 'ext-'.$f->suffix">
-					<a n:href="deleteFile! $f->id" class='del ajax' title='smazat'>×</a>
-					{*<a n:href="toggleFile! $f->id, !$f->visible" class='toggle visible{$f->visible}'							 title="{$toggle[$f->visible]}"><span>{$toggle[$f->visible]}</span></a>*}
-					<div><a n:href="editFile!#toc-files $f->id" class='ajax' title='upravit'><img src='{$f->previewLink('120x120')}'></a></div>
-					<span>
-						{$f->filename}{if $f->suffix}.{$f->suffix}{/if}<br>
-						<small>{$f->description|truncate:50}</small><br>
-						<a href="{$f->previewLink('120x120')}" data-embed="{$f->getEmbedCode()}" class='insertlink'>vložit do textu</a>
-					</span>
-				</div>
-				{breakIf $iterator->counter >= $filelistMax[$num]}
-			{/foreach}
-			{if $filelistMax[$num] < count($files)}
-				<div class="infoitem"><small>Zobrazeno {$filelistMax[$num]} z {count($files)}</small><br><br>
-					<br><a n:href="filelistMore!#fileid-$f->id $num, $filelistMax[$num]+20" class="ajax">Zobrazit další</a>
-					<br><a n:href="filelistMore!#fileid-$f->id $num, count($files)" class="ajax">Zobrazit všechny</a>
-				</div>
-			{/if}
-			<div class="clearitem">&nbsp;</div>
-		</div>
-	{/foreach}
-	
-	<p class="clear" n:if="count($page->files)">
-		Klikněte na přílohu pro více možností. Tahem myší můžete změnit pořadí nebo číslo galerie.
-		<br>Náhledy dokumentů <a href="http://docs.google.com/viewer">Google</a>.<br>
-		{* TODO [check] <a n:href="sortFilesByName!" class="ajax">seřadit dle názvu</a> *}
-	</p>
-</div>
-{/snippet}
-
-{* if $page->getMeta(".filesSync")}
-	<p>Zapnuta synchronizace příloh se složkou na serveru (<a n:href="filesSync!">aktualizovat</a>)
-	{if isset($filesSyncLog)}
-		<br>Nově nalezené: {count($filesSyncLog['new'])}
-		<br>Aktualizované: {count($filesSyncLog['changed'])}
-	{/if}
-{/if *}
-
+<h2 id='toc-files'>přílohy:</h2>
+{control npFilesControl}
 
 			
 
@@ -215,10 +130,6 @@
 
 
 
-<p><br><br>
-<p><br><br>
-<p><br><br>
-<p><br><br>
 
 </div> <!-- /.editform -->
 
@@ -226,7 +137,7 @@
 function getPagesFlatJson (){
 	return {!Json::encode(PagesModel::getPagesFlat()->getPairs())};
 }
-var getPagesFlatJsonUrl = {link getPagesFlatJson!};
+//var getPagesFlatJsonUrl = {link getPagesFlatJson!};
 </script>
 
 {/block}

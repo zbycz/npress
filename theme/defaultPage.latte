@@ -1,0 +1,16 @@
+{block title}{if $x=$page->getMeta('html-title')}{$x}{else}{$page[heading]}{/if}{/block}
+
+{block layout_aftertitle}{if $x=$page->getMeta('html-aftertitle')}{$x}{else}{include #parent}{/if}{/block}
+
+{block content}
+<h2>{$page[heading]}</h2>
+
+<div n:foreach="$flashes as $flash" class="flash">
+	{$flash->message}
+</div>
+
+{if $presenter->triggerEvent('allowPageContentDisplay')}
+	{if $presenter->triggerEvent('displayPageContent')}
+		{!$page->content}
+	{/if}
+{/if}

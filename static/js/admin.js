@@ -101,143 +101,6 @@ function subpageslist(){
 	});
 }
 
-function filelist_init(){
-	//files deleter, insertlink
-	$("#js-filelist")
-		.delegate('.del', 'click', function (){ $(this).parent().fadeOut() })
-		.delegate('.insertlink', 'click', function(event){
-			if(!event.ctrlKey){
-				$('#frmpageEditForm-text').wysiwyg('insertHtml', npmacro2tag($(this).attr('data-embed')));
-				return false;
-			}
-		});
-
-	filelist();
-}
-function filelist(){
-	var handleEmptyList = function(){
-		var h4 = $(this).prev();
-		if($(this).children().length <= 1){ //always contains div.clearitem
-			h4.add(this).addClass('emptyList');
-			$(this).prepend('<div class="item placeholder" />');
-		}
-		else{
-			h4.add(this).removeClass('emptyList');
-			$(this).find('.placeholder').remove();
-		}
-	};
-
-	// files sorter
-	$("#js-filelist .list").each(handleEmptyList).sortable({
-		items: "> div.item",
-		cancel: ".placeholder",
-		connectWith: "#js-filelist .list",
-
-		start: function(){ $("#js-filelist").addClass('ui-dragging') },
-
-		receive: function(event, ui) {
-			
-			//send request
-			var num = $(this).attr('data-num');
-			var fid = ui.item.attr('id').split('-')[1];
-			var data = 'changedId='+fid+'&num='+num+'&' + $(this).sortable("serialize");
-			$.post($('#js-filelist').attr('data-sortlink'), data);
-
-			ui.sender.add(this).find('.infoitem small').css('opacity',0.05);
-			ui.sender.data('handled', true);
-			handleEmptyList.call(this);
-			$(this).append($('.clearitem', this));//clearitem must be last element
-		},
-
-		stop: function(event, ui){
-			$("#js-filelist").removeClass('ui-dragging');
-			handleEmptyList.call(this);
-
-			//send data only if not send in receive
-			if($(this).data('handled'))
-				$(this).data('handled', false);
-			else {
-				var data = $(this).sortable("serialize");
-				$.post($('#js-filelist').attr('data-sortlink'), data);
-			}
-		}
-	});
-
-
-	/*files visibility toggler
-	$("#js-filelist .toggle").click(function (){
-		$.get(this.href);
-		if($(this).hasClass("visible1")){
-			$(this).removeClass("visible1").addClass("visible0").attr('title', 'zobrazit obrázek v galerii')
-			$(this).children('span').html($(this).attr('title'));
-			this.href = this.href.replace('visible=[01]', 'visible=1');
-		}
-		else {
-			$(this).removeClass("visible0").addClass("visible1").attr('title', 'skrýt obrázek v galerii');
-			$(this).children('span').html($(this).attr('title'));
-			this.href = this.href.replace('visible=[01]', 'visible=0');
-		}
-		return false;
-	});*/
-}
-
-function np_uploadify(){
-	$('#np-uploadify').uploadify({
-		'script'         : escape( $("#np-uploadify").attr('data-uploadifyHandler') ),  //bug in uploadify, & would splits flashvar fields
-		'uploader'       : basePath + '/static/uploadify/uploadify.swf',
-		'cancelImg'      : basePath + '/static/uploadify/cancel.png',
-		'buttonText'     : $("#np-uploadify").html(),
-		'multi'          : true,
-		'auto'           : true,
-		'scriptData'     : { 'uploadify_session': $("#np-uploadify").attr('data-session')},
-		//'fileExt'        : '*.jpg;*.gif;*.png',
-		//'fileDesc'       : 'Image Files (.JPG, .GIF, .PNG)',
-		'queueID'        : 'np-uploadify-queue',
-		//'queueSizeLimit' : 3,
-		'simUploadLimit' : 3,
-		'sizeLimit'      : 100*1000*1000,
-		'removeCompleted': false,
-		'onSelectOnce'   : function(event,data) {
-				//$('#status-message').text(data.filesSelected + ' files have been added to the queue.');
-			},
-		'onAllComplete'  : function(event,data) {
-				$.get($("#np-uploadify").attr('data-afterUploadLink'));
-				$('#np-uploadify').uploadifyClearQueue();
-			}
-	});
-}
-
-function ajax_upload(){
-  $(".ajax_upload").submit(function () {
-		var form = this;
-		$.ajaxFileUpload({
-			url: $(form).attr('action')+"&ajax_upload=true",
-			secureuri: false,
-			fileElementId: $('input[type=file]',form).attr('id'),
-			dataType: 'json',
-			success: function (data, status) {
-				if (typeof(data.error) != 'undefined') {
-					if (data.error != '') {
-					} else {
-						//alert(data.msg);
-						//$.get($('#frm-uploadForm').attr('action'));
-						$.get($("#np-uploadify").attr('data-afterUploadLink'));
-
-						//if we were uploading just new preview - reload the image
-						var img = $("#snippet--editform_editfile .thumbnail");
-						img.attr('src', img.attr('src')+"&x=1")
-						//img.get(0).reload();
-					}
-				}
-			},
-			error: function (data, status, e) {
-				alert(e);
-			}
-		});
-		return false;
-  });
-	}
-
 function pageEditForm_jwysiwyg(){
 	if(!wysiwygConfig) wysiwygConfig = {contentStyle: false, minHtmlHeading: 2};
 
@@ -544,14 +407,10 @@ $(function(){
 
 	subpageslist();
 
-	ajax_upload();
-	np_uploadify();
-	filelist_init();
-
 	metalist();
 	
 	
-	//commons AJAX for a.ajax & form.ajax
+	//common AJAX handlers for a.ajax & form.ajax
 	$("a.ajax").live("click", function (event) {
 		if(!event.ctrlKey){
 			event.preventDefault();
@@ -592,7 +451,7 @@ function make_url(s) {
 }
 
 
-var formatXml = function (xml) {
+function formatXml(xml) {
         var reg = /(>)(<)(\/*)/g;
         var wsexp = / *(.*) +\n/g;
         var contexp = /(<.+>)(.+\n)/g;
