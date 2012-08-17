@@ -53,6 +53,7 @@ common:
 		langDomains!:
 
 		plugins:
+			- FieldsPlugin
 			#- PasswordPlugin
 			#- ContactsPlugin
 			#- NewsletterPlugin

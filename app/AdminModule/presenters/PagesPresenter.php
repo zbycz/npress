@@ -21,9 +21,18 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 		$this->template->deletedPages = PagesModel::getDeletedPages();
 	}
 	public function actionAdd($id_parent, $sibling=false){
+		if($id_parent){
+			$page = PagesModel::getPageById($id_parent);
+			if(!$page)
+				return $this->displayMissingPage($id_parent, $this->lang);
+
+			if($sibling AND $page = $page->getParent()) $id_parent = $page->id;
+		}
+
 		$newid = PagesModel::addPage(array(
 				'id_parent' => intval($id_parent) ? intval($id_parent) : 0,
 				'lang' => $this->lang,
+				'ord' => 9999,
 			));
 		$this->redirect('edit#newpage', $newid);
 	}

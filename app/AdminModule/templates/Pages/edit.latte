@@ -14,7 +14,7 @@
 
 <div class="page-header">
 {if $x=$page->getParent()->getMeta('.category')}{* TODO dirty hack *}
-	<p class="fright">
+	<p class="pull-right">
 		<a n:href='Pages:edit $page->getParent()->id' class='small'>složka {$page->getParent()->name}</a>
 	</p>
 	<h2>Editace {if $x=='shop'}produktu{else}příspěvku{/if}</h2>
@@ -53,7 +53,7 @@
         <span class="add-on">{input published}</span
 				><input n:input="name" {if $page->published}readonly="readonly"{/if}>
 			</div>
-			<p class="help-inline" id="js-published-helper" n:class="$page->published?hide"><small>Tato stránka se nebude zobrazovat v menu</small>
+			<p class="help-inline" id="js-published-helper" n:class="$page->published?hide"><small>Tato stránka se nebude zobrazovat v navigaci</small>
 	</div></div>
 
 	<div class="control-group">
@@ -85,7 +85,7 @@
 
 	<div id="js-texteditor">
 	{if $page->getMeta('.category') || $page->getMeta('.hideTextInput')}
-		<p>{label text /}: <a href="#" onclick="$(this).parent().next().toggle(200);return false">zobrazit editační pole</a>
+		<p>obsah stránky: <a href="#" onclick="$(this).parent().next().toggle(200);return false">zobrazit editační pole</a>
 		<div class="jshidden">
 			 {input text rows=>10}
 		</div>
@@ -109,10 +109,11 @@
 
 
 {if $page->getMeta('.category') == 'yes'}
-<h3 id="toc-subpages">výpis článků: <a n:href='add $page->id' class='small'>+ přidat</a></h3>
+<h2 id="toc-subpages">výpis článků: <a n:href='add $page->id'><small>+ přidat</small></a></h2>
 <ul id="js-subpageslist" data-sortlink='{link subpagessort!}'>
 {foreach $page->getChildNodes() as $r}
-	<li id='pageid-{$r->id}'><a href="{link Pages:edit $r->id}">{$r->name}</a>
+	<li id='pageid-{$r->id}'>{if !$r[published]}<img src="{$basePath}/static/images/iconEyeNo.png">{/if}
+		<a href="{link Pages:edit $r->id}">{$r->name}</a>
 {/foreach}
 </ul>
 <p>Tahem myší můžete změnit pořadí článků.

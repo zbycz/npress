@@ -347,7 +347,7 @@ function menu_reordering(){
 
 function metalist_reflectCheckbox(){
 		var state = $('#js-showHiddenMeta').prop("checked");
-		$('#js-meta li.jshidden').toggle(state);
+		$('#js-meta div.jshidden').toggle(state);
 		$('#js-meta-sql').toggle(state);
 	};
 function metalist(){

@@ -79,6 +79,11 @@
 		</div>
 	{/foreach}
 
+
+	<p class="clear" n:if="count($page->files)">
+		<i class="icon-info-sign"></i> Pro vložení galerie do stránky, začněte přetahovat přílohy myší, objeví se Galerie 1, kterou lze celou vložit do textu.
+	</p>
+
 	<p class="clear" n:if="count($page->files)">
 		Klikněte na přílohu pro více možností. Tahem myší můžete změnit pořadí nebo číslo galerie.
 		<br>Náhledy dokumentů <a href="http://docs.google.com/viewer">Google</a>.<br>

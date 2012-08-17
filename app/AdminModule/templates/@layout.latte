@@ -15,7 +15,7 @@
 	<script>document.write('<style>.jshidden { display:none }</style>')</script>
 
 	{if $config[preferCdnJquery]}
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
 	<script>window.jQuery || document.write('<script src="{!$basePath}/static/js/jquery.min.js" type="text/javascript"><\/script>');</script>
 	{else}
 	<script src="{$basePath}/static/js/jquery.min.js" type="text/javascript"></script>
@@ -90,8 +90,10 @@
 			<ul class="dropdown-menu">
 				<li><a n:href="Pages:add $presenter->getParam('id_page'),1">přidat stránku</a></li>
 				<li><a n:href="Pages:add $presenter->getParam('id_page')">přidat podstránku</a></li>
-				<li class="divider"></li>
-				<li><a href="">Novinky</a></li>
+				{foreach PagesModel::getPagesByMeta('.category','yes') as $r}
+					{first}<li class="divider"></li>{/first}
+					<li><a n:href="Pages:add $r->id">přidat do {$r->name}</a></li>
+				{/foreach}
 			</ul>
 		</div>
 

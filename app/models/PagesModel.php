@@ -484,12 +484,13 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 		if(isset($newdata['name']) AND $newdata['name'] == $this->data['heading'])
 			$newdata['name'] = '';
 
-		dibi::query('
-			UPDATE pages
-			SET',$newdata,'
-			WHERE id_page = %i', $this->data['id_page'],'
-				AND lang = %s',$this->data['lang'],'
-		');
+		if(count($newdata))
+			dibi::query('
+				UPDATE pages
+				SET',$newdata,'
+				WHERE id_page = %i', $this->data['id_page'],'
+					AND lang = %s',$this->data['lang'],'
+			');
 
 	}
 
