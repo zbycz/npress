@@ -47,5 +47,18 @@ abstract class Admin_BasePresenter extends CommonBasePresenter
 		$CategoriesTree->expandNode();
 		return $CategoriesTree;
 	}
-	
+
+
+	//Allow to use helpers as a latte macros
+	public function templatePrepareFilters($template) {
+		$template->registerFilter($e = new Nette\Latte\Engine());
+		$s = new Nette\Latte\Macros\MacroSet($e->compiler);
+		$s->addMacro('helper', 'ob_start()',
+			function($n) {
+				$w = new \Nette\Latte\PhpWriter($n->tokenizer, $n->args);
+				return $w->write('echo %modify(ob_get_clean())');
+			}
+		);
+	}
+
 }
