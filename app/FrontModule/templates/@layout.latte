@@ -1,25 +1,40 @@
 <!DOCTYPE html>
-<html>
+<html lang="{$lang}">{* dir="ltr" *}
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-	<meta http-equiv="Content-Language" content="{$lang}">
+	<script>{* scripts working with URI of the page *}
+		if(history.replaceState) { {* visibly remove flash id and backlink parameters from URI *}
+			l = location.toString();
+			r = [['_fid',4],['backlink',5]];
+			for(i in r) {
+				uri = l.indexOf(r[i][0]+'=');
+				if(uri != -1) {
+					uri = l.substr(0, uri)+l.substr(uri+r[i][0].length+r[i][1]+2);
+					if( (uri.substr(uri.length-1) == '?') || (uri.substr(uri.length-1) == '&') ) {
+						uri = uri.substr(0, uri.length-1);
+					}
+					history.replaceState('', '', uri);
+				}
+			}
+		}
+	</script>
+	<meta charset="utf-8">{* HTML5 charset *}
+	<title>{block title}{/block}{block layout_aftertitle} | {$config[webTitle]}{/block}</title>
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 	<meta name="generator" content="nPress {!NPRESS|striptags}">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
-	<title>{block title}{/block}{block layout_aftertitle} | {$config[webTitle]}{/block}</title>
 	
-	<!-- css stylesheet -->
+	{* css stylesheet *}
 	{block layout_stylesheet}
-		<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/static/screen.css" type="text/css">
-		<link rel="stylesheet" media="print" href="{$basePath}/static/print.css" type="text/css">
+		<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/static/screen.css">
+		<link rel="stylesheet" media="print" href="{$basePath}/static/print.css">
 	{/block}
 	<script>document.write('<style>.jshidden { display:none }</style>')</script>
 
 	{if $config[preferCdnJquery]}
-	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js" type="text/javascript"></script>
-	<script>window.jQuery || document.write('<script src="{!$basePath}/static/js/jquery.min.js" type="text/javascript"><\/script>');</script>
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="{!$basePath}/static/js/jquery.min.js"><\/script>');</script>
 	{else}
-	<script src="{$basePath}/static/js/jquery.min.js" type="text/javascript"></script>
+	<script src="{$basePath}/static/js/jquery.min.js"></script>
 	{/if}
 	
 	
@@ -28,9 +43,22 @@
 	{block layout_js}{/block}
 
 	{block layout_head}{/block}
+
+	{* google analytics - now at the bottom of the head *}
+	<script n:if="$config[analytics]">
+		var _gaq = _gaq || [];
+		_gaq.push(['_setAccount', {$config[analytics]}]);
+		_gaq.push(['_trackPageview']);
+
+		(function() {
+			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+		})();
+	</script>
 </head>
 
-<body class="{$lang}">
+<body>
 {block layout_body}
 	<div class="fright" n:inner-foreach="$langs as $l=>$txt">
 		<a href="{$presenter->langSwitch($l)}" n:class="$lang==$l?bold" class="{$l}">{$txt}</a>
@@ -67,23 +95,7 @@
 
 	
 
-<!-- analytics tracking code -->
-
-{if $config[analytics]}
-	<!-- google analytics -->
-	<script type="text/javascript">
-		var _gaq = _gaq || [];
-		_gaq.push(['_setAccount', {$config[analytics]}]);
-		_gaq.push(['_trackPageview']);
-
-		(function() {
-			var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-		})();
-	</script>
-{/if}
-
+{* analytics tracking code *}
 {if $config[clicky]}
 	{* put in theme sidebar: <a title="Google Analytics Alternative" href="http://getclicky.com/{$config[clicky]}"><img alt="Google Analytics Alternative" src="//static.getclicky.com/media/links/badge.gif" border="0" /></a> *}
 	<script type="text/javascript">
