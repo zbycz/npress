@@ -211,19 +211,13 @@ function live_typing(){ //live typing (on newly created page)
 		});
 	}
 
-	//copy heading text in menu, stop when in-menu is focused
-	fheading.on('keyup blur', function(){
-		if(fname.val() == fheadingPrevVal)
-			fname.val(fheadingPrevVal = fheading.val());
-	});
-	fname.focus(function(){ fheading.off('keyup blur'); });
 
 	//un-published disables in-menu text field
 	var helptext = $('#js-published-helper');
 	var fpublished = $('#frmpageEditForm-published')
 	function published_helper(){
-		if (fpublished.attr('checked')) {fname.removeAttr('readonly'); helptext.addClass('hide')}
-    else {fname.attr('readonly', 'readonly'); helptext.removeClass('hide')}
+		if (fpublished.attr('checked')) { helptext.addClass('hide')}
+    else { helptext.removeClass('hide')}
 	}
 	fpublished.click(published_helper);
 	published_helper();

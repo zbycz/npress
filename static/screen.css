@@ -29,6 +29,7 @@ input.likeprep {width: 235px;}
 a.del {padding: 0 0.2em;}
 a.del:hover {background: #fd4239; color: #fff;}
 
+#js-published-helper {padding-left: 24px; background: url(images/iconEyeNo.png) no-repeat 3px center;}
 
 
 #flashes {
