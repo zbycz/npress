@@ -48,12 +48,13 @@
 	
 	<div class="control-group">
 		{label name "class"=>"control-label" /}
-		<div class="controls">
-			<div class="input-prepend">
-        <span class="add-on">{input published}</span
-				><input n:input="name" {if $page->published}readonly="readonly"{/if}>
-			</div>
-			<p class="help-inline" id="js-published-helper" n:class="$page->published?hide"><small>Tato stránka se nebude zobrazovat v navigaci</small>
+		<div class="controls"><input n:input="name">
+	</div></div>
+
+	<div class="control-group">
+		{label published "class"=>"control-label" /}
+		<div class="controls"><div class="input-prepend"><span class="add-on">{input published}</span></div>
+		<p n:class="help-inline, $page->published?hide" id="js-published-helper"><small>Tato stránka se nebude zobrazovat v menu, lze na ni jen odkázat</small>
 	</div></div>
 
 	<div class="control-group">
@@ -66,10 +67,7 @@
 			<p class="help-inline"><a href="{$page->link()}" rel="tooltip" title="{$page->link(true)}" class="btn btn-success">zobrazit na webu</a>
 	</div></div>
 
-	{*<div class="control-group">
-		{label published "class"=>"control-label" /}
-		<div class="controls">{input published}
-	</div></div>*}
+
 
 	{? $presenter->triggerEvent_filter('filterPageEditForm_render', $_form)}
 

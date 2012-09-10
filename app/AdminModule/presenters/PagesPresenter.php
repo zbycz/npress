@@ -93,7 +93,7 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 		$form->addText("seoname", "adresa")
 						->setAttribute('placeholder', '(automatická)');
 
-		$form->addCheckbox("published", "zobrazeno v menu");
+		$form->addCheckbox("published", "publikováno");
 
 		
 		$form->addTextArea("text", "obsah stránky");
