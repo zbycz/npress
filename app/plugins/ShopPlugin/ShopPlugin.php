@@ -16,7 +16,7 @@ class ShopPlugin extends Control{
 					'filterPageEditForm_values',
 					'filterPageEditForm_defaults'
 			);
-	public $currency = "€";
+	public $currency = "Kč";
 
 	private $page;
 
@@ -61,20 +61,24 @@ class ShopPlugin extends Control{
 	
 	function filterPageEditForm_render(AppForm $_form){
 		if ($this->page->getParent()->getMeta('.category') == 'shop'){
-			?>
-	<tr>
-		<th><?php echo $_form["id_parent_change"]->getLabel() ?>:
-		<td><?php echo $_form["id_parent_change"]->getControl() ?>
-	</tr>
-	<tr>
-		<th><?php echo $_form["price"]->getLabel() ?>:
-		<td>€ <?php echo $_form["price"]->getControl()->addAttributes(array('size'=>3)) ?>
-	</tr>
-	<tr>
-		<th><?php echo $_form["akce"]->getLabel() ?>:
-		<td><?php echo $_form["akce"]->getControl() ?>
-	</tr>
-<?php }
+
+				?>
+				<div class="control-group">
+				<?php if ($_label = $_form["id_parent_change"]->getLabel()) echo $_label->addAttributes(array("class"=>"control-label" )) ?>
+				<div class="controls"><?php echo $_form["id_parent_change"]->getControl(); ?></div></div><?php
+
+
+				?>
+				<div class="control-group">
+				<?php if ($_label = $_form["price"]->getLabel()) echo $_label->addAttributes(array("class"=>"control-label" )) ?>
+				<div class="controls"><?php echo $_form["price"]->getControl(); ?> Kč</div></div><?php
+
+				?>
+				<div class="control-group">
+				<?php if ($_label = $_form["akce"]->getLabel()) echo $_label->addAttributes(array("class"=>"control-label" )) ?>
+				<div class="controls"><?php echo $_form["akce"]->getControl(); ?></div></div><?php
+		
+		}
 		return $_form;
 	}
 
