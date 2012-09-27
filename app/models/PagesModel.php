@@ -184,7 +184,11 @@ class PagesModel extends Object {
 	public static function addPage($data){ //lang supplied in $data
 		if(!isset($data['published']))
 			$data['published'] = 0;
-		
+
+		if(!isset($data['ord'])){
+			$data['ord'] = 1 + dibi::fetchSingle('SELECT max(ord) FROM pages WHERE lang=%s',$data['lang']," AND id_parent=%s",$data['id_parent']);
+		}
+
 		dibi::query('INSERT INTO pages', $data);
 		$new_page_id = dibi::insertId();
 
