@@ -4,87 +4,9 @@
 # If you don't protect this directory from direct web access, anybody will be able to see your passwords.
 # http://nette.org/security-warning
 #
+
+
 common:
-	php:
-		date.timezone: Europe/Prague
-		# session.save_path: "%tempDir%/sessions"
-		# zlib.output_compression: yes
-
-	nette:
-		xhtml: no
-		session:
-			autoStart: smart
-			expiration: +1 month
-
-		application:
-			debugger: true # panel v bluescreen
-			#catchExceptions: TRUE
-			errorPresenter: Front:Error
-
-		routing:
-			debugger: true
-
-		container:
-			debugger: true
-
-		security:
-			debugger: true  # panel v Debugger baru
-			users: {admin: %npress.adminPassword%}
-
-
-	services:
-		linkHelper: LinkHelper
-		plugins:    Plugins(%plugins%)
-		npMacros:   NpMacros(%macros%, ...)
-		i18n:       I18n(%langs%, %defaultLang%, %langDomains%)
-
-
-	parameters:
-		# absolute filesystem paths, accessible on web (%basePath%/...)
-		staticDir: %wwwDir%/static
-		dataDir:   %wwwDir%/data
-		themeDir:  %wwwDir%/theme
-
-		# Language settings
-		defaultLang: cs
-		langs!:
-			cs: Česky
-			en: English
-		langDomains!:
-
-		plugins:
-			- FieldsPlugin
-			#- PasswordPlugin
-			#- ContactsPlugin
-			#- NewsletterPlugin
-			#- ShopPlugin
-
-		macros:
-			filelist: 		%appDir%/macros/filelist.latte
-			translatefrom: %appDir%/macros/translatefrom.latte
-			gallery: 			%appDir%/macros/gallery.latte
-			subpagesblog: %appDir%/macros/subpagesblog.latte
-			sitemap: 			%appDir%/macros/sitemap.latte
-
-		npress:
-			webTitle: Demo
-			adminPassword: demo
-			analytics:
-			clicky:
-			preferCdnJquery: false
-			wysiwyg:
-				minHtmlHeading: 3
-				contentStyle: /static/wysiwyg-content.css
-
-		database:
-			host: localhost
-			driver: mysqli
-			database: npress
-			username: root
-			password:
-			profiler:
-				run: false
-				file: %appDir%/log/dibi.log
 
 production < common:
 development < common:

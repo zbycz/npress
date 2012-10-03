@@ -36,8 +36,8 @@ abstract class CommonBasePresenter extends Presenter
 
 		//configuration
 		$this->template->config = $this->context->params['npress'];
-		$this->template->frontjslatte = $this->context->params['appDir'] . '/FrontModule/templates/frontjs.latte';
-		$this->template->npLayoutFile = $this->context->params['appDir'] . '/FrontModule/templates/@layout.latte';
+		$this->template->frontjslatte = $this->context->params['npDir'] . '/FrontModule/templates/frontjs.latte';
+		$this->template->npLayoutFile = $this->context->params['npDir'] . '/FrontModule/templates/@layout.latte';
 	}
 
 	// Link to page mutation, or homepage
@@ -111,4 +111,32 @@ abstract class CommonBasePresenter extends Presenter
 		}
 		return $ret;
 	}
+
+
+
+	/** Enable templates overriding by app folder, although theme folder overrides even this
+	 */
+	public function formatTemplateFiles() {
+		$name = str_replace(":", ".", $this->getName());
+		$list = parent::formatTemplateFiles();
+		array_unshift($list, $this->context->params["appDir"] . "/templates/$name.$this->view.latte");
+		return $list;
+	}
+
+	/** Enable layout overrides by app folder
+	 */
+	public function formatLayoutTemplateFiles() {
+		$name = str_replace(':', '.', $this->getName());
+		$layout = $this->layout ? $this->layout : 'layout';
+
+		$arr = array();
+		do {
+			$arr[] = $this->context->params["appDir"] . "/templates/$name.@layout.latte";
+		} while ($name = substr($name, 0, strrpos($name, '.')));
+		$arr[] = $this->context->params["appDir"] . "/templates/@layout.latte";
+
+		return array_merge($arr, parent::formatLayoutTemplateFiles());
+	}
+
+
 }

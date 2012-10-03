@@ -24,12 +24,16 @@ $_SERVER['SCRIPT_NAME'] = preg_replace('~/index\.php$~', '', $_SERVER['SCRIPT_NA
 
 
 // Load Nette Framework
-require LIBS_DIR . '/Nette/loader.php';
-define("NPRESS", "<span title='2012/08/17 (beta)'>v0.6-rc</span>");
+require LIBS_DIR . '/nette/loader.php';
+define("NPRESS", "<span title='2012/10/04 (beta)'>v0.7-dev</span>");
 
 
 // Configure application
 $configurator = new Configurator;
+$configurator->addParameters(array(
+		'npDir' => LIBS_DIR . '/npress',
+		'appDir' => APP_DIR,  //autodetect uses directory with this bootstrap file
+		));
 
 // Enable Nette Debugger for error visualisation & logging
 //$configurator->setProductionMode($configurator::AUTO);
@@ -43,7 +47,8 @@ $configurator->createRobotLoader()
 	->addDirectory(LIBS_DIR)
 	->register();
 
-// Create Dependency Injection container from config.neon file
+// Create Dependency Injection container from config.neon files
+$configurator->addConfig(LIBS_DIR . '/npress/config.neon');
 $configurator->addConfig(APP_DIR . '/config.neon');
 $configurator->addConfig(WWW_DIR . '/data/config.neon');
 $container = $configurator->createContainer();
@@ -68,6 +73,11 @@ $frontRouter[] = new Route('<presenter>[/<action>]/<id_page>', array( //default 
         'action' => 'default',
         'id_page' => 1, //TODO default page from config
     ));
+
+
+// Include app specific bootstrap.php
+if(file_exists(APP_DIR . '/bootstrap.php'))
+				require_once APP_DIR . '/bootstrap.php';
 
 
 // Configure and run the application!

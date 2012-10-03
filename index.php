@@ -21,4 +21,4 @@ define('LIBS_DIR', WWW_DIR . '/libs');
 // require APP_DIR . '/templates/maintenance.phtml';
 
 // load bootstrap file
-require APP_DIR . '/bootstrap.php';
+require LIBS_DIR . '/npress/bootstrap.php';
