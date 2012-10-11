@@ -68,6 +68,34 @@ abstract class CommonBasePresenter extends Presenter
 		return parent::createComponent($name);
 	}
 
+	//Create Webloader component for javascript
+	public function createComponentJs()
+	{
+		$files = new \WebLoader\FileCollection(WWW_DIR . '/static');
+		$compiler = \WebLoader\Compiler::createJsCompiler($files, WWW_DIR . '/static/webtemp');
+		$compiler->addFilter(function ($code) {
+			return JSMin::minify($code);
+		});
+		return new \WebLoader\Nette\JavaScriptLoader($compiler, $this->template->basePath . '/static/webtemp');
+	}
+
+	//Create Webloader component for css
+	protected function createComponentCss()
+	{
+		$files = new WebLoader\FileCollection(WWW_DIR . '/static');
+		$compiler = WebLoader\Compiler::createCssCompiler($files, WWW_DIR . '/static/webtemp');
+		//$compiler->addFilter(new WebLoader\Filter\VariablesFilter(array('foo' => 'bar')));
+		$compiler->addFileFilter(new \WebLoader\Filter\LessFilter());
+		$compiler->addFilter(function ($code) {
+			return cssmin::minify($code, "remove-last-semicolon");
+		});
+		$control = new WebLoader\Nette\CssLoader($compiler, $this->template->basePath . '/static/webtemp');
+		$control->setMedia('handheld, screen');
+		$control->setType(null);
+		//$control->setTitle('default skin');
+		return $control;
+	}
+
 	//Allow to use helpers as a latte macros
 	public function templatePrepareFilters($template) {
 		$template->registerFilter($e = new /*Nette\Latte\Engine*/LatteFilter());
