@@ -25,8 +25,10 @@ class NpFilesControl extends Control
 	public function render(){
 
 		//filelist max related
-		$this->template->filelistMaxNum = -1;
-		$this->template->filelistMax = new ArrayWithDefault(9);
+		if(!isset($this->template->filelistMaxNum))
+			$this->template->filelistMaxNum = -1;
+		if(!isset($this->template->filelistMax))
+			$this->template->filelistMax = new ArrayWithDefault(9);
 
 		$template = $this->getTemplate();
 		$template->setFile(dirname(__FILE__) . '/template.latte');
@@ -62,7 +64,7 @@ class NpFilesControl extends Control
 		//also see @previewUploadFormSubmitted
 		if($this->getParam('ajax_upload')){
 			/*Nette\Diagnostics\*/Debugger::$bar = FALSE;  //TODO (ask) nešlo by to nějak líp?
-			$this->sendResponse(new TextResponse("{error: '',msg: 'ok'}", 'text/html'));
+			$this->presenter->sendResponse(new TextResponse("{error: '',msg: 'ok'}", 'text/html'));
 			exit;
 		}
 
@@ -76,10 +78,10 @@ class NpFilesControl extends Control
 
 		$file = $this->httpRequest->getFile('Filedata');
 		if(!$file)
-			$this->sendResponse(new TextResponse("File not uploaded"));
+			$this->presenter->sendResponse(new TextResponse("File not uploaded"));
 
 		FilesModel::upload($this->page->id, $file);
-		$this->sendResponse(new TextResponse("Upload ok."));
+		$this->presenter->sendResponse(new TextResponse("Upload ok."));
 	}
 
 
