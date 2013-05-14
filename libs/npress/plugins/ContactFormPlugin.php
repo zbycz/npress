@@ -26,13 +26,13 @@ class ContactFormPlugin extends Control {
 		$form = new AppForm;
 		$form->addText("name", "Jméno");
 		$form->addText("email", "E-mail")
-						->setDefaultValue('@')
+						//->setDefaultValue('@')
 						->setRequired('Vyplňte, prosím, správně svůj email.')
 						->addRule(Form::EMAIL, 'Vyplňte, prosím, správně svůj email.');
 		$form->addTextArea("text", "Zpráva")
 						->setRequired('Vyplňte, prosím, svou zprávu.');
 		$form->addSubmit("submit1", "Odeslat");
-		$form->addProtection();
+		//$form->addProtection(); //sends cookie ... wtf?
 		$form->onSuccess[] = callback($this, 'contactFormSubmitted');
 		return $form;
 	}
