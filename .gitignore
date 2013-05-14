@@ -1,6 +1,3 @@
 
-/app/log
-/app/temp
 /libs/Nette/lockfile
 /nbproject
-/data
