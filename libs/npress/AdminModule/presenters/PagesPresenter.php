@@ -13,6 +13,21 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 {
 	public $page; 
 
+	public function editAllowed($id = false){
+		if($id===false) $id = $this->page->id;
+		
+		if($this->triggerStaticEvent('allow_page_edit', $this, $id))
+			return true;
+		
+		$this->flashMessage('Nedostatečné oprávnění pro editaci této stránky.');
+		if(!$this->isAjax()){
+			if($this->action == 'add')
+				$this->redirect('Admin:');
+			else
+				$this->redirect('this');
+		}
+		return false;
+	}
 
 	public function actionDefault(){
 		$this->redirect("Admin:");
@@ -28,9 +43,12 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 
 			if($sibling AND $page = $page->getParent()) $id_parent = $page->id;
 		}
+		
+		$id_parent = intval($id_parent) ? intval($id_parent) : 0;
+		if(!$this->editAllowed($id_parent)) return;
 
 		$newid = PagesModel::addPage(array(
-				'id_parent' => intval($id_parent) ? intval($id_parent) : 0,
+				'id_parent' => $id_parent,
 				'lang' => $this->lang,
 			));
 		$this->redirect('edit#newpage', $newid);
@@ -107,6 +125,8 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 		return $form;
 	}
 	public function pageEditFormSubmitted(AppForm $form){
+		if(!$this->editAllowed()) return;
+	
 		$values = (array) $form->values;
 		$values['text'] = preg_replace_callback('~#-(.+?)-#~', array($this, 'npMacroControlOptions'), $values['text']);
 
@@ -132,6 +152,7 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 		$this->invalidateControl('editform_seoname');
 
 		//save values
+		unset($values['id_page']);
 		$this->page->save($values);
 		$this->flashMessage('Obsah stránky uložen ('.date('y-m-d H:i:s').')');
 
@@ -161,6 +182,8 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 	
 	//subpageslist - sorting
 	public function handleSubpagessort(){
+		if(!$this->editAllowed()) return;
+		
 		PagesModel::sort($this->getHttpRequest()->post['pageid'], $this->lang);
 		$this->flashMessage("Pořadí článků upraveno");
 		//$this->payload->hack = 'ok';

@@ -4,8 +4,10 @@
 <div class="hero-unit">
 	<h1>Vítejte v nPress</h1>
 	<p>Pokračujte výběrem stránky, nebo přidáním nové ikonkou <i class="icon-plus"></i>.</p>
-	<p><a class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+	<p><a href="http://npress.info/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
 </div>
+
+{? $presenter->triggerEvent('admin_motd')}
 
 
 {*
@@ -13,4 +15,3 @@
 {control treeView}
 
 *}
-

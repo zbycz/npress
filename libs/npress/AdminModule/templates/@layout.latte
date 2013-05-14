@@ -32,7 +32,7 @@
 
 		<div class="btn-group pull-right">
 			<a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
-				<i class="icon-user"></i> admin
+				<i class="icon-user"></i> {$presenter->user->identity->id}
 				<span class="caret"></span>
 			</a>
 			<ul class="dropdown-menu">
@@ -126,6 +126,9 @@
 			{* <li><a>Nastavení</a> *}
 			<li><a n:href="Redirect:"><i class="icon-random"></i> Přesměrování</a>
 			<li n:if="count($langs)>1"><a n:href="Translations:"><i class="icon-globe"></i> Překlady</a></li>
+			{foreach $adminMenu as $link=>$txt}
+				<li><a href="{$link}">{!$txt}</a></li>
+			{/foreach}
 		</ul>
 
 	</div><!--/.well -->

@@ -25,6 +25,13 @@
 {/if}
 </div>
 
+{* permissions *}
+{if !$presenter->triggerStaticEvent('allow_page_edit', $presenter, $page->id)}
+		<p class="alert alert-error"><strong>Nemáte oprávnění editovat tuto stránku</strong>.</p>
+{/if}
+
+
+
 {snippet editform_deleted}
 	{if $page->data[deleted]}
 		<p class="alert alert-error"><i class="icon-trash"></i> <strong>Tato stránka je smazaná</strong>, ale můžete to <a n:href="deletePage! 1" class='ajax'>vzít zpět</a>.</p>
@@ -107,7 +114,7 @@
 
 
 {if $page->getMeta('.category') == 'yes'}
-<h2 id="toc-subpages">výpis článků: <a n:href='add $page->id'><small>+ přidat</small></a></h2>
+<h2 id="toc-subpages">výpis článků: <a n:href='add $page->id' class='small btn btn-info'>+ přidat</a></h2>
 <ul id="js-subpageslist" data-sortlink='{link subpagessort!}'>
 {foreach $page->getChildNodes() as $r}
 	<li id='pageid-{$r->id}'>{if !$r[published]}<img src="{$basePath}/static/images/iconEyeNo.png">{/if}

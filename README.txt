@@ -21,6 +21,8 @@ Instalace
 6) Administrace je na adrese <webova-cesta-k-npress>/admin/
 7) Enjoy!
 
+pozn. kdykoliv něco nefunguje, co by fakt mělo, možná stačí smazat /app/temp/cache
+
 Systém je stále v beta verzi, takže jistě obsahuje množství chyb. Bugy, prosím, hlašte na adrese https://github.com/zbycz/npress/issues
 
 Stejně tak budu rád za jakékoliv pull requesty či nápady. Pokud systém někde použijete, budu rád, když mi dáte vědět.
@@ -51,4 +53,21 @@ Pavel Zbytovský (c) 2011-2012
 mail/jabber: zbytovsky@gmail.com
 http://npress.info/
 
+
+
+
+
+Events
+======
+Pluginy se registrují v configu pomocí sekce parameters.plugins. Každý plugin si pak registruje události ve svém statickém poli $events, při vyvolání (trigger) události je pak různým způsobem zavolána metoda pluginu přesně s názvem $event() a to na všech Pluginech, které ji registrují.dý
+
+Vrací true, když každý spuštěný Plugin vrátil true.
+
+
+ - Presenter#triggerEvent($event, [$args]) - Plugin je připojen jako komponenta presenteru $presenter[PluginName], metoda zavolána na ni
+ - Presenter#triggerStaticEvent($event, [$args]) - metoda zavolána staticky jako PluginName::{$event}()
+ - Presenter#triggerEvent_filter($event, $filter) - metoda je volána postupně na všechny registrované a $filter je postupně předáván, nakonec vrácen.
+		
+		
+		
 

@@ -3,6 +3,12 @@
 {block #content}
 <h2>Přihlásit se</h2>
 
+<div n:foreach="$flashes as $flash" class="flash alert zprava">
+	{$flash->message}
+</div>
+
+{? $presenter->triggerEvent('login_motd')}
+
 {control loginForm}
 {* <a href="{link Login:lostPass}">Zapomněli jste heslo?</a> *}
 

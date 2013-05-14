@@ -46,6 +46,8 @@ class NpFilesControl extends Control
 		return $form;
 	}
 	public function uploadFormSubmitted(AppForm $form){
+		if(!$this->presenter->editAllowed()) return;
+	
 		$file = $form->values['file'];
 		if($file->isOK()){
 			FilesModel::upload($this->page->id, $file);
@@ -70,6 +72,8 @@ class NpFilesControl extends Control
 		$this->invalidateControl('editform_filelist');
 	}
 	public function handleUploadify(){
+		if(!$this->presenter->editAllowed()) return;
+
 		$file = $this->httpRequest->getFile('Filedata');
 		if(!$file)
 			$this->sendResponse(new TextResponse("File not uploaded"));
@@ -109,6 +113,8 @@ class NpFilesControl extends Control
 		return $form;
 	}
 	public function editFileFormSubmitted(AppForm $form){
+		if(!$this->presenter->editAllowed()) return;
+
 		$values = (array)$form->values;
 		$values['id_page'] = $values['id_page_change']; //fix - after submitting changing $id_page
 		unset($values['id_page_change']);
@@ -137,12 +143,14 @@ class NpFilesControl extends Control
 		return $form;
 	}
 	public function previewUploadFormSubmitted(AppForm $form){
+		if(!$this->presenter->editAllowed()) return;
+
 		if($form->values['file']->isOK())
 			FilesModel::uploadPreview($form->values);
 
 		if($this->getParam('ajax_upload')){ //@see uploadFormSubmitted
 			Debugger::$bar = FALSE;
-			$this->sendResponse(new TextResponse("{error: '',msg: 'ok'}", 'text/html'));
+			$this->presenter->sendResponse(new TextResponse("{error: '',msg: 'ok'}", 'text/html'));
 			exit;
 		}
 		else
@@ -152,11 +160,15 @@ class NpFilesControl extends Control
 
 	//filelist - sorting, delete
 	public function handleFilesort(){
+		if(!$this->presenter->editAllowed()) return;
+
 		FilesModel::sort($this->httpRequest->post);
-		//dom is enoug //$this->invalidateControl('editform_filelist'); //(all dynamic snippets)
+		//dom is enough //$this->invalidateControl('editform_filelist'); //(all dynamic snippets)
 		$this->presenter->flashMessage("Pořadí souborů upraveno");
 	}
 	public function handleDeleteFile($fid, $undo=false){
+		if(!$this->presenter->editAllowed()) return;
+
 		if(!$undo){
 			FilesModel::edit(array('id' =>$fid, 'deleted'=>true));
 			$undolink = $this->link('deleteFile!#toc-files', $fid, true); //undo=true
@@ -172,15 +184,22 @@ class NpFilesControl extends Control
 	}
 	
 	public function handleSortFilesByName(){
+		if(!$this->presenter->editAllowed()) return;
+
 		FilesModel::sortFilesBy($this->page->id, 'filename');
 		$this->invalidateControl('editform_filelist');
 		if(!$this->presenter->isAjax()) $this->redirect('this#toc-files');
 	}
 	public function handleFilesSync(){
+		if(!$this->presenter->editAllowed()) return;
+
 		$log = FilesModel::filesSync($this->page->id, $this->page->getMeta('.filesSync'));
 		$this->template->filesSyncLog = $log;
 	}
 	public function handleFilelistMore($num, $max){
+		if(!isset($this->template->filelistMax)) {
+			$this->template->filelistMax = new ArrayWithDefault(9);
+		}
 		$this->template->filelistMax[$num] = $max;
 		$this->template->filelistMaxNum = $num;
 		$this->invalidateControl('editform_filelist'); //dynamic snippets used here!

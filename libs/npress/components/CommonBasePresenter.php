@@ -112,6 +112,24 @@ abstract class CommonBasePresenter extends Presenter
 		return $ret;
 	}
 
+	/** Trigger plugin event, observing returned false
+	 * @param $eventname
+	 * @param [$arg0]  argument to filter function
+	 * @param [$arg1]  ...
+	 * @return bool    true if each event returned true
+	 */
+	public function triggerStaticEvent($eventname){
+		$args = array_slice(func_get_args(), 1);
+
+		$triggers = $this->context->plugins->getEventTriggers($eventname);
+		$ret = true;
+		foreach($triggers as $plugin){
+			$r = call_user_func_array(callback($plugin, $eventname), $args);
+			if($r === false)
+				$ret = false;
+		}
+		return $ret;
+	}
 
 
 	/** Enable templates overriding by app folder, although theme folder overrides even this
@@ -127,7 +145,6 @@ abstract class CommonBasePresenter extends Presenter
 	 */
 	public function formatLayoutTemplateFiles() {
 		$name = str_replace(':', '.', $this->getName());
-		$layout = $this->layout ? $this->layout : 'layout';
 
 		$arr = array();
 		do {

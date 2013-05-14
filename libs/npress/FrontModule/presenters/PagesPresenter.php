@@ -38,6 +38,13 @@ class Front_PagesPresenter extends Front_BasePresenter
 			return $this->redirectUrl($redirect);
 	}
 
+
+	public function beforeRender(){
+		parent::startup();
+
+		$this->triggerStaticEvent('event_Front_Pages_beforeRender', $this);
+	}
+
 	//page specific template
 	function formatTemplateFiles() {
 		$list = parent::formatTemplateFiles();
