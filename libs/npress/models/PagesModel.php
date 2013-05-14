@@ -81,6 +81,19 @@ class PagesModel extends Object {
 		return $result;
 	}
 
+
+	public static function getChildNodesWithMeta($id, $lang, $key, $value){  //used by Node methods
+		$children = self::getChildNodes($id, $lang);
+
+		//filtering deleted pages
+		$result = array();
+		foreach($children as $k=>$r)
+			if($r->getMeta($key) == $value)
+				$result[] = $r;
+
+		return $result;
+	}	
+
 	public static function getRoot($lang=false){
 		if(!$lang) $lang = self::$lang;
 
@@ -262,6 +275,10 @@ class PagesCollection extends ArrayList {
 		}
 		return $output;
 	}
+	
+	public function toArray(){
+		return iterator_to_array($this);
+	}
 
 }
 
@@ -323,6 +340,10 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 	/** returns all children in tree */
 	public function getChildNodesUnfiltered(){
 		return PagesModel::getChildNodesUnfiltered($this->id, $this->lang);
+	}
+
+	public function getChildNodesWithMeta($key, $value=NULL){
+		return PagesModel::getChildNodesWithMeta($this->id, $this->lang, $key, $value);
 	}
 
 	/** Gets array of all pages with correct index and level
