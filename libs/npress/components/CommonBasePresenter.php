@@ -22,22 +22,31 @@ abstract class CommonBasePresenter extends Presenter
 
 	public function startup() {
 		parent::startup();
+		
+		PagesModel::$lang = $this->lang;		
+		$this->pages = PagesModel::getRoot();
+	}
+	
+	public function createTemplate($class = NULL) {
+		$template = parent::createTemplate($class);
 
 		//lang settings
-		$this->template->lang = PagesModel::$lang = $this->lang;
-		$this->template->langs = $this->context->params["langs"];
-		$this->template->setTranslator(new TranslationsModel($this->lang));
+		$template->lang = $this->lang;
+		$template->langs = $this->context->params["langs"];
+		$template->setTranslator(new TranslationsModel($this->lang));
 
 
 		//pages tree
-		$this->pages = PagesModel::getRoot();
-		$this->template->pages = $this->pages;
-		$this->template->crumbs = array();
+		$template->pages = $this->pages;
+		$template->crumbs = array();
 
 		//configuration
-		$this->template->config = $this->context->params['npress'];
-		$this->template->frontjslatte = $this->context->params['npDir'] . '/FrontModule/templates/frontjs.latte';
-		$this->template->npLayoutFile = $this->context->params['npDir'] . '/FrontModule/templates/@layout.latte';
+		$template->config = $this->context->params['npress'];
+		$template->frontjslatte = $this->context->params['npDir'] . '/FrontModule/templates/frontjs.latte';
+		$template->npLayoutFile = $this->context->params['npDir'] . '/FrontModule/templates/@layout.latte';
+
+		//bardump(array($this->formatLayoutTemplateFiles(), $this->formatTemplateFiles()));
+		return $template;
 	}
 
 	// Link to page mutation, or homepage

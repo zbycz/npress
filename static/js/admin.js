@@ -160,12 +160,12 @@ function pageEditForm_jwysiwyg(){
 			},
 			
 			paragraph: { visible: true},
+ 			increaseFontSize : { visible : true },
+ 			decreaseFontSize : { visible : true },
 
 // 			cut   : { visible : true },
 // 			copy  : { visible : true },
 // 			paste : { visible : true },
-// 			increaseFontSize : { visible : true },
-// 			decreaseFontSize : { visible : true },
 //			exam_html: {
 //				exec: function() {
 //					this.insertHtml('<abbr title="exam">Jam</abbr>');

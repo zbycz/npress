@@ -7,7 +7,7 @@
 
 {snippet translationstable}
 	{form translationsEditForm}
-	<table class="border">
+	<table class="table table-bordered table-striped">
 		<tr><th>Interní klíč</th><th n:foreach="$langs as $l">{$l}</th><th></th></tr>
 		{foreach $translations as $r}
 			{if $editid == $r['id']}

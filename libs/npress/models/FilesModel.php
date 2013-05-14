@@ -31,7 +31,7 @@ class FilesModel extends Object {
 		if(!isset(self::$cacheByPage[$id_page])){
 			self::$cacheByPage[$id_page] = array();
 
-			$result = dibi::query('SELECT * FROM pages_files WHERE id_page = %i',$id_page,' AND deleted=0 ORDER BY ord');
+			$result = dibi::query('SELECT * FROM pages_files WHERE id_page = %i',$id_page,' AND deleted=0 ORDER BY gallerynum,ord');
 			foreach($result as $r)
 				self::$cacheByPage[$id_page][] = self::createFileObject($r);
 		}

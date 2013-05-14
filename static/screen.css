@@ -132,3 +132,6 @@ a.del:hover {background: #fd4239; color: #fff;}
 	z-index: 1000;
 }
 
+
+#toc-subpages,
+#toc-files {margin-top: 2em;}

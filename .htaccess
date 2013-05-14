@@ -28,8 +28,8 @@ RewriteBase /
 ## Main rewrite rule - nPress handles everything
 ## - uncomment following lines to allow parallel real-directories structure
 ##
-#RewriteCond %{REQUEST_FILENAME} !-f
-#RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule !^(favicon\.ico|index\.php|static/.+|data/.+|theme/.+)$ index.php [L]
 
 
