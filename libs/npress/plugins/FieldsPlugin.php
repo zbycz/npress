@@ -19,6 +19,7 @@ class FieldsPlugin extends Control{
 
 	private $page;
 	private $fields = array();
+	private $error = "";
 
 	public function __construct(){
 		parent::__construct();
@@ -40,13 +41,28 @@ class FieldsPlugin extends Control{
 		$this->template->setTranslator(new TranslationsModel($presenter->lang));
 
 		//parse fields
-		$json = $this->page->getParent()->getMeta('.fields');
-		$fields = array();
+		$json = $this->page->getParent()->getMeta('.sectionFields');
+		$sectionFields = array();
 		try {
 			if($json)
 				$fields = Neon::decode($json);
-		} catch (Exception $e){}
+		} catch (Exception $e){
+			$m = htmlspecialchars($e->getMessage());
+			$this->error .= "<div class='control-group' title=\"$m\">.sectionFields not valid</div>";
+		}
 
+		$fields = array();
+		$json = $this->page->getMeta('.fields');
+		try {
+			if($json)
+				$fields = Neon::decode($json);
+		} catch (Exception $e){
+			$m = htmlspecialchars($e->getMessage()."\"");
+			$this->error .= "<div class='control-group' title=\"$m\">.fields not valid</div>";
+		}
+
+
+		$fields = array_merge($fields, $sectionFields);
 		foreach($fields as $k=>$f){
 			if(substr($k,-1) == '_') $k .= $this->page->lang;
 			$this->fields[$k] = $f;
@@ -75,8 +91,9 @@ class FieldsPlugin extends Control{
 
 		return $form;
 	}
-	
+
 	function filterPageEditForm_render(AppForm $_form){
+		echo $this->error;
 		foreach($this->fields as $k=>$v){
 				?>
 				<div class="control-group">
