@@ -1,7 +1,8 @@
 
 
-<h3 id='toc-meta'>další nastavení: <small><input type="checkbox" id="js-showHiddenMeta" class="hidden"> více</small></h3>
-<ul id='js-meta-sql' class="jshidden">
+<h3 id='toc-meta'>další nastavení: <small><input type="checkbox" id="js-showHiddenMeta" class="hidden"> zobrazit</small></h3>
+<div id='js-meta-content' class='jshidden'>
+<ul>
 	<li>.category=yes, .hideTextInput=yes, .template=file (latte file in theme/), hideHeading, .filesSync
 	<li>id_page: {$page[id_page]}
 	<li>id_parent: {$page[id_parent]}
@@ -11,7 +12,7 @@
 {* js events delegated to #js-meta *}
 <div id='js-meta' class="form-horizontal">
 <div n:snippet="editpage_metalist" data-afterUpdate="metalist_reflectCheckbox">
-		<div n:foreach="$page->meta as $key=>$val" n:class="$key[0]=='.' ? jshidden">
+		<div n:foreach="$page->meta as $key=>$val">
 			<form action="{link saveEditForm}" method="post" class="ajax control-group">
 				<label for='meta-{$key}' class="control-label">{$key}</label>
 				<div class="controls">
@@ -31,4 +32,7 @@
 </div>
 </div>
 <p {*n:if="count($langs)>1"*}>Nastavení jsou společná napříč jazykovými mutacemi.</p>
+
+</div>
+
 
