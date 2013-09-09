@@ -649,6 +649,18 @@ class VideoFile extends File {
 		$link = Environment::getHttpRequest()->getUrl()->getBasePath()
 						. "data/files/$this->id.orig.$this->suffix";
 
+		// custom templating
+		$template = Environment::getContext()->params["themeDir"] . '/control-video.latte';
+		if (file_exists($template)) {
+				$tpl = Environment::getApplication()->presenter->createTemplate();
+				$tpl->setFile($template);
+				$tpl->file = $this;
+				$tpl->preview = $preview;
+				$tpl->link = $link;
+				$tpl->basePath = Environment::getHttpRequest()->getUrl()->getBasePath();
+				return (string) $tpl;
+		}
+
 		return "\n<video src='$link' width='480' height='330' poster='$preview' preload='none'>\n"
 						."Pokud vidíte tento text, váš prohlížeč zřejmě neumí přehrávat video.\n"
 						."<br>Video můžete alespoň <a href='$link'>stáhnout</a> a zkusit ho přehrát mimo prohlížeč.\n"
