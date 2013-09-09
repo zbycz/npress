@@ -24,7 +24,7 @@ $_SERVER['SCRIPT_NAME'] = preg_replace('~/index\.php$~', '', $_SERVER['SCRIPT_NA
 
 
 // Load Nette Framework
-require LIBS_DIR . '/nette/loader.php';
+require LIBS_DIR . '/Nette/loader.php';
 define("NPRESS", "<span title='2012/10/04 (beta)'>v0.7-dev</span>");
 
 
