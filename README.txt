@@ -1,7 +1,7 @@
 nPress - opensource cms
 =======================
 
-nPress je nový systém pro správu obsahu postavený na Nette Frameworku. Umožňuje snadno upravovat strukturu více jazyčného webu a dobře pracuje s přílohami.
+nPress je systém pro správu obsahu postavený na Nette Frameworku. Umožňuje snadno upravovat strukturu více jazyčného webu a dobře pracuje s přílohami.
 
 Více informací na www.npress.info
 
@@ -55,6 +55,9 @@ http://npress.info/
 
 
 
+Licence
+=======
+MIT - volně šiřte, prodávejte, zachovejte autora
 
 
 Events
