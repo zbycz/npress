@@ -45,7 +45,7 @@ class FieldsPlugin extends Control{
 		$sectionFields = array();
 		try {
 			if($json)
-				$fields = Neon::decode($json);
+				$sectionFields = Neon::decode($json);
 		} catch (Exception $e){
 			$m = htmlspecialchars($e->getMessage());
 			$this->error .= "<div class='control-group' title=\"$m\">.sectionFields not valid</div>";
