@@ -3,7 +3,8 @@ nPress - opensource cms
 
 nPress je systém pro správu obsahu postavený na Nette Frameworku. Umožňuje snadno upravovat strukturu více jazyčného webu a dobře pracuje s přílohami.
 
-Více informací na www.npress.info
+Více informací na http://npress.zby.cz
+//update 7.12.2015 doména npress.info již není prodlouženíhodná, tedy se web přesunul. Aktualizované to stejně není.
 
 
 Instalace
