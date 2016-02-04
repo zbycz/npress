@@ -2,7 +2,7 @@
  * nPress - opensource cms
  *
  * @copyright  (c) 2012 Pavel Zbytovský (pavel@zby.cz)
- * @link       http://npress.info/
+ * @link       http://npress.zby.cz/
  * @package    nPress
  */
 
