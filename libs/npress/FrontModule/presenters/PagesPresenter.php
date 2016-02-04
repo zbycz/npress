@@ -27,6 +27,8 @@ class Front_PagesPresenter extends Front_BasePresenter
 		//page should display different URL?
 		$this->doPageRedirects();
 
+        $this->invalidateControl('content');
+
 		// bread crumbs
 		$this->template->crumbs = $this->page->getParents();
 		$this->template->page = $this->page;

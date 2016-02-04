@@ -24,7 +24,7 @@ $_SERVER['SCRIPT_NAME'] = preg_replace('~/index\.php$~', '', $_SERVER['SCRIPT_NA
 
 
 // Load Nette Framework
-require LIBS_DIR . '/Nette/loader.php';
+require LIBS_DIR . '/nette/loader.php';
 define("NPRESS", "<span title='2012/10/04 (beta)'>v0.7-dev</span>");
 
 
@@ -36,7 +36,7 @@ $configurator->addParameters(array(
 		));
 
 // Enable Nette Debugger for error visualisation & logging
-//$configurator->setProductionMode($configurator::AUTO);
+//$configurator->setProductionMode(FALSE);
 $configurator->enableDebugger(APP_DIR . '/log');
 function barDump($x){Debugger::barDump($x);}
 
@@ -51,6 +51,8 @@ $configurator->createRobotLoader()
 $configurator->addConfig(LIBS_DIR . '/npress/config.neon');
 $configurator->addConfig(APP_DIR . '/config.neon');
 $configurator->addConfig(WWW_DIR . '/data/config.neon');
+if (file_exists(WWW_DIR . '/data/config.local.neon'))
+    $configurator->addConfig(WWW_DIR . '/data/config.local.neon');
 $container = $configurator->createContainer();
 
 
@@ -81,4 +83,5 @@ if(file_exists(APP_DIR . '/bootstrap.php'))
 
 
 // Configure and run the application!
-$container->application->run();
+if(!defined("DONT_RUN_NPRESS_APP"))
+    $container->application->run();

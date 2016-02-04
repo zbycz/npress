@@ -1,0 +1,25 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file is NOT accessible directly via a web browser!
+#
+# If you don't protect this file from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+
+common:
+production < common:
+	parameters:
+		database:
+			host: localhost
+			driver: mysqli
+			database: abc
+			username: 
+			password: 
+	
+		npress:
+			preferCdnJquery: true
+	
+	
+		
+
+development < common:
+console < common:

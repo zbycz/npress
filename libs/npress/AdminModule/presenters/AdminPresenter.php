@@ -10,7 +10,6 @@
 
 class Admin_AdminPresenter extends Admin_BasePresenter
 {
-
 	public function actionPagesort() //TODO rather use a signal
 	{
     if ($this->isAjax()) {

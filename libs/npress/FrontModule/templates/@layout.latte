@@ -74,7 +74,7 @@
 {block editlink}
 <a n:if="isset($presenter->page) && $presenter->user->isLoggedIn()"
 	 n:href=":Admin:Pages:edit $presenter->page->id, lang=>$presenter->page->lang"
-	 style="position:fixed;left:0;bottom:0;padding:1em;background:#000;color:#685DE7;opacity:0.5">
+	 style="position:fixed;left:0;bottom:0;padding:1em;background:#000;color:#685DE7;opacity:0.5;z-index:1000">
 	edit</a>
 {/block}
 

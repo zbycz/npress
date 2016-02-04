@@ -40,4 +40,3 @@ class NewsletterPlugin extends AppForm {
 	}
 }
 
-?>

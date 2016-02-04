@@ -20,8 +20,8 @@ RewriteBase /
 ##
 ## Uncomment to prefer www-prefixed domain name
 ##
-#RewriteCond %{HTTP_HOST} ^npress.info$
-#RewriteRule ^.*$ http://www.npress.info/$0 [R=301,L]
+#RewriteCond %{HTTP_HOST} ^www.zby.cz$
+#RewriteRule ^.*$ http://zby.cz/$0 [R=301,L]
 
 
 ##
@@ -44,13 +44,13 @@ RewriteRule .* index.php [NE,L]
 ##
 ## PHP settings - comment those when running PHP as CGI
 ##
-php_value default_charset utf-8
-php_value date.timezone Europe/Prague
-php_flag magic_quotes_gpc Off
-php_flag magic_quotes_runtime Off
-
-php_flag file_uploads On
-php_value upload_max_filesize 100M
-php_value post_max_size 100M
-#php_value upload_tmp_dir temporarydir
+#php_value default_charset utf-8
+#php_value date.timezone Europe/Prague
+#php_flag magic_quotes_gpc Off
+#php_flag magic_quotes_runtime Off
+#
+#php_flag file_uploads On
+#php_value upload_max_filesize 100M
+#php_value post_max_size 100M
+###php_value upload_tmp_dir temporarydir
 
