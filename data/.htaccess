@@ -1,3 +1,6 @@
 <Files config.neon>
 	Deny from all
 </Files>
+<Files config.local.neon>
+	Deny from all
+</Files>
