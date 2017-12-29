@@ -11,7 +11,9 @@
 
 if(!defined('PHP_VERSION_ID')){$tmp=explode('.',PHP_VERSION);define('PHP_VERSION_ID',($tmp[0]*10000+$tmp[1]*100+$tmp[2]));}if(PHP_VERSION_ID<50200){throw
 new
-Exception('Nette Framework requires PHP 5.2.0 or newer.');}error_reporting(E_ALL|E_STRICT);@set_magic_quotes_runtime(FALSE);iconv_set_encoding('internal_encoding','UTF-8');extension_loaded('mbstring')&&mb_internal_encoding('UTF-8');umask(0);@header('X-Powered-By: Nette Framework');@header('Content-Type: text/html; charset=utf-8');class
+Exception('Nette Framework requires PHP 5.2.0 or newer.');}error_reporting(E_ALL|E_STRICT);@set_magic_quotes_runtime(FALSE);
+  //iconv_set_encoding('internal_encoding','UTF-8');
+  extension_loaded('mbstring')&&mb_internal_encoding('UTF-8');umask(0);@header('X-Powered-By: Nette Framework');@header('Content-Type: text/html; charset=utf-8');class
 NCFix{static$vars=array();static
 function
 uses($args){self::$vars[]=$args;return
