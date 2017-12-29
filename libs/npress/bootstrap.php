@@ -62,19 +62,23 @@ dibi::connect($container->params['database']);
 
 
 // Setup router
+$flag = isset($_SERVER['HTTPS']) ? Route::SECURED : false;
+if (isset($_SERVER['HTTPS'])) Route::$defaultFlags = Route::SECURED;
+
 $container->router[] = $adminRouter = new RouteList('Admin');
-$adminRouter[] = new Route('admin/<presenter>/<action>[/<id_page>]', 'Admin:default');
+$adminRouter[] = new Route('admin/<presenter>/<action>[/<id_page>]', 'Admin:default', $flag);
 
 $container->router[] = $frontRouter = new RouteList('Front');
-$frontRouter[] = new Route('data/thumbs/<id>[.<opts>].png', 'Files:preview');
+$frontRouter[] = new Route('data/thumbs/<id>[.<opts>].png', 'Files:preview', $flag);
+$frontRouter[] = new Route('files[/<action>][/<id>]', 'Files:default', $flag);
 $frontRouter[] = new Route('index.php', 'Pages:default', Route::ONE_WAY);
 $frontRouter[] = new PagesRouter;
 $frontRouter[] = new RedirectRouter;
 $frontRouter[] = new Route('<presenter>[/<action>]/<id_page>', array( //default route
         'presenter' => 'Pages',
         'action' => 'default',
-        'id_page' => 1, //TODO default page from config
-    ));
+        'id_page' => 1, //TODO default page from config (but matched only when '/' page missing)
+    ), $flag);
 
 
 // Include app specific bootstrap.php
