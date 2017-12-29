@@ -99,8 +99,8 @@ class FilesModel extends Object {
 		if(isset(self::$cache[$id]))
 			return self::$cache[$id];
 
-			$r = dibi::fetch('SELECT * FROM pages_files WHERE id = %i', $id);
-			return self::createFileObject($r);
+        $r = dibi::fetch('SELECT * FROM pages_files WHERE id = %i', $id);
+        return $r ? self::createFileObject($r) : false;
 	}
 
 	/** Get one file by filename

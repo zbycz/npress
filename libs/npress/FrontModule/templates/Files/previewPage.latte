@@ -1,18 +1,25 @@
-<p>Name: {$file->filename}.{$file->suffix} ({$file->filesize|bytes})
-<p>Description: {$file->description}
+<h1><a n:href="default $file->id" title="download / show">{$file->filename}.{$file->suffix}</a></h1>
+<p>Description: {$file->description}  ({$file->filesize|bytes})
 
-<p>Image preview: ({$file->dimensions})<br>
-<img src="{$file->previewLink()}">
+<p>Image preview: ({$file->dimensions}px)<br>
+<img src="{$file->previewLink()}" alt="preview of {$file->filename}">
 
 
 
 {if $pdf2xml}
 	<p>Text preview:<br>
 	{foreach $pdf2xml as $page}
-		<div style="position:relative;">
-		{foreach $page[1] as $text}
-			<div style="position:absolute;left:{$text[l]};top:{$text[t]}">{$text}</div>
-		{/foreach}
+        {var $max = 100;}
+        {capture $inner}
+            {foreach $page[1] as $text}
+                {? $max = max($max, $text[t]);}
+                <div style="position:absolute;left:{$text[l]};top:{$text[t]}">{$text}</div>
+            {/foreach}
+        {/capture}
+
+        <div style="position:relative;width: 100%;height:{$max+100}px;border-top:1px black solid">
+            {!$inner}
 		</div>
+
 	{/foreach}
 {/if}

@@ -309,6 +309,9 @@ class File {
 					$image->resize($opts['w'], $opts['h'], Image::FILL);
 					$image->crop('50%', '20%', $opts['w'], $opts['h']);
 				}
+				elseif(isset($opts["crop2"])){
+					$image->crop('50%', '20%', $opts['w'], $opts['h']);
+				}
 				else
 					$image->resize($opts['w'], $opts['h'], Image::SHRINK_ONLY);
 			}

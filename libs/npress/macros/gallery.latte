@@ -3,7 +3,7 @@
 
 <div class='np-gallery'>
 {foreach $files as $f}
-	{* --- this is parsed by Lightbox - dont change --- *}
+	{* --- 800x600 is parsed by Lightbox - dont change --- *}
 	{var $href = $f->previewLink('800x600')} 
 	
 	<div><a href='{$href}' class='lightbox'{if trim($f->description)} title='{$f->description|trim}'{/if}>

@@ -20,7 +20,14 @@ class Front_FilesPresenter extends Front_BasePresenter
 	 */
 	public function actionDefault($id)
 	{
+        //legacy URL /files/?id=##
+        if ($id == NULL && ($query = $this->context->httpRequest->getQuery('id')))
+            $id = $query;
+
 		$file = FilesModel::getFile($id);
+
+        if(!$file)
+            throw new BadRequestException("File not found", 404);
 
 		if(!$this->triggerEvent('allowFileDownload', $file))
 			throw new BadRequestException("File download forbidden", 403);
@@ -41,6 +48,10 @@ class Front_FilesPresenter extends Front_BasePresenter
 	public function actionPreview($id, $opts=null)
 	{
 		$file = FilesModel::getFile($id);
+
+        if(!$file)
+            throw new BadRequestException("File not found", 404);
+
 		$response = $file->getPreviewHttpResponse($opts);
 		$this->sendResponse($response);
 	}
@@ -48,7 +59,10 @@ class Front_FilesPresenter extends Front_BasePresenter
 	public function actionPreviewPage($id){
 		$file = FilesModel::getFile($id);
 
-		if(!$this->triggerEvent('allowFileDownload', $file))
+        if(!$file)
+            throw new BadRequestException("File not found", 404);
+
+        if(!$this->triggerEvent('allowFileDownload', $file))
 			throw new BadRequestException("File download forbidden", 403);
 
 		$this->template->file = $file;
