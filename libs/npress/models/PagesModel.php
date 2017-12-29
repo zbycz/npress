@@ -109,7 +109,8 @@ class PagesModel extends Object {
 				"name" => "root"), array());
 	}
 
-	public static function getPageBySeoname($seoname, $lang){
+	public static function getPageBySeoname($seoname, $lang = false){
+        if(!$lang) $lang = self::$lang;
 		$page = dibi::fetch("SELECT * FROM pages WHERE lang = %s",$lang," AND seoname = %s",$seoname," AND deleted=0");
 		if($page)
 			return self::pagesModelNode($page);
@@ -179,11 +180,12 @@ class PagesModel extends Object {
 	/** Get pages with spcified meta key&value
 	 * @return PagesCollection
 	 */
-	public static function getPagesByMeta($key, $value){
+	public static function getPagesByMeta($key, $value = NULL){
 		$result = dibi::query('
 			SELECT pages.*
 			FROM pages_meta LEFT JOIN pages USING(id_page)
-			WHERE lang=%s',self::$lang,' AND `key`=%s',$key,' AND value=%s',$value,'
+			WHERE lang=%s',self::$lang,' AND `key`=%s',$key,'
+			%if",$value," AND value=%s',$value,' %end
 			ORDER BY id_parent, ord
 			');
 		if(!$result) return false;
