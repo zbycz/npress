@@ -207,7 +207,7 @@
 						$(this.original).css({
 							width:	this.element.outerWidth() - 6,
 							height: this.element.height() - this.ui.toolbar.height() - 6,
-							resize: "none"
+							resize: "vertical"
 						}).show();
 						this.editor.hide();
 						
@@ -1444,12 +1444,12 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			/**
 			 * @link http://code.google.com/p/jwysiwyg/issues/detail?id=20
 			 */
-			$(self.original).focus(function () {
-				if ($(this).filter(":visible").length === 0) {
-					return;
-				}
-				self.ui.focus();
-			});
+			// $(self.original).focus(function () {
+			// 	if ($(this).filter(":visible").length === 0) {
+			// 		return;
+			// 	}
+			// 	self.ui.focus();
+			// });
 
 			$(self.editorDoc).keydown(function (event) {
 				var emptyContentRegex;
