@@ -264,7 +264,7 @@
 			// Perfomance the effect
 			$('#lightbox-container-image-box').animate({width: intWidth, height: intHeight},settings.containerResizeSpeed,function() {/*npress// _show_image();*/});
 			if ( ( intDiffW == 0 ) && ( intDiffH == 0 ) ) {
-				if ( $.browser.msie ) {
+				if ( navigator.appName == 'Microsoft Internet Explorer' ) {
 					___pause(250);
 				} else {
 					___pause(100);	

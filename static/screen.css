@@ -135,3 +135,8 @@ a.del:hover {background: #fd4239; color: #fff;}
 
 #toc-subpages,
 #toc-files {margin-top: 2em;}
+
+
+.modal-backdrop {
+    top: 40px;
+}
