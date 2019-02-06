@@ -21,7 +21,11 @@
 	{else}
 	<script src="{$basePath}/static/js/jquery.min.js"></script>
 	{/if}
-	
+
+	{foreach $langs as $l=>$txt}
+		<link rel="alternate" href="{$presenter->langSwitch($l)}" hrefLang="{$l}">
+	{/foreach}
+
 	
 	<!-- npress frontend javascripts -->
 	{include $frontjslatte}
