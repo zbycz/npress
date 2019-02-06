@@ -14,9 +14,9 @@ CREATE TABLE `pages` (
   `seoname` varchar(255) collate utf8_czech_ci NOT NULL default '',
   `heading` varchar(255) collate utf8_czech_ci NOT NULL default '',
   `text` text collate utf8_czech_ci NOT NULL,
-  `ord` int(10) unsigned NOT NULL,
-  `published` tinyint(1) NOT NULL,
-  `deleted` tinyint(1) NOT NULL,
+  `ord` int(10) unsigned NOT NULL default 0,
+  `published` tinyint(1) NOT NULL default 0,
+  `deleted` tinyint(1) NOT NULL default 0,
   PRIMARY KEY  (`id_page`,`lang`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 
@@ -26,17 +26,17 @@ CREATE TABLE `pages_files` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `id_page` int(10) unsigned NOT NULL,
   `filename` varchar(255) collate utf8_czech_ci NOT NULL default '',
-  `suffix` varchar(255) collate utf8_czech_ci NOT NULL,
-  `filesize` int(10) unsigned NOT NULL,
-  `description` text collate utf8_czech_ci NOT NULL,
-  `keywords` text collate utf8_czech_ci NOT NULL,
-  `info` text collate utf8_czech_ci NOT NULL,
+  `suffix` varchar(255) collate utf8_czech_ci NOT NULL default '',
+  `filesize` int(10) unsigned NOT NULL default 0,
+  `description` text collate utf8_czech_ci default NULL,
+  `keywords` text collate utf8_czech_ci default NULL,
+  `info` text collate utf8_czech_ci default NULL,
   `dimensions` varchar(255) collate utf8_czech_ci NOT NULL default '',
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
   `origpath` varchar(255) collate utf8_czech_ci default NULL,
-  `deleted` tinyint(1) unsigned NOT NULL,
-  `gallerynum` tinyint(3) unsigned NOT NULL,
-  `ord` int(10) unsigned NOT NULL,
+  `deleted` tinyint(1) unsigned NOT NULL default 0,
+  `gallerynum` tinyint(3) unsigned NOT NULL default 0,
+  `ord` int(10) unsigned NOT NULL default 0,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_czech_ci;
 

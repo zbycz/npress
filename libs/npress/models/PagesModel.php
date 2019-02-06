@@ -551,6 +551,7 @@ class PagesModelNode extends Object  implements ArrayAccess, ITreeViewNode, IExp
 				'id_page' => $this->id,
 				'lang' => $lang,
 				'id_parent' => $id_parent,
+				'text' => '',
 		);
 		dibi::query('INSERT INTO pages', $data);
 
