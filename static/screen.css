@@ -18,18 +18,21 @@ small i {
 /* --------------  header -------------- */
 .npresslogo {
   color: #888 !important;
-  font-variant: small-caps;
   font-size: 90%;
 }
 .npresslogo span {
   color: #485dc5;
-  font-variant: normal;
   font-weight: bold;
-  font-size: 110%;
 } /*a.npresslogo:hover {text-decoration: underline !important;}*/
 
 .brand small {
   font-size: 70%;
+}
+.brand:hover {
+  text-decoration: underline !important;
+}
+.npresslogo:hover {
+  text-decoration: none !important;
 }
 
 .navbar i {
@@ -59,6 +62,13 @@ a.del {
 a.del:hover {
   background: #fd4239;
   color: #fff;
+}
+a.small {
+  font-size: 80%;
+  color: #777 !important;
+}
+a:small:hover {
+  color: #777 !important;
 }
 
 #js-published-helper {

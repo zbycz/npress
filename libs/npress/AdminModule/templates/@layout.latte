@@ -57,10 +57,11 @@
 		</ul>
 			
 
-		<a n:href="Admin:default" class='npresslogo navbar-text pull-left'><span>n</span>Press</a>
+		<a n:href="Admin:default" class='npresslogo navbar-text pull-left' title="Admin homepage"><span>n</span>Press</a>
 
 		<div class="navbar-text pull-left span">
-			<a n:href=":Front:Pages: lang=>$lang" class="brand">{$config[webTitle]} <small>web &raquo;</small></a>
+      <a n:href="Admin:default" class="brand" title="Admin homepage">{$config[webTitle]} </a>
+			<a n:href=":Front:Pages: lang=>$lang" class="brand" title="Public web homepage"><small>web &raquo;</small></a>
 		</div>
 
 		<div id='flashes'><div class='box' n:snippet="flashes">
@@ -147,9 +148,10 @@
 <hr>
 
 <footer>
-	<p style="font-size: 80%;margin-left:0.3em">
-		<a href="http://npress.zby.cz/" style="color: #777">CMS nPress {!NPRESS}</a>
-		<small title="Nette 2.0-dev released on 2012-02-03, dibi {dibi::VERSION}, MySql {dibi::fetch('SHOW VARIABLES LIKE "version"')->Value}">(PHP {phpversion()})</small>
+	<p style="margin:2em; color:#777">
+		<a href="https://github.com/zbycz/npress/tree/v{!NPRESS}"
+			title="PHP {phpversion()}{!"\n"}Nette 2.0-dev released on 2012-02-03{!"\n"}MySql {dibi::fetch('SHOW VARIABLES LIKE "version"')->Value}{!"\n"}dibi {dibi::VERSION}"
+			class="small">CMS nPress {!NPRESS}</a>
 	</p>
 </footer>
 

@@ -29,7 +29,8 @@ $_SERVER['SCRIPT_NAME'] = preg_replace(
 
 // Load Nette Framework
 require LIBS_DIR . '/nette/loader.php';
-define("NPRESS", "<span title='2018/03/27'>v1.2</span>");
+$pkg = json_decode(file_get_contents("./package.json"));
+define("NPRESS", $pkg->version);
 
 // Configure application
 $configurator = new Configurator();
