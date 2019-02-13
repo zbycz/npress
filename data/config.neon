@@ -1,0 +1,50 @@
+#
+# SECURITY WARNING: it is CRITICAL that this file is NOT accessible directly via a web browser!
+#
+# If you don't protect this file from direct web access, anybody will be able to see your passwords.
+# http://nette.org/security-warning
+#
+
+common:
+	parameters:
+	
+		# Language settings
+		defaultLang: cs  # TODO also hardcoded in code (https://github.com/nette/nette/pull/445)
+		langs!:
+			cs: Česky
+			en: English
+		
+		# Language specific prefixes/domains
+		# If differ only in suffix - the more specific goes first
+		langDomains!:
+
+		
+		# list or hash of Plugin classes
+		plugins:
+
+	
+		npress:											
+			webTitle: "OpenStreetMap.cz"
+			adminPassword:
+			analytics:      # google analytics tracking number (like UA-123-1) 
+			clicky:
+			preferCdnJquery: false
+			wysiwyg:
+				minHtmlHeading: 2
+				contentStyle: https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css
+
+
+		database:
+			host: localhost
+			driver: mysqli
+			database: openstreetmap_cz
+			username: root
+			password:
+			profiler:
+				run: false
+
+
+
+production < common:
+development < common:
+console < common:

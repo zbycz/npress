@@ -84,29 +84,98 @@ function filelist() {
 }
 
 function np_uploadify() {
-  $("#np-uploadify").uploadify({
-    script: escape($("#np-uploadify").attr("data-uploadifyHandler")), //bug in uploadify, & would splits flashvar fields
-    uploader: basePath + "/static/uploadify/uploadify.swf",
-    cancelImg: basePath + "/static/uploadify/cancel.png",
-    buttonText: $("#np-uploadify").html(),
-    multi: true,
-    auto: true,
-    scriptData: { uploadify_session: $("#np-uploadify").attr("data-session") },
-    //'fileExt'        : '*.jpg;*.gif;*.png',
-    //'fileDesc'       : 'Image Files (.JPG, .GIF, .PNG)',
-    queueID: "np-uploadify-queue",
-    //'queueSizeLimit' : 3,
-    simUploadLimit: 3,
-    sizeLimit: 100 * 1000 * 1000,
-    removeCompleted: false,
-    onSelectOnce: function(event, data) {
-      //$('#status-message').text(data.filesSelected + ' files have been added to the queue.');
-    },
-    onAllComplete: function(event, data) {
-      $.get($("#np-uploadify").attr("data-afterUploadLink"));
-      $("#np-uploadify").uploadifyClearQueue();
+  var up = $("#fileupload");
+  up.change(function() {
+    var files = up[0].files;
+    if (!files.length) return;
+    $("#upload-progress").css("display", "inline");
+
+    var formData = new FormData();
+    for (var i = 0; i < files.length; i++) {
+      formData.append("files[]", files[i]);
     }
+
+    // https://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+    $.ajax({
+      url: up.attr("data-url"),
+      type: "POST",
+      processData: false,
+      contentType: false,
+      data: formData,
+      dataType: "html", //returned
+      error: function(e) {
+        console.warn(e);
+      },
+      success: function(data) {
+        console.log("Upload finished: ", data);
+        console.log(up.attr("data-afterUploadLink"));
+        $.get(up.attr("data-afterUploadLink"));
+        up[0].value = "";
+      },
+      complete: function() {
+        $("#upload-progress").css("display", "none");
+      },
+      // progressbar - http://christopher5106.github.io/web/2015/12/13/HTML5-file-image-upload-and-resizing-javascript-with-progress-bar.html
+      xhr: function() {
+        var myXhr = $.ajaxSettings.xhr();
+        if (myXhr.upload) {
+          // For handling the progress of the upload
+          myXhr.upload.addEventListener(
+            "progress",
+            function(e) {
+              if (e.lengthComputable) {
+                $("#upload-progress")
+                  .css("display", "inline")
+                  .attr({
+                    value: e.loaded,
+                    max: e.total
+                  });
+              }
+            },
+            false
+          );
+        }
+        return myXhr;
+      }
+    });
   });
+
+  // $("#fileupload").fileupload({
+  //   dataType: "text",
+  //   done: function(e, data) {
+  //     console.log(e, data);
+  //     $.get($("#fileupload").attr("data-afterUploadLink"));
+  //
+  //     // $.each(data.result.files, function (index, file) {
+  //     //   $('<p/>').text(file.name).appendTo(document.body);
+  //     // });
+  //   }
+  // });
+
+  //
+  // $("#np-uploadify").uploadify({
+  //   script: escape($("#np-uploadify").attr("data-uploadifyHandler")), //bug in uploadify, & would splits flashvar fields
+  //   uploader: basePath + "/static/uploadify/uploadify.swf",
+  //   cancelImg: basePath + "/static/uploadify/cancel.png",
+  //   buttonText: $("#np-uploadify").html(),
+  //   multi: true,
+  //   auto: true,
+  //   scriptData: { uploadify_session: $("#np-uploadify").attr("data-session") },
+  //   //'fileExt'        : '*.jpg;*.gif;*.png',
+  //   //'fileDesc'       : 'Image Files (.JPG, .GIF, .PNG)',
+  //   queueID: "np-uploadify-queue",
+  //   //'queueSizeLimit' : 3,
+  //   simUploadLimit: 3,
+  //   sizeLimit: 100 * 1000 * 1000,
+  //   removeCompleted: false,
+  //   onSelectOnce: function(event, data) {
+  //     //$('#status-message').text(data.filesSelected + ' files have been added to the queue.');
+  //   },
+  //   onAllComplete: function(event, data) {
+  //     $.get($("#np-uploadify").attr("data-afterUploadLink"));
+  //     $("#np-uploadify").uploadifyClearQueue();
+  //   }
+  // });
 }
 
 function ajax_upload() {

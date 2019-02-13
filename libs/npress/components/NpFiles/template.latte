@@ -4,16 +4,14 @@
 
 
 
-<div class='uploadform pull-left' style="min-width: 130px;height:50px;">
-	<span id="np-uploadify"
-				data-uploadifyHandler="{link uploadify!}"
-				data-session="{session_id()}"
-				data-afterUploadLink='{link refreshFileList!}' />Nahrajte soubory</span>
+<div class='uploadform pull-left' style="width: 350px;height:50px;margin-right:1em;">
+  <input id="fileupload" type="file" name="files[]" data-url="{link uploadify!}" multiple data-afterUploadLink='{link refreshFileList!}'>
+  <progress id="upload-progress" style="display:none; width: 100px;"></progress>
 </div>
 {form uploadForm}
 	<div class='uploadform'>
 		<a href='#jsonly' onclick="$(this).next().toggle();return false" class="small">záložní způsob</a>
-		<span class='jshidden'>{input file} {input submit1} max: {ini_get("upload_max_filesize")}B</span>
+		<div class='jshidden'>{input file} {input submit1} max: {ini_get("upload_max_filesize")}B</div>
 	</div>
 {/form}
 <div id="np-uploadify-queue" class="clear"></div>

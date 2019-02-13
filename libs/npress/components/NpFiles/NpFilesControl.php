@@ -85,12 +85,15 @@ class NpFilesControl extends Control
       return;
     }
 
-    $file = $this->httpRequest->getFile('Filedata');
-    if (!$file) {
+    $files = $this->httpRequest->getFile('files');
+    if (!$files) {
       $this->presenter->sendResponse(new TextResponse("File not uploaded"));
     }
 
-    FilesModel::upload($this->page->id, $file);
+    foreach ($files as $file) {
+      FilesModel::upload($this->page->id, $file);
+    }
+
     $this->presenter->sendResponse(new TextResponse("Upload ok."));
   }
 
