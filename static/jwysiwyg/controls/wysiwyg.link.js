@@ -80,8 +80,9 @@
 
 				var selectBox = elements.find("select[name=id_page]").get(0);
 				selectBox.options[0] = new Option('-----', 0);
-				$.each(getPagesFlatJson(), function (id, caption) {
-						selectBox.options[selectBox.options.length] = new Option(caption, id);
+				getPagesFlatJson().forEach(function (row) {
+				  console.log(1, row);
+						selectBox.options[selectBox.options.length] = new Option(row.text, +row.id);
 				});
 
 				//parse npMacro and fill the selectbox

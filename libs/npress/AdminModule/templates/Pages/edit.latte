@@ -141,7 +141,7 @@
 
 <script>
 function getPagesFlatJson (){
-	return {!Json::encode(PagesModel::getPagesFlat()->getPairs())};
+	return {!PagesModel::getPagesFlat()->getPairsJson()};
 }
 //var getPagesFlatJsonUrl = {link getPagesFlatJson!};
 </script>

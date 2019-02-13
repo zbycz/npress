@@ -386,15 +386,29 @@ class PagesCollection extends ArrayList
    * @param $sep   string used for indentation of children
    * @return array indented page-names indexed by page-id
    */
+  /* $sep --> two non-breakable spaces (ascii#160) */
   public function getPairs($sep = "  ")
   {
-    //!! <- two non-breakable spaces (ascii#160)
+    /*!! <- two non-breakable spaces (ascii#160)*/
     $output = array();
     foreach ($this as $r) {
       $output[$r->id] =
         ($sep ? str_repeat($sep, $r->level - 1) : '') . $r->name;
     }
     return $output;
+  }
+
+  /* $sep --> two non-breakable spaces (ascii#160) */
+  public function getPairsJson($sep = "  ")
+  {
+    $output = array();
+    foreach ($this as $r) {
+      $output[] = array(
+        "id" => $r->id,
+        "text" => ($sep ? str_repeat($sep, $r->level - 1) : '') . $r->name
+      );
+    }
+    return JSON::encode($output);
   }
 
   public function toArray()
