@@ -83,134 +83,67 @@ function filelist() {
     });
 }
 
-function np_uploadify() {
-  var up = $("#fileupload");
-  up.change(function() {
-    var files = up[0].files;
-    if (!files.length) return;
-    $("#upload-progress").css("display", "inline");
+function handleUpload(fileId) {
+  var $up = $("#fileupload");
+  var $progress = $("#upload-progress");
+  var filesAll = Array.from($up[0].files);
+  if (!filesAll.length) return;
+  $progress.css("display", "inline");
 
-    var formData = new FormData();
-    for (var i = 0; i < files.length; i++) {
-      formData.append("files[]", files[i]);
-    }
+  if (fileId >= filesAll.length) {
+    $progress.css("display", "none"); // we are finished
+    $up[0].value = "";
+    console.log("All files uploaded");
+    return;
+  }
 
-    // https://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
-    $.ajax({
-      url: up.attr("data-url"),
-      type: "POST",
-      processData: false,
-      contentType: false,
-      data: formData,
-      dataType: "html", //returned
-      error: function(e) {
-        console.warn(e);
-      },
-      success: function(data) {
-        console.log("Upload finished: ", data);
-        console.log(up.attr("data-afterUploadLink"));
-        $.get(up.attr("data-afterUploadLink"));
-        up[0].value = "";
-      },
-      complete: function() {
-        $("#upload-progress").css("display", "none");
-      },
+  var filesDone = filesAll.filter((file, id) => id < fileId);
+  var sizeDone = filesDone.reduce((acc, file) => acc + file.size, 0);
+  var sizeTotal = filesAll.reduce((acc, file) => acc + file.size, 0);
+  $progress.css("display", "inline").attr({ value: sizeDone, max: sizeTotal });
+
+  var formData = new FormData();
+  formData.append("files[]", filesAll[fileId]);
+
+  // https://stackoverflow.com/questions/6974684/how-to-send-formdata-objects-with-ajax-requests-in-jquery
+  $.ajax({
+    url: $up.attr("data-url"),
+    type: "POST",
+    processData: false,
+    contentType: false,
+    data: formData,
+    error: e => console.warn(e),
+    success: payload => {
+      console.log("Upload " + fileId + " finished: ", payload);
+      jQuery.nette.success(payload);
+      $.get($up.attr("data-afterUploadLink"));
+    },
+    complete: () => handleUpload(fileId + 1),
+    xhr: function() {
       // progressbar - http://christopher5106.github.io/web/2015/12/13/HTML5-file-image-upload-and-resizing-javascript-with-progress-bar.html
-      xhr: function() {
-        var myXhr = $.ajaxSettings.xhr();
-        if (myXhr.upload) {
-          // For handling the progress of the upload
-          myXhr.upload.addEventListener(
-            "progress",
-            function(e) {
-              if (e.lengthComputable) {
-                $("#upload-progress")
-                  .css("display", "inline")
-                  .attr({
-                    value: e.loaded,
-                    max: e.total
-                  });
-              }
-            },
-            false
-          );
-        }
-        return myXhr;
-      }
-    });
+      var myXhr = $.ajaxSettings.xhr();
+      if (!myXhr.upload) return myXhr;
+      myXhr.upload.addEventListener(
+        "progress",
+        e => {
+          if (!e.lengthComputable || !filesAll[fileId]) return;
+          $progress.css("display", "inline").attr({
+            value: sizeDone + (e.loaded / e.total) * filesAll[fileId].size,
+            max: sizeTotal
+          });
+        },
+        false
+      );
+      return myXhr;
+    }
   });
-
-  // $("#fileupload").fileupload({
-  //   dataType: "text",
-  //   done: function(e, data) {
-  //     console.log(e, data);
-  //     $.get($("#fileupload").attr("data-afterUploadLink"));
-  //
-  //     // $.each(data.result.files, function (index, file) {
-  //     //   $('<p/>').text(file.name).appendTo(document.body);
-  //     // });
-  //   }
-  // });
-
-  //
-  // $("#np-uploadify").uploadify({
-  //   script: escape($("#np-uploadify").attr("data-uploadifyHandler")), //bug in uploadify, & would splits flashvar fields
-  //   uploader: basePath + "/static/uploadify/uploadify.swf",
-  //   cancelImg: basePath + "/static/uploadify/cancel.png",
-  //   buttonText: $("#np-uploadify").html(),
-  //   multi: true,
-  //   auto: true,
-  //   scriptData: { uploadify_session: $("#np-uploadify").attr("data-session") },
-  //   //'fileExt'        : '*.jpg;*.gif;*.png',
-  //   //'fileDesc'       : 'Image Files (.JPG, .GIF, .PNG)',
-  //   queueID: "np-uploadify-queue",
-  //   //'queueSizeLimit' : 3,
-  //   simUploadLimit: 3,
-  //   sizeLimit: 100 * 1000 * 1000,
-  //   removeCompleted: false,
-  //   onSelectOnce: function(event, data) {
-  //     //$('#status-message').text(data.filesSelected + ' files have been added to the queue.');
-  //   },
-  //   onAllComplete: function(event, data) {
-  //     $.get($("#np-uploadify").attr("data-afterUploadLink"));
-  //     $("#np-uploadify").uploadifyClearQueue();
-  //   }
-  // });
 }
 
-function ajax_upload() {
-  $(".ajax_upload").submit(function() {
-    var form = this;
-    $.ajaxFileUpload({
-      url: $(form).attr("action") + "&ajax_upload=true",
-      secureuri: false,
-      fileElementId: $("input[type=file]", form).attr("id"),
-      dataType: "json",
-      success: function(data, status) {
-        if (typeof data.error != "undefined") {
-          if (data.error != "") {
-          } else {
-            //alert(data.msg);
-            //$.get($('#frm-uploadForm').attr('action'));
-            $.get($("#np-uploadify").attr("data-afterUploadLink"));
-
-            //if we were uploading just new preview - reload the image
-            var img = $("#snippet--editform_editfile .thumbnail");
-            img.attr("src", img.attr("src") + "&x=1");
-            //img.get(0).reload();
-          }
-        }
-      },
-      error: function(data, status, e) {
-        alert(e);
-      }
-    });
-    return false;
-  });
+function np_html5upload() {
+  $("#fileupload").change(() => handleUpload(0));
 }
 
 $(function() {
-  ajax_upload();
-  np_uploadify();
+  np_html5upload();
   filelist_init();
 });

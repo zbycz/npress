@@ -7,12 +7,6 @@
  * @package    nPress
  */
 
-// Inject the session_id during Uploadify request by flash  (TODO (ask) better?)
-if (isset($_POST['uploadify_session'])) {
-  session_id($_POST['uploadify_session']);
-  $_COOKIE['PHPSESSID'] = $_POST['uploadify_session'];
-}
-
 // Fix the document root on virtual hosts (BUG in Apache)
 if (isset($_SERVER['SCRIPT_FILENAME'], $_SERVER['SCRIPT_NAME'])) {
   $pos = strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['SCRIPT_NAME']);

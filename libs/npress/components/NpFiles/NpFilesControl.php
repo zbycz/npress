@@ -41,13 +41,13 @@ class NpFilesControl extends Control
   public function createComponentUploadForm()
   {
     $form = new AppForm();
-    //$form->getElementPrototype()->class('ajax_upload');
     $form->addHidden("id_page");
     $form->addUpload("file", "soubor");
     $form->addSubmit("submit1", "Nahrát");
     $form->onSuccess[] = callback($this, 'uploadFormSubmitted');
     return $form;
   }
+
   public function uploadFormSubmitted(AppForm $form)
   {
     if (!$this->presenter->editAllowed()) {
@@ -62,23 +62,14 @@ class NpFilesControl extends Control
       $this->presenter->flashMessage('Nahrání se nepovedlo :-(');
     }
 
-    //iframe umí interpretovat jen text/html, nelze poslat snippety
-    //TODO bylo by fajn posílat aspoň pravdu
-    //also see @previewUploadFormSubmitted
-    if ($this->getParam('ajax_upload')) {
-      /*Nette\Diagnostics\*/ Debugger::$bar = false; //TODO (ask) nešlo by to nějak líp?
-      $this->presenter->sendResponse(
-        new TextResponse("{error: '',msg: 'ok'}", 'text/html')
-      );
-      exit();
-    }
-
     $this->redirect('this#toc-files');
   }
+
   public function handleRefreshFileList()
   {
     $this->invalidateControl('editform_filelist');
   }
+
   public function handleUploadify()
   {
     if (!$this->presenter->editAllowed()) {
@@ -87,14 +78,15 @@ class NpFilesControl extends Control
 
     $files = $this->httpRequest->getFile('files');
     if (!$files) {
-      $this->presenter->sendResponse(new TextResponse("File not uploaded"));
+      return $this->presenter->flashMessage(
+        'Chyba: soubory se nenahrály, zkuste opakovat.'
+      );
     }
 
     foreach ($files as $file) {
       FilesModel::upload($this->page->id, $file);
+      $this->presenter->flashMessage("Soubor $file->name úspěšně nahrán.");
     }
-
-    $this->presenter->sendResponse(new TextResponse("Upload ok."));
   }
 
   //Edit File form + handle
@@ -118,6 +110,7 @@ class NpFilesControl extends Control
       $form->setValues($file->data);
     } //výchozí hodnoty
   }
+
   public function createComponentEditFileForm()
   {
     $form = new AppForm();
@@ -143,6 +136,7 @@ class NpFilesControl extends Control
     $form->onSuccess[] = callback($this, 'editFileFormSubmitted');
     return $form;
   }
+
   public function editFileFormSubmitted(AppForm $form)
   {
     if (!$this->presenter->editAllowed()) {
@@ -179,6 +173,7 @@ class NpFilesControl extends Control
     $form->onSuccess[] = callback($this, 'previewUploadFormSubmitted');
     return $form;
   }
+
   public function previewUploadFormSubmitted(AppForm $form)
   {
     if (!$this->presenter->editAllowed()) {
@@ -212,6 +207,7 @@ class NpFilesControl extends Control
     //dom is enough //$this->invalidateControl('editform_filelist'); //(all dynamic snippets)
     $this->presenter->flashMessage("Pořadí souborů upraveno");
   }
+
   public function handleDeleteFile($fid, $undo = false)
   {
     if (!$this->presenter->editAllowed()) {
@@ -247,6 +243,7 @@ class NpFilesControl extends Control
       $this->redirect('this#toc-files');
     }
   }
+
   public function handleFilesSync()
   {
     if (!$this->presenter->editAllowed()) {
@@ -259,6 +256,7 @@ class NpFilesControl extends Control
     );
     $this->template->filesSyncLog = $log;
   }
+
   public function handleFilelistMore($num, $max)
   {
     if (!isset($this->template->filelistMax)) {

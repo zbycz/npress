@@ -8,13 +8,13 @@
   <input id="fileupload" type="file" name="files[]" data-url="{link uploadify!}" multiple data-afterUploadLink='{link refreshFileList!}'>
   <progress id="upload-progress" style="display:none; width: 100px;"></progress>
 </div>
+
 {form uploadForm}
 	<div class='uploadform'>
 		<a href='#jsonly' onclick="$(this).next().toggle();return false" class="small">záložní způsob</a>
 		<div class='jshidden'>{input file} {input submit1} max: {ini_get("upload_max_filesize")}B</div>
 	</div>
 {/form}
-<div id="np-uploadify-queue" class="clear"></div>
 
 <div n:snippet="editform_editfile" data-afterUpdate="editform_editfile_update">
 {ifset $editFile}
