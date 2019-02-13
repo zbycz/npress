@@ -7,60 +7,78 @@
  * @package    nPress
  */
 
+class TranslationsModel extends Object implements ITranslator
+{
+  public static function getAll()
+  {
+    self::checkColumns();
 
-class TranslationsModel extends Object implements ITranslator {
+    $res = dibi::query('SELECT * FROM translations');
+    return $res->fetchAssoc('id');
+  }
 
-	public static function getAll(){
-		self::checkColumns();
+  private static function checkColumns()
+  {
+    $langs = Environment::getVariable('langs');
 
-		$res = dibi::query('SELECT * FROM translations');
-		return $res->fetchAssoc('id');
-	}
+    $columns = dibi::query('SHOW COLUMNS FROM `translations`')->fetchAssoc(
+      'Field'
+    );
 
-	private static function checkColumns(){
-		$langs = Environment::getVariable('langs');
+    foreach ($langs as $lang => $txt) {
+      if (!isset($columns[$lang])) {
+        dibi::query(
+          'ALTER TABLE `translations` ADD %n',
+          $lang,
+          ' text NOT NULL'
+        );
+        $res = dibi::query('SELECT * FROM translations');
+      }
+    }
+  }
 
-		$columns = dibi::query('SHOW COLUMNS FROM `translations`')->fetchAssoc('Field');
+  public static function replace($values)
+  {
+    dibi::query('REPLACE INTO translations', $values);
+  }
 
-		foreach($langs as $lang=>$txt)
-			if(!isset($columns[$lang])){
-				dibi::query('ALTER TABLE `translations` ADD %n',$lang,' text NOT NULL');
-				$res = dibi::query('SELECT * FROM translations');
-			}
-	}
+  public static function delete($id)
+  {
+    dibi::query('DELETE FROM translations WHERE id=%i', $id);
+  }
 
-	public static function replace($values){
-		dibi::query('REPLACE INTO translations', $values);
-	}
+  private $lang;
+  private static $cache = array();
+  public function __construct($lang)
+  {
+    //translator
+    $this->lang = $lang;
 
-	public static function delete($id){
-		dibi::query('DELETE FROM translations WHERE id=%i', $id);
-	}
+    //suppres the query for one-language
+    $langs = Environment::getVariable('langs');
+    if (count($langs) <= 1) {
+      return self::$cache[$lang] = array();
+    }
 
+    //fill the cache
+    try {
+      self::$cache[$lang] = dibi::query(
+        'SELECT * FROM translations'
+      )->fetchPairs('key', $lang);
+    } catch (Exception $e) {
+      self::$cache[$lang] = array();
+    }
+  }
 
-	private $lang;
-	private static $cache = array();
-	public function __construct($lang){ //translator
-		$this->lang = $lang;
+  public function translate($message, $count = null)
+  {
+    if (
+      isset(self::$cache[$this->lang][$message]) &&
+      self::$cache[$this->lang][$message]
+    ) {
+      return self::$cache[$this->lang][$message];
+    }
 
-		//suppres the query for one-language
-		$langs = Environment::getVariable('langs');
-		if(count($langs) <= 1)
-			return self::$cache[$lang] = array();
-
-		//fill the cache
-		try {
-			self::$cache[$lang] = dibi::query('SELECT * FROM translations')->fetchPairs('key', $lang);
-		} catch(Exception $e){
-			self::$cache[$lang] = array();
-		}
-	}
-
-	public function translate($message, $count = NULL) {
-		if(isset(self::$cache[$this->lang][$message]) && self::$cache[$this->lang][$message])
-			return self::$cache[$this->lang][$message];
-
-		return $message;
-	}
-
+    return $message;
+  }
 }

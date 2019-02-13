@@ -7,141 +7,156 @@
  * @package    nPress
  */
 
-
 //Instantiated also in LinkHelper service
 class PagesRouter implements IRouter
 {
-	const PRESENTER = 'Pages';
+  const PRESENTER = 'Pages';
 
-	static function isSeonameOk($link, $page){
-		if(empty($link) OR $link{0} != '/')
-			return true;
-		
-		$found = PagesModel::getPageBySeoname($link, $page->lang);
-		return ($found == false OR $found->id == $page->id);
-	}
+  static function isSeonameOk($link, $page)
+  {
+    if (empty($link) or $link[0] != '/') {
+      return true;
+    }
 
-	function getDefaultLang(){
-		return 'cs'; //TODO get from config (also in CommonBasePresenter)
-	}
+    $found = PagesModel::getPageBySeoname($link, $page->lang);
+    return $found == false or $found->id == $page->id;
+  }
 
-	function match(IHttpRequest $httpRequest){
-		$url = $httpRequest->getUrl();
+  function getDefaultLang()
+  {
+    return 'cs'; //TODO get from config (also in CommonBasePresenter)
+  }
 
-		$lang = $this->getDefaultLang();
-		$langs = Environment::getVariable("langs");
-		$langDomains = Environment::getVariable("langDomains");
+  function match(IHttpRequest $httpRequest)
+  {
+    $url = $httpRequest->getUrl();
 
-		//domains for languages or just directory prefix?
-		if(count($langDomains)){
-			$path = '//' . $url->getHost() . $url->getPath();
-			foreach($langDomains as $lang=>$pattern){
-				$pattern = preg_quote($pattern, '~');
-				$pattern = preg_replace('~^//(www\\.)?~', '//(www\.)?', $pattern); //www not mandatory
-				if(preg_match("~^$pattern~", $path, $m)){ //matching absolute path
-					$seoname = substr($path, strlen($m[0])); //what follows
-					break;
-				}
-			}
-		}
-		else{ //just language prefixes
-			$path = $url->pathInfo;
-			foreach($langs as $lang=>$txt){
-				if(preg_match("~^$lang/~", $path, $m)){  //matching relative path
-					$seoname = substr($path, strlen($m[0])); //what follows
-					break;
-				}
-			}
-		}
+    $lang = $this->getDefaultLang();
+    $langs = Environment::getVariable("langs");
+    $langDomains = Environment::getVariable("langDomains");
 
-		if(!isset($seoname)){ //default language possible without prefix
-			$keys = array_keys($langs);
-			$lang = array_shift($keys);
-			$seoname = $url->pathInfo;
-		}
-		
-		if(substr($seoname, -1) == '/')
-			$seoname = substr($seoname, 0, -1);
+    //domains for languages or just directory prefix?
+    if (count($langDomains)) {
+      $path = '//' . $url->getHost() . $url->getPath();
+      foreach ($langDomains as $lang => $pattern) {
+        $pattern = preg_quote($pattern, '~');
+        $pattern = preg_replace('~^//(www\\.)?~', '//(www\.)?', $pattern); //www not mandatory
+        if (preg_match("~^$pattern~", $path, $m)) {
+          //matching absolute path
+          $seoname = substr($path, strlen($m[0])); //what follows
+          break;
+        }
+      }
+    } else {
+      //just language prefixes
+      $path = $url->pathInfo;
+      foreach ($langs as $lang => $txt) {
+        if (preg_match("~^$lang/~", $path, $m)) {
+          //matching relative path
+          $seoname = substr($path, strlen($m[0])); //what follows
+          break;
+        }
+      }
+    }
 
-		$page = PagesModel::getPageBySeoname('/'.$seoname, $lang); //just one level
-		if(!$page){
-			if(preg_match('~^p([0-9]+)(-|$)~', $seoname, $matches)){
-				$page = PagesModel::getPageById($matches[1], $lang);
-				if(!$page)
-					return NULL;
-			}
-			else
-				return NULL;
-		}
+    if (!isset($seoname)) {
+      //default language possible without prefix
+      $keys = array_keys($langs);
+      $lang = array_shift($keys);
+      $seoname = $url->pathInfo;
+    }
 
-		$params = array();
-		$params += $httpRequest->getQuery();
-		$params['id_page'] = $page['id_page'];
-		$params['lang'] = $lang;
+    if (substr($seoname, -1) == '/') {
+      $seoname = substr($seoname, 0, -1);
+    }
 
-		return new PresenterRequest(
-			self::PRESENTER,
-			$httpRequest->getMethod(),
-			$params,
-			$httpRequest->getPost(),
-			$httpRequest->getFiles(),
-			array(PresenterRequest::SECURED => $httpRequest->isSecured())
-		);
-	}
+    $page = PagesModel::getPageBySeoname('/' . $seoname, $lang); //just one level
+    if (!$page) {
+      if (preg_match('~^p([0-9]+)(-|$)~', $seoname, $matches)) {
+        $page = PagesModel::getPageById($matches[1], $lang);
+        if (!$page) {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    }
 
-	//must return absolute url
-	function constructUrl(PresenterRequest $appRequest, Url $ref) {
-		if($appRequest->getPresenterName() !== self::PRESENTER)
-			return NULL;
+    $params = array();
+    $params += $httpRequest->getQuery();
+    $params['id_page'] = $page['id_page'];
+    $params['lang'] = $lang;
 
-		$params = $appRequest->getParameters();
+    return new PresenterRequest(
+      self::PRESENTER,
+      $httpRequest->getMethod(),
+      $params,
+      $httpRequest->getPost(),
+      $httpRequest->getFiles(),
+      array(PresenterRequest::SECURED => $httpRequest->isSecured())
+    );
+  }
 
-		//find the friendly-url in the database
-		$lang = $params['lang'];
-		if($lang == NULL)
-			$lang = $this->getDefaultLang();
+  //must return absolute url
+  function constructUrl(PresenterRequest $appRequest, Url $ref)
+  {
+    if ($appRequest->getPresenterName() !== self::PRESENTER) {
+      return null;
+    }
 
-		//lang base url (domain or just relative prefix?)
-		$langDomains = Environment::getVariable("langDomains");
-		if($langDomains)
-			$baseUrl = $ref->scheme . ':' . $langDomains[$lang];
-		else
-			$baseUrl = $ref->getBaseUrl() . ($lang==$this->getDefaultLang() ? '' : "$lang/");
+    $params = $appRequest->getParameters();
 
+    //find the friendly-url in the database
+    $lang = $params['lang'];
+    if ($lang == null) {
+      $lang = $this->getDefaultLang();
+    }
 
-		//NULL page = /
-		if(!isset($params['id_page']))
-			return $baseUrl;
+    //lang base url (domain or just relative prefix?)
+    $langDomains = Environment::getVariable("langDomains");
+    if ($langDomains) {
+      $baseUrl = $ref->scheme . ':' . $langDomains[$lang];
+    } else {
+      $baseUrl =
+        $ref->getBaseUrl() . ($lang == $this->getDefaultLang() ? '' : "$lang/");
+    }
 
-		//nonexisting page - do not route
-		$page = PagesModel::getPageById($params['id_page'], $lang);
-		if(!$page)
-			return NULL;
+    //NULL page = /
+    if (!isset($params['id_page'])) {
+      return $baseUrl;
+    }
 
-		
-		unset($params['lang']);
-		unset($params['id_page']);
-		unset($params['action']);
+    //nonexisting page - do not route
+    $page = PagesModel::getPageById($params['id_page'], $lang);
+    if (!$page) {
+      return null;
+    }
 
+    unset($params['lang']);
+    unset($params['id_page']);
+    unset($params['action']);
 
-		// appended parameters
-		$params = http_build_query($params, '', '&');
-		if($params) $params = "?$params";
+    // appended parameters
+    $params = http_build_query($params, '', '&');
+    if ($params) {
+      $params = "?$params";
+    }
 
+    // no pagelink -> do /p123-friendly-name
+    if (!$page['seoname']) {
+      return $baseUrl .
+        "p$page->id" .
+        (Strings::webalize($page->name) ? '-' : '') .
+        Strings::webalize($page->name) .
+        $params;
+    }
 
-		// no pagelink -> do /p123-friendly-name
-		if(!$page['seoname'])
-			return $baseUrl . "p$page->id"
-						. (Strings::webalize($page->name) ? '-' : '')
-						. Strings::webalize($page->name) . $params;
+    // /sth  -> normal friendly url for that page
+    $seoname = $page['seoname'];
+    if ($seoname[0] == '/') {
+      return $baseUrl . substr($page['seoname'], 1) . $params;
+    }
 
-		// /sth  -> normal friendly url for that page
-        $seoname = $page['seoname'];
-		if($seoname{0} == '/')
-			return $baseUrl . substr($page['seoname'],1) . $params;
-
-		return NULL;
-	}
-
+    return null;
+  }
 }
-

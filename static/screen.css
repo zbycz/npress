@@ -1,96 +1,148 @@
-
 body {
-	padding-top: 60px;
-	padding-bottom: 40px;
+  padding-top: 60px;
+  padding-bottom: 40px;
 }
-.spacer {margin-top: 9px;}
-.spacerr {margin-right: 9px;}
+.spacer {
+  margin-top: 9px;
+}
+.spacerr {
+  margin-right: 9px;
+}
 .sidebar-nav {
-	padding: 0 0 9px 0;
+  padding: 0 0 9px 0;
 }
-small i {opacity: 0.5}
-
+small i {
+  opacity: 0.5;
+}
 
 /* --------------  header -------------- */
-.npresslogo{color: #888 !important; font-variant: small-caps; font-size: 90%;}
-.npresslogo span {color: #485dc5; font-variant: normal; font-weight: bold; font-size: 110%;} /*a.npresslogo:hover {text-decoration: underline !important;}*/
+.npresslogo {
+  color: #888 !important;
+  font-variant: small-caps;
+  font-size: 90%;
+}
+.npresslogo span {
+  color: #485dc5;
+  font-variant: normal;
+  font-weight: bold;
+  font-size: 110%;
+} /*a.npresslogo:hover {text-decoration: underline !important;}*/
 
-.brand small {font-size: 70%}
+.brand small {
+  font-size: 70%;
+}
 
 .navbar i {
-    margin-top: -2px;
-    vertical-align: middle;
+  margin-top: -2px;
+  vertical-align: middle;
 }
-.dropdown-menu .inline {padding-left: 12px;}
-.dropdown-menu .inline a {display: inline;}
-input.xxl {font-size: 200%; height: 200%; width: 450px;}
-input.likeprep {width: 235px;}
-.add-on input {margin-top: -3px;}
-a.del {padding: 0 0.2em;}
-a.del:hover {background: #fd4239; color: #fff;}
+.dropdown-menu .inline {
+  padding-left: 12px;
+}
+.dropdown-menu .inline a {
+  display: inline;
+}
+input.xxl {
+  font-size: 200%;
+  height: 200%;
+  width: 450px;
+}
+input.likeprep {
+  width: 235px;
+}
+.add-on input {
+  margin-top: -3px;
+}
+a.del {
+  padding: 0 0.2em;
+}
+a.del:hover {
+  background: #fd4239;
+  color: #fff;
+}
 
-#js-published-helper {padding-left: 24px; background: url(images/iconEyeNo.png) no-repeat 3px center;}
-
+#js-published-helper {
+  padding-left: 24px;
+  background: url(images/iconEyeNo.png) no-repeat 3px center;
+}
 
 #flashes {
-	overflow:hidden;
-	position:relative;
+  overflow: hidden;
+  position: relative;
 }
 #flashes .box {
-	clear:left;
-	float:left;
-	position:relative;
-	left:50%;
+  clear: left;
+  float: left;
+  position: relative;
+  left: 50%;
 }
 #flashes .box .flash {
-	display:block;
-	position:relative;
-	right:50%;
+  display: block;
+  position: relative;
+  right: 50%;
 
-	margin: 0 1em; padding: 0 1em;
-	border: 0;
-	background: #ffff66;
-	color: #000;
+  margin: 0 1em;
+  padding: 0 1em;
+  border: 0;
+  background: #ffff66;
+  color: #000;
 }
-
-
 
 .menu ul {
-	position: relative;
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
 }
-.menu ul ul {margin-left: 10px;}
+.menu ul ul {
+  margin-left: 10px;
+}
 
 .menu ul a {
-	display: block;
-	text-decoration: none;
-	padding: 3px 20px 3px 18px;
+  display: block;
+  text-decoration: none;
+  padding: 3px 20px 3px 18px;
 }
-.menu ul a:before, .menu ul .placeholder:before {
-	content: url(images/dot.gif); position:absolute; left:7px; margin-top:-4px;
+.menu ul a:before,
+.menu ul .placeholder:before {
+  content: url(images/dot.gif);
+  position: absolute;
+  left: 7px;
+  margin-top: -4px;
 }
-.menu ul a:hover {cursor: move; background: url(images/handle.gif) no-repeat right center;}
-.menu ul.ui-sortable-disabled a:hover {cursor: pointer; background-image: none;}
-.menu .ui-sortable-helper a {background: none;}
-
+.menu ul a:hover {
+  cursor: move;
+  background: url(images/handle.gif) no-repeat right center;
+}
+.menu ul.ui-sortable-disabled a:hover {
+  cursor: pointer;
+  background-image: none;
+}
+.menu .ui-sortable-helper a {
+  background: none;
+}
 
 .menu ul .foldable span {
-	left: 7px;
-	position: absolute;
-	margin: 4px 0 0 -5px;
-	padding: 3px 3px;
-	color: #b41313;
-	font-size: 10px;
-	height: 12px;
-	line-height: 10px;
+  left: 7px;
+  position: absolute;
+  margin: 4px 0 0 -5px;
+  padding: 3px 3px;
+  color: #b41313;
+  font-size: 10px;
+  height: 12px;
+  line-height: 10px;
   -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
 }
-.menu ul .foldable span:hover {background: #685de7; color: #fff;cursor:pointer;}
-.menu ul .foldable a:before {content: ''}
+.menu ul .foldable span:hover {
+  background: #685de7;
+  color: #fff;
+  cursor: pointer;
+}
+.menu ul .foldable a:before {
+  content: "";
+}
 
 .menu .current > a,
 .menu .current > a:hover {
@@ -99,13 +151,25 @@ a.del:hover {background: #fd4239; color: #fff;}
   background-color: #0088cc;
 }
 
-.menu .unpublished a {color: #888; }
-.menu .unpublished a:hover {color: #555; }
-.menu .unpublished.current a {color: #fff; }
-.menu .unpublished:before {content: url(images/iconEyeNo.png); position:absolute; right:12px; margin-top: 3px;}
+.menu .unpublished a {
+  color: #888;
+}
+.menu .unpublished a:hover {
+  color: #555;
+}
+.menu .unpublished.current a {
+  color: #fff;
+}
+.menu .unpublished:before {
+  content: url(images/iconEyeNo.png);
+  position: absolute;
+  right: 12px;
+  margin-top: 3px;
+}
 
-.menu ul a:hover {background-color: #eeeeee;}
-
+.menu ul a:hover {
+  background-color: #eeeeee;
+}
 
 .nav-header {
   display: block;
@@ -118,25 +182,26 @@ a.del:hover {background: #fd4239; color: #fff;}
   text-transform: uppercase;
 }
 
-
-#content {position:relative}
-
-#deletedOverlay {
-	position: absolute;
-	width: 101%;
-	height: 101%;
-	background: #000;
-	border-left: 10px #000 solid;
-	margin: -5px 0 0 -3px;
-	opacity: 0.3;
-	z-index: 1000;
+#content {
+  position: relative;
 }
 
+#deletedOverlay {
+  position: absolute;
+  width: 101%;
+  height: 101%;
+  background: #000;
+  border-left: 10px #000 solid;
+  margin: -5px 0 0 -3px;
+  opacity: 0.3;
+  z-index: 1000;
+}
 
 #toc-subpages,
-#toc-files {margin-top: 2em;}
-
+#toc-files {
+  margin-top: 2em;
+}
 
 .modal-backdrop {
-    top: 40px;
+  top: 40px;
 }

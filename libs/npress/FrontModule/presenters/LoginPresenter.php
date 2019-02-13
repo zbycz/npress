@@ -7,51 +7,55 @@
  * @package    nPress
  */
 
-
 /** Login presenter
  */
 class Front_LoginPresenter extends Front_BasePresenter
 {
-	public function actionDefault(){
-		if($this->user->isLoggedIn())
-			$this->redirect(":Admin:Admin:");
-	}
+  public function actionDefault()
+  {
+    if ($this->user->isLoggedIn()) {
+      $this->redirect(":Admin:Admin:");
+    }
+  }
 
-	public function createComponentLoginForm(){
-		$form = new AppForm;
-		$form->addText('username', 'Uživatelské jméno:')
-			->addRule(Form::FILLED, 'Vyplňte prosím uživatelské jméno.');
-		$form->addPassword('password', 'Heslo:')
-			->addRule(Form::FILLED, 'Vyplňte, prosím, heslo.');
-		$form->addCheckbox('remember', 'Trvale přihlásit na tomto počítači');
-		$form->addSubmit('login', 'Přihlásit se');
-		$form->onSuccess[] = callback($this, 'loginFormSubmitted');
+  public function createComponentLoginForm()
+  {
+    $form = new AppForm();
+    $form
+      ->addText('username', 'Uživatelské jméno:')
+      ->addRule(Form::FILLED, 'Vyplňte prosím uživatelské jméno.');
+    $form
+      ->addPassword('password', 'Heslo:')
+      ->addRule(Form::FILLED, 'Vyplňte, prosím, heslo.');
+    $form->addCheckbox('remember', 'Trvale přihlásit na tomto počítači');
+    $form->addSubmit('login', 'Přihlásit se');
+    $form->onSuccess[] = callback($this, 'loginFormSubmitted');
 
-		return $form;
-	}
-	public function loginFormSubmitted(AppForm $form){
-		try {
-			$values = $form->values;
-			//if ($values['remember']) {
-				$this->user->setExpiration('+ 1 month', FALSE); //also in config.neon#session
-			//} else {
-			//	$this->user->setExpiration(0, TRUE);
-			//}
-			//TODO expiration(0) breaks uploadify
+    return $form;
+  }
+  public function loginFormSubmitted(AppForm $form)
+  {
+    try {
+      $values = $form->values;
+      //if ($values['remember']) {
+      $this->user->setExpiration('+ 1 month', false); //also in config.neon#session
+      //} else {
+      //	$this->user->setExpiration(0, TRUE);
+      //}
+      //TODO expiration(0) breaks uploadify
 
-			$this->user->login($values['username'], $values['password']);
+      $this->user->login($values['username'], $values['password']);
 
-			if(isset($values['backlink']))
-				$this->application->restoreRequest($values['backlink']);
-			$this->redirect(":Admin:Admin:");
+      if (isset($values['backlink'])) {
+        $this->application->restoreRequest($values['backlink']);
+      }
+      $this->redirect(":Admin:Admin:");
+    } catch (AuthenticationException $e) {
+      $form->addError($e->getMessage());
+    }
+  }
 
-		} catch (AuthenticationException $e) {
-			$form->addError($e->getMessage());
-		}
-	}
-
-	
-	/*/ -----------------------------------------   LOST PASS  ---------------------
+  /*/ -----------------------------------------   LOST PASS  ---------------------
 	public function createComponentLostPassForm(){
 		$usersModel = new UsersModel();
 

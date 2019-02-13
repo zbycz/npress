@@ -7,22 +7,25 @@
  * @package    nPress
  */
 
-
 class Admin_AdminPresenter extends Admin_BasePresenter
 {
-	public function actionPagesort() //TODO rather use a signal
-	{
+  public function actionPagesort()
+  {
+    //TODO rather use a signal
     if ($this->isAjax()) {
-			PagesModel::nestedsort($this->getHttpRequest()->post['menuid'], $this->lang);
-			$this->flashMessage("Menu upraveno");
+      PagesModel::nestedsort(
+        $this->getHttpRequest()->post['menuid'],
+        $this->lang
+      );
+      $this->flashMessage("Menu upraveno");
     }
     $this->setView('default');
-	}
+  }
 
-	public function actionLogout(){
-		$this->user->logout();
-		$this->flashMessage("Odhlášení proběhlo úspěšně");
-		$this->redirect(":Front:Login:");
-	}
-
+  public function actionLogout()
+  {
+    $this->user->logout();
+    $this->flashMessage("Odhlášení proběhlo úspěšně");
+    $this->redirect(":Front:Login:");
+  }
 }

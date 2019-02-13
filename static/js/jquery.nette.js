@@ -8,40 +8,39 @@
  */
 
 jQuery.extend({
-    nette: {
-        updateSnippet: function (id, html) {
-          var snippet = $("#" + id).html(html);
+  nette: {
+    updateSnippet: function(id, html) {
+      var snippet = $("#" + id).html(html);
 
-					var fnc = snippet.attr("data-afterUpdate");
-					if(window[fnc])
-						window[fnc]();
-        },
+      var fnc = snippet.attr("data-afterUpdate");
+      if (window[fnc]) window[fnc]();
+    },
 
-        success: function (payload) {
-        	if(!payload) alert('není payload'); //TODO fakt se někdy děje? user-unfriendly!
-      	
-      		//alert
-          if (payload.message) {
-          	alert(payload.message)
-          }
+    success: function(payload) {
+      if (!payload) alert("není payload"); //TODO fakt se někdy děje? user-unfriendly!
 
-          // redirect
-          if (payload.redirect) {
-              window.location.href = payload.redirect;
-              return;
-          }
+      //alert
+      if (payload.message) {
+        alert(payload.message);
+      }
 
-          // snippets
-          if (payload.snippets) {
-            for (var i in payload.snippets) {
-                jQuery.nette.updateSnippet(i, payload.snippets[i]);
-            }
-          }
+      // redirect
+      if (payload.redirect) {
+        window.location.href = payload.redirect;
+        return;
+      }
+
+      // snippets
+      if (payload.snippets) {
+        for (var i in payload.snippets) {
+          jQuery.nette.updateSnippet(i, payload.snippets[i]);
         }
+      }
     }
+  }
 });
 
 jQuery.ajaxSetup({
-    success: jQuery.nette.success,
-    dataType: "json"
+  success: jQuery.nette.success,
+  dataType: "json"
 });

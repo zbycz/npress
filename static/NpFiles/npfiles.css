@@ -1,102 +1,155 @@
-
-
-
 .editfile {
-	position:fixed;
-	border: 1px #eee solid;
-	background: #eee;
-	padding: 1em;
-	margin-bottom: 1em;
-	width: 50em;
+  position: fixed;
+  border: 1px #eee solid;
+  background: #eee;
+  padding: 1em;
+  margin-bottom: 1em;
+  width: 50em;
 }
-.editfile .info {float: left; width: 120px; padding-right: 1em; text-align: center;}
-.editfile table {width: auto;}
-.editfile table th {padding-right: 1em;}
-.editfile input[type=text], .editfile select {width: 300px;}
-.editfile textarea {padding: 0.3em; width:301px;}
-.editfile .close {position:absolute;top:8px;right:8px;}
-
+.editfile .info {
+  float: left;
+  width: 120px;
+  padding-right: 1em;
+  text-align: center;
+}
+.editfile table {
+  width: auto;
+}
+.editfile table th {
+  padding-right: 1em;
+}
+.editfile input[type="text"],
+.editfile select {
+  width: 300px;
+}
+.editfile textarea {
+  padding: 0.3em;
+  width: 301px;
+}
+.editfile .close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
 
 #js-filelist .list {
-	clear: both;
+  clear: both;
 }
-#js-filelist.ui-dragging .list {background-color: #ffff66;}
-#js-filelist h3.emptyList {display:none;}
-#js-filelist.ui-dragging h3.emptyList {display:block;}
-#js-filelist h3 { margin: 2em 0 0.5em 0;}
-#js-filelist h3 > i { margin-top: 4px;}
-#js-filelist h3 .insertlink { float:right;}
+#js-filelist.ui-dragging .list {
+  background-color: #ffff66;
+}
+#js-filelist h3.emptyList {
+  display: none;
+}
+#js-filelist.ui-dragging h3.emptyList {
+  display: block;
+}
+#js-filelist h3 {
+  margin: 2em 0 0.5em 0;
+}
+#js-filelist h3 > i {
+  margin-top: 4px;
+}
+#js-filelist h3 .insertlink {
+  float: right;
+}
 
-
-#js-filelist .item, #js-filelist .infoitem {
-	position:relative;
-	margin: 5px;
-	width: 128px; height: 128px;
-	text-align: center;
-	float: left;
-	font-size: 80%;
-	background: #fff;
+#js-filelist .item,
+#js-filelist .infoitem {
+  position: relative;
+  margin: 5px;
+  width: 128px;
+  height: 128px;
+  text-align: center;
+  float: left;
+  font-size: 80%;
+  background: #fff;
 
   border: 1px solid #ddd;
   -webkit-border-radius: 4px;
-     -moz-border-radius: 4px;
-          border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
   -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-     -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
-          box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.075);
 }
 
-#js-filelist .item:hover, #js-filelist .infoitem:hover {
+#js-filelist .item:hover,
+#js-filelist .infoitem:hover {
   border-color: #0088cc;
   -webkit-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-     -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
-          box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+  -moz-box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
+  box-shadow: 0 1px 4px rgba(0, 105, 214, 0.25);
 }
-#js-filelist .item div {display: table; width:100%; height:100%; padding: 4px;}
-#js-filelist .item div a {display: table-cell; vertical-align: middle; width:100%; height:100%;}
-#js-filelist .item div a img {margin: 0 auto;}
+#js-filelist .item div {
+  display: table;
+  width: 100%;
+  height: 100%;
+  padding: 4px;
+}
+#js-filelist .item div a {
+  display: table-cell;
+  vertical-align: middle;
+  width: 100%;
+  height: 100%;
+}
+#js-filelist .item div a img {
+  margin: 0 auto;
+}
 #js-filelist .item .del {
-	display: none;
-	position: absolute;
-	right:0;
+  display: none;
+  position: absolute;
+  right: 0;
 }
 
-#js-filelist .item .lefttop {position: absolute;left:2px;top:2px;}
-
+#js-filelist .item .lefttop {
+  position: absolute;
+  left: 2px;
+  top: 2px;
+}
 
 /* description popover */
 #js-filelist .item span {
-	display: block;
-	position: absolute; top: 100px; z-index:3;
-	width: 100%;
-	height: 20px;
-	line-height: 20px;
-	overflow: hidden;
-	font-size: 90%;
-	padding:0;margin:0;
-	background: #fafafa;
-	opacity: 0.7;
+  display: block;
+  position: absolute;
+  top: 100px;
+  z-index: 3;
+  width: 100%;
+  height: 20px;
+  line-height: 20px;
+  overflow: hidden;
+  font-size: 90%;
+  padding: 0;
+  margin: 0;
+  background: #fafafa;
+  opacity: 0.7;
 }
 /*#js-filelist .item.ImageFile span {display:none;}*/
-#js-filelist .item:hover .del {display:block}
-#js-filelist .item:hover .toggle {display:block}
+#js-filelist .item:hover .del {
+  display: block;
+}
+#js-filelist .item:hover .toggle {
+  display: block;
+}
 #js-filelist .item:hover span {
-	display: block;
-	background: #fbf44e;
-	height: auto;
-	opacity:1;
+  display: block;
+  background: #fbf44e;
+  height: auto;
+  opacity: 1;
 }
 
 #js-filelist .placeholder {
-	border:0;
-	height: 20px;
-	background: transparent;
+  border: 0;
+  height: 20px;
+  background: transparent;
 }
-#js-filelist .emptyList .placeholder {height:0;}
-#js-filelist.ui-dragging .emptyList .placeholder {height:20px;}
+#js-filelist .emptyList .placeholder {
+  height: 0;
+}
+#js-filelist.ui-dragging .emptyList .placeholder {
+  height: 20px;
+}
 #js-filelist .clearitem {
-	clear:both;
-	height: 1px;
+  clear: both;
+  height: 1px;
 }
-
-

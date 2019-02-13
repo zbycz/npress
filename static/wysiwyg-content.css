@@ -1,62 +1,129 @@
 /* set in config: npress.wysiwyg.contentStyle */
 body {
-	color: #000;
-	background-color: #fff;
-	padding:0.2em 0.3em; margin:0;
+  color: #000;
+  background-color: #fff;
+  padding: 0.2em 0.3em;
+  margin: 0;
 }
-body,td,th,input,select,textarea {	font: 16px/1.4 Tahoma, 'Lucida Grande CE', lucida, sans-serif;}
-textarea {font-size: 90%;}
+body,
+td,
+th,
+input,
+select,
+textarea {
+  font: 16px/1.4 Tahoma, "Lucida Grande CE", lucida, sans-serif;
+}
+textarea {
+  font-size: 90%;
+}
 
-table {border-collapse: collapse;}
-td,th {padding: 0.1em 0.2em; border: 1px #aaa solid; line-height: 1.4;}
-th, thead td {background-color: #ACE;}
-img {vertical-align: bottom;}
+table {
+  border-collapse: collapse;
+}
+td,
+th {
+  padding: 0.1em 0.2em;
+  border: 1px #aaa solid;
+  line-height: 1.4;
+}
+th,
+thead td {
+  background-color: #ace;
+}
 img {
-	border:0;
-	margin: 0.5em;
-	margin-top: 0.2em;
-	margin-bottom: 0;
+  vertical-align: bottom;
 }
-img[align=left], img[style*="left"] {	margin-left: 0;}
-img[align=right], img[style*="right"] {	margin-right: 0;}
+img {
+  border: 0;
+  margin: 0.5em;
+  margin-top: 0.2em;
+  margin-bottom: 0;
+}
+img[align="left"],
+img[style*="left"] {
+  margin-left: 0;
+}
+img[align="right"],
+img[style*="right"] {
+  margin-right: 0;
+}
 
-hr {border:0; border-bottom: 2px #3678cf solid;}
+hr {
+  border: 0;
+  border-bottom: 2px #3678cf solid;
+}
 
 /*tridy*/
-.hidden {display: none;}
-.red {color: red;}
-.fleft {float: left;}
-.mar1 {margin: 1em;}
-.fright {float: right;}
-.aright {text-align: right;}
-.acenter {text-align: center;}
-.aleft {text-align: left;}
-.clear {clear: both;}
-.border {border: 1px black solid;}
-.small {font-size: 80%;}
+.hidden {
+  display: none;
+}
+.red {
+  color: red;
+}
+.fleft {
+  float: left;
+}
+.mar1 {
+  margin: 1em;
+}
+.fright {
+  float: right;
+}
+.aright {
+  text-align: right;
+}
+.acenter {
+  text-align: center;
+}
+.aleft {
+  text-align: left;
+}
+.clear {
+  clear: both;
+}
+.border {
+  border: 1px black solid;
+}
+.small {
+  font-size: 80%;
+}
 .zprava {
-	font-size: 130%;
-	font-weight: bold;
+  font-size: 130%;
+  font-weight: bold;
   background: #ef0000;
-	color: #fff;
+  color: #fff;
   margin: 1em 0.5em;
   padding: 0.5em;
   border-radius: 11px;
 }
-.zprava a {color: #fff;}
-.half {width: 48%;}
+.zprava a {
+  color: #fff;
+}
+.half {
+  width: 48%;
+}
 
-.fleft, .fright, .half {border: 1px #3366ff solid;}
-
+.fleft,
+.fright,
+.half {
+  border: 1px #3366ff solid;
+}
 
 #obsah .title {
   border-bottom: 1px dashed #aaa;
   cursor: help;
 }
-.pointer{cursor:pointer;}
+.pointer {
+  cursor: pointer;
+}
 /*odkazy*/
-a {color: #222; text-decoration: underline;}
-a:hover {color: #22d;}
+a {
+  color: #222;
+  text-decoration: underline;
+}
+a:hover {
+  color: #22d;
+}
 a img {
   border: 0px white solid;
   /*border-bottom: 1px blue solid;*/
@@ -79,16 +146,33 @@ div a.as-text:hover {
   text-decoration: none;
   cursor: pointer;
 }
-.like-a:hover {color: black;}
+.like-a:hover {
+  color: black;
+}
 
-a img.smilie {text-decoration: underline; border: 0;}
+a img.smilie {
+  text-decoration: underline;
+  border: 0;
+}
 
 /*nadpisy*/
-h1,h2,h3,h4,h5 {
+h1,
+h2,
+h3,
+h4,
+h5 {
   font-family: Arial, sans-serif;
   margin: 1em auto 0.2em auto;
 }
-h2 {font-size: 160%;}
-h3 {font-size: 145%;}
-h4 {font-size: 130%;}
-h5 {font-size: 110%;}
+h2 {
+  font-size: 160%;
+}
+h3 {
+  font-size: 145%;
+}
+h4 {
+  font-size: 130%;
+}
+h5 {
+  font-size: 110%;
+}
