@@ -7,7 +7,6 @@
  * @package    nPress
  */
 
-
 // absolute filesystem path to this web root
 define('WWW_DIR', dirname(__FILE__));
 

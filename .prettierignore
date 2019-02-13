@@ -1,0 +1,13 @@
+app/log
+app/temp
+data
+libs/dibi
+libs/nette
+node_modules
+static/icons
+static/**/*.min.js
+static/jwysiwyg
+static/lightbox
+static/mediaelement
+static/uploadify
+static/bootstrap.css

@@ -136,7 +136,8 @@ class PagesRouter implements IRouter
 						. Strings::webalize($page->name) . $params;
 
 		// /sth  -> normal friendly url for that page
-		if($page['seoname']{0} == '/')
+        $seoname = $page['seoname'];
+		if($seoname{0} == '/')
 			return $baseUrl . substr($page['seoname'],1) . $params;
 
 		return NULL;
