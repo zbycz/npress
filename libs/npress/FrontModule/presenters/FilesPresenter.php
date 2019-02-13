@@ -54,8 +54,8 @@ class Front_FilesPresenter extends Front_BasePresenter
       throw new BadRequestException("File not found", 404);
     }
 
-    $response = $file->getPreviewHttpResponse($opts);
-    $this->sendResponse($response);
+    $file->getPreviewHttpResponse($opts);
+    $this->redirect('this', array($id, $opts)); // we redirect so all correct apache headers are shown
   }
 
   public function actionPreviewPage($id)
