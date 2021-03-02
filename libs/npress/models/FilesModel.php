@@ -308,7 +308,7 @@ class FilesModel extends Object
         $new = true;
         $f = self::createNew($id_page, $origpath, 'end');
         $f->origpath = str_replace('\\', '/', $origpath);
-        $f->visible = 1;
+        // $f->visible = 1;
       }
 
       if ($new or $f->fileMetricsChanged()) {
