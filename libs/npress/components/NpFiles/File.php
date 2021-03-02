@@ -776,8 +776,7 @@ class SoundFile extends File
     $basePath = Environment::getHttpRequest()
       ->getUrl()
       ->getBasePath();
-    $link = rawurlencode($link);
-    return "\n<embed type='application/x-shockwave-flash' flashvars='audioUrl=$link' src='{$basePath}static/3523697345-audio-player.swf' width='400' height='27' quality='best'></embed>";
+    return "\n<audio controls><source src=\"$link\" type=\"audio/mpeg\">Error: Sound player is broken. Try <a href=\"$link\">this link</a>.</audio>";
 
     //mediaelementjs flash-fallback (IE<9) can only preload the whole file first :-/
     //return "\n<audio src='$link' type='audio/mp3' preload='none' controls='controls'></audio>\n";
