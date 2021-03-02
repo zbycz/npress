@@ -7,6 +7,8 @@
  * @package    nPress
  */
 
+use Nette\Object;
+
 /** Service maintaining all language specific features
  *
  * @TODO currently not in use

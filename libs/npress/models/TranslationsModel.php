@@ -1,4 +1,9 @@
 <?php
+
+use Nette\Environment;
+use Nette\Localization\ITranslator;
+use Nette\Object;
+
 /**
  * nPress - opensource cms
  *

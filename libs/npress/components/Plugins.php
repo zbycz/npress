@@ -7,6 +7,8 @@
  * @package    nPress
  */
 
+use Nette\Object;
+
 /** Service for triggering events and Plugins management
  */
 class Plugins extends Object

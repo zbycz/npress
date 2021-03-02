@@ -1,4 +1,7 @@
 <?php
+
+use Nette\Application\UI\Control;
+
 /**
  * nPress - opensource cms
  *
@@ -28,7 +31,7 @@ class PasswordPlugin extends Control
 				<form action='$link' method='post'>
 				Heslo: <input type='password' name='heslo'><input type='submit' value='Přihlásit'>
 				</form>
-				
+
 				";
         echo "<p><a href='http://is.blanik.info/web/'><img style='vertical-align: middle;padding:0.3em' src='https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash3/174604_196507737035123_879315590_q.jpg' alt='login'>Přihlásit přes SkautIS</a>";
 

@@ -7,12 +7,19 @@
  * @package    nPress
  */
 
+namespace FrontModule;
+
+use FilesModel;
+use Nette\Application\BadRequestException;
+use Nette\Application\Responses\TextResponse;
+use Nette\Application\Responses\RedirectResponse;
+
 /** Files presenter
  *
  * Works just as a service for @see File objects (link() methods)
  *
  */
-class Front_FilesPresenter extends Front_BasePresenter
+class FilesPresenter extends BasePresenter
 {
   /** Handle the file downloading
    * @param $id   contains fileid-size
@@ -54,8 +61,14 @@ class Front_FilesPresenter extends Front_BasePresenter
       throw new BadRequestException("File not found", 404);
     }
 
-    $file->getPreviewHttpResponse($opts);
-    $this->redirect('this', array($id, $opts)); // we redirect so all correct apache headers are shown
+    $imageResponse = $file->getPreviewHttpResponse($opts); // persists image on disk as a sideeffect
+
+    if ($imageResponse instanceof RedirectResponse) { // type "control" sometimes redirects
+      $this->sendResponse($imageResponse);
+    }
+
+    //discard the $imageResponse and let apache serve it (so all headers are there)
+    $this->redirect('this', array($id, $opts));
   }
 
   public function actionPreviewPage($id)

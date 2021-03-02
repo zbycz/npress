@@ -7,9 +7,14 @@
  * @package    nPress
  */
 
+namespace FrontModule;
+
+use Nette\Application\UI\Form;
+use Nette\Security\AuthenticationException;
+
 /** Login presenter
  */
-class Front_LoginPresenter extends Front_BasePresenter
+class LoginPresenter extends BasePresenter
 {
   public function actionDefault()
   {
@@ -20,7 +25,7 @@ class Front_LoginPresenter extends Front_BasePresenter
 
   public function createComponentLoginForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form
       ->addText('username', 'Uživatelské jméno:')
       ->addRule(Form::FILLED, 'Vyplňte prosím uživatelské jméno.');
@@ -33,7 +38,7 @@ class Front_LoginPresenter extends Front_BasePresenter
 
     return $form;
   }
-  public function loginFormSubmitted(AppForm $form)
+  public function loginFormSubmitted(Form $form)
   {
     try {
       $values = $form->values;
@@ -73,7 +78,7 @@ class Front_LoginPresenter extends Front_BasePresenter
 	public function lostPassFormSubmitted(AppForm $form){
 		$auth = md5(uniqid(rand()));
 		dibi::query('UPDATE [::users] SET auth_lost_pass = %s',$auth,' WHERE email= %s',$form['email']->value);
-		
+
 		//pošleme mail
 		$template = $this->createTemplate();
 		$template->registerFilter(new LatteFilter);
@@ -89,7 +94,7 @@ class Front_LoginPresenter extends Front_BasePresenter
 
 		if(!Environment::isProduction())
 			$mail->setMailer(new MyMailer);
-		
+
     try {
             $mail->send();
     } catch (InvalidStateException $e) {
@@ -99,19 +104,19 @@ class Front_LoginPresenter extends Front_BasePresenter
 		$this->flashMessage('Zkontrolujte prosím svůj email a postupujte dle instrukcí.');
 		$this->redirect('Login:form');
 	}
-	
+
 	// -----------------------------------------   NEW PASS  ---------------------
 	public function actionNewPass($auth){
 		$data = dibi::fetch('SELECT  * FROM [::users] WHERE auth_lost_pass= %s',$auth);
 		if(!$data){
 			$this->flashMessage('Bohužel odkaz pro obnovu hesla je chybný, zkuste ho správně zkopírovat, nebo vygenerujte nový.');
-			$this->redirect('Login:lostPass');		
+			$this->redirect('Login:lostPass');
 		}
-		
+
 		$this->template->data = $data;
 		$this['newPassForm']['auth']->setValue($auth);
 	}
-	
+
 	public function createComponentNewPassForm(){
 		$usersModel = new UsersModel();
 
@@ -130,14 +135,14 @@ class Front_LoginPresenter extends Front_BasePresenter
 		$form->onSubmit[] = callback($this, 'newPassFormSubmitted');
 		return $form;
 	}
-	
+
 	public function newPassFormSubmitted(AppForm $form){
 		$pass = sha1($form['pass']->value);
 		dibi::query('UPDATE [::users] SET pass = %s',$pass,', auth_lost_pass=\'\' WHERE auth_lost_pass= %s',$form['auth']->value);
-		
+
 		$this->flashMessage('Nové heslo bylo nastaveno, můžete se přihlásit.');
 		$this->redirect('Login:form');
-		
+
 	}
 
 */

@@ -1,4 +1,10 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Application\UI\Presenter;
+use Nette\InvalidStateException;
+
 /**
  * nPress - opensource cms
  *
@@ -71,7 +77,7 @@ class MetaControl extends Control
   //metaAdd
   protected function createComponentMetaAddForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax');
 
     $form->addText('key', 'klíč')->getControlPrototype()->style = 'width:90px';
@@ -81,7 +87,7 @@ class MetaControl extends Control
 
     return $form;
   }
-  public function metaAddFormSubmitted(AppForm $form)
+  public function metaAddFormSubmitted(Form $form)
   {
     $this->page->addMeta($form->values['key'], $form->values['value']);
 

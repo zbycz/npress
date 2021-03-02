@@ -1,4 +1,9 @@
 <?php
+
+use Nette\Environment;
+use Nette\Object;
+use Nette\Utils\Finder;
+
 /**
  * nPress - opensource cms
  *
@@ -257,7 +262,16 @@ class FilesModel extends Object
       'suffix' => isset($pathinfo['extension'])
         ? strtolower($pathinfo['extension'])
         : '',
-      'ord' => $ord
+      'ord' => $ord,
+      'filesize' => 0,
+      'description' => '',
+      'keywords' => '',
+      'info' => '',
+      'dimensions' => 0,
+      'timestamp' => 0,
+      'origpath' => 0,
+      'deleted' => 0,
+      'gallerynum' => 0
     ));
 
     //instance of File (or the specific file type)

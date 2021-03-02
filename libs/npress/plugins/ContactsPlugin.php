@@ -1,4 +1,8 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+
 /**
  * nPress - opensource cms
  *
@@ -65,7 +69,7 @@ class ContactsPlugin extends Control
 
   protected function createComponentForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->addHidden('id');
     $form
       ->addText('jmeno', 'Jméno:')
@@ -84,7 +88,7 @@ class ContactsPlugin extends Control
     return $form;
   }
 
-  public function editFormSubmitted(AppForm $form)
+  public function editFormSubmitted(Form $form)
   {
     if (!$form['jmeno']->value and $form['id']->value) {
       dibi::query('DELETE FROM lide WHERE id = %i', $form['id']->value);

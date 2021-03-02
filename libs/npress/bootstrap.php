@@ -7,6 +7,10 @@
  * @package    nPress
  */
 
+use Nette\Application\Routers\Route;
+use Nette\Application\Routers\RouteList;
+use Nette\Config\Configurator;
+
 // Fix the document root on virtual hosts (BUG in Apache)
 if (isset($_SERVER['SCRIPT_FILENAME'], $_SERVER['SCRIPT_NAME'])) {
   $pos = strpos($_SERVER['SCRIPT_FILENAME'], $_SERVER['SCRIPT_NAME']);
@@ -22,7 +26,7 @@ $_SERVER['SCRIPT_NAME'] = preg_replace(
 );
 
 // Load Nette Framework
-require LIBS_DIR . '/nette/loader.php';
+require LIBS_DIR . '/nette/nette.min.php';
 $pkg = json_decode(file_get_contents("./package.json"));
 define("NPRESS", $pkg->version);
 

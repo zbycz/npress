@@ -7,9 +7,14 @@
  * @package    nPress
  */
 
+namespace AdminModule;
+
+use Nette\Application\UI\Form;
+use RedirectModel;
+
 /** Redirect presenter
  */
-class Admin_RedirectPresenter extends Admin_BasePresenter
+class RedirectPresenter extends BasePresenter
 {
   public function startup()
   {
@@ -47,7 +52,7 @@ class Admin_RedirectPresenter extends Admin_BasePresenter
 
   public function createComponentRedirectEditForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax');
 
     $form->addHidden('id');
@@ -59,7 +64,7 @@ class Admin_RedirectPresenter extends Admin_BasePresenter
     return $form;
   }
 
-  public function redirectEditFormSubmitted(AppForm $form)
+  public function redirectEditFormSubmitted(Form $form)
   {
     $values = $form->values;
     RedirectModel::replace($values);

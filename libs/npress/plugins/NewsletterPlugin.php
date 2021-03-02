@@ -1,4 +1,9 @@
 <?php
+
+use Nette\Application\UI\Form;
+use Nette\Environment;
+use Nette\InvalidStateException;
+
 /**
  * nPress - opensource cms
  *
@@ -7,7 +12,7 @@
  * @package    nPress
  */
 
-class NewsletterPlugin extends AppForm
+class NewsletterPlugin extends Form
 {
   static $events = array();
 

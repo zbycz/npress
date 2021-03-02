@@ -7,6 +7,14 @@
  * @package    nPress
  */
 
+use Nette\Application\Responses\FileResponse;
+use Nette\Application\Responses\RedirectResponse;
+use Nette\Environment;
+use Nette\Http\Response;
+use Nette\Image;
+use Nette\InvalidStateException;
+use Nette\Utils\Html;
+
 /** Files active-record object, see derived classes
  */
 class File
@@ -472,7 +480,7 @@ class ImageFile extends File
     if (strpos($zoom, "control") !== false) {
       return new RedirectResponse(
         $this->previewLink($ctrlzoom),
-        HttpResponse::S301_MOVED_PERMANENTLY
+        Response::S301_MOVED_PERMANENTLY
       );
     }
 

@@ -1,4 +1,12 @@
 <?php
+
+use Nette\Application\IRouter;
+use Nette\Application\Request;
+use Nette\Environment;
+use Nette\Http\IRequest;
+use Nette\Http\Url;
+use Nette\Utils\Strings;
+
 /**
  * nPress - opensource cms
  *
@@ -27,7 +35,7 @@ class PagesRouter implements IRouter
     return 'cs'; //TODO get from config (also in CommonBasePresenter)
   }
 
-  function match(IHttpRequest $httpRequest)
+  function match(IRequest $httpRequest)
   {
     $url = $httpRequest->getUrl();
 
@@ -87,18 +95,18 @@ class PagesRouter implements IRouter
     $params['id_page'] = $page['id_page'];
     $params['lang'] = $lang;
 
-    return new PresenterRequest(
+    return new Request(
       self::PRESENTER,
       $httpRequest->getMethod(),
       $params,
       $httpRequest->getPost(),
       $httpRequest->getFiles(),
-      array(PresenterRequest::SECURED => $httpRequest->isSecured())
+      array(Request::SECURED => $httpRequest->isSecured())
     );
   }
 
   //must return absolute url
-  function constructUrl(PresenterRequest $appRequest, Url $ref)
+  function constructUrl(Request $appRequest, Url $ref)
   {
     if ($appRequest->getPresenterName() !== self::PRESENTER) {
       return null;

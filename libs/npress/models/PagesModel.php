@@ -1,4 +1,10 @@
 <?php
+
+use Nette\ArrayList;
+use Nette\Environment;
+use Nette\Object;
+use Nette\Utils\Json;
+
 /**
  * nPress - opensource cms
  *
@@ -791,7 +797,10 @@ class PagesModelNode extends Object implements
       'id_page' => $this->id,
       'lang' => $lang,
       'id_parent' => $id_parent,
-      'text' => ''
+      'text' => '',
+      'ord' => 0,
+      'published' => 0,
+      'deleted' => 0,
     );
     dibi::query('INSERT INTO pages', $data);
 

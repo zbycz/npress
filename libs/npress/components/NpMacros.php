@@ -7,6 +7,14 @@
  * @package    nPress
  */
 
+use Nette\Application\IRouter;
+use Nette\Application\Request;
+use Nette\Diagnostics\Debugger;
+use Nette\Environment;
+use Nette\Http\Request as HttpRequest;
+use Nette\Object;
+use Nette\Templating\FileTemplate;
+
 /** Service for processing np-macros (#-xxx-#)
  */
 class NpMacros extends Object
@@ -85,7 +93,7 @@ class NpMacros extends Object
       );
 
       return $this->router->constructUrl(
-        new PresenterRequest('Front:Pages', 'GET', $params),
+        new Nette\Application\Request('Front:Pages', 'GET', $params),
         $this->url
       );
     }
@@ -93,7 +101,7 @@ class NpMacros extends Object
     //f12  -> file download link
     if (preg_match('~^#-f([0-9]+)-#$~', $macro, $m)) {
       return $this->router->constructUrl(
-        new PresenterRequest('Front:Files', 'GET', array(
+        new Request('Front:Files', 'GET', array(
           'id' => $m[1],
           'action' => 'default'
         )),
@@ -109,7 +117,7 @@ class NpMacros extends Object
   {
     $template = new FileTemplate($file);
     $template->registerFilter(Environment::getNette()->createLatte());
-    $template->registerHelperLoader('TemplateHelpers::loader');
+    $template->registerHelperLoader('Nette\\Templating\\Helpers::loader');
     $template->setCacheStorage(
       Environment::getContext()->nette->templateCacheStorage
     );

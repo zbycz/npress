@@ -7,7 +7,11 @@
  * @package    nPress
  */
 
-class Admin_AdminPresenter extends Admin_BasePresenter
+namespace AdminModule;
+
+use PagesModel;
+
+class AdminPresenter extends BasePresenter
 {
   public function actionPagesort()
   {

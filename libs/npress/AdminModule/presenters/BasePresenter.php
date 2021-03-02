@@ -7,7 +7,14 @@
  * @package    nPress
  */
 
-abstract class Admin_BasePresenter extends CommonBasePresenter
+namespace AdminModule;
+
+use ExpandableTreeView;
+use Nette\Application\ForbiddenRequestException;
+use Nette\Application\Responses\JsonResponse;
+use PagesModel;
+
+abstract class BasePresenter extends \CommonBasePresenter
 {
   public function startup()
   {

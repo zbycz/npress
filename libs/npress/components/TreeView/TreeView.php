@@ -1,4 +1,8 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\MemberAccessException;
+
 /**
  * TreeView Control
  *

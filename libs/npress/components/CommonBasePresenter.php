@@ -7,6 +7,8 @@
  * @package    nPress
  */
 
+use Nette\Application\UI\Presenter;
+
 /** Base presenter for both Admin and Front module
  *
  * @author     Pavel Zbytovský (pavel@zby.cz)
@@ -92,10 +94,10 @@ abstract class CommonBasePresenter extends Presenter
   //Allow to use helpers as a latte macros
   public function templatePrepareFilters($template)
   {
-    $template->registerFilter($e = new /*Nette\Latte\Engine*/ LatteFilter());
-    $s = new /*Nette\Latte\Macros\*/ MacroSet($e->compiler);
+    $template->registerFilter($e = new Nette\Latte\Engine());
+    $s = new Nette\Latte\Macros\MacroSet($e->compiler);
     $s->addMacro('helper', 'ob_start()', function ($n) {
-      $w = new /*\Nette\Latte\*/ PhpWriter($n->tokenizer, $n->args);
+      $w = new \Nette\Latte\PhpWriter($n->tokenizer, $n->args);
       return $w->write('echo %modify(ob_get_clean())');
     });
   }

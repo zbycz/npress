@@ -7,9 +7,18 @@
  * @package    nPress
  */
 
+namespace AdminModule;
+
+use FilesModel;
+use MetaControl;
+use Nette\Application\UI\Form;
+use NpFilesControl;
+use PagesModel;
+use PagesRouter;
+
 /** Pages admin presenter
  */
-class Admin_PagesPresenter extends Admin_BasePresenter
+class PagesPresenter extends BasePresenter
 {
   public $page;
 
@@ -63,7 +72,10 @@ class Admin_PagesPresenter extends Admin_BasePresenter
     $newid = PagesModel::addPage(array(
       'id_parent' => $id_parent,
       'lang' => $this->lang,
-      'text' => ''
+      'text' => '',
+      'ord' => 0,
+      'published' => 0,
+      'deleted' => 0,
     ));
     $this->redirect('edit#newpage', $newid);
   }
@@ -119,7 +131,7 @@ class Admin_PagesPresenter extends Admin_BasePresenter
   //page-edit form
   public function createComponentPageEditForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax');
 
     $form->addHidden("id_page");
@@ -143,7 +155,7 @@ class Admin_PagesPresenter extends Admin_BasePresenter
 
     return $form;
   }
-  public function pageEditFormSubmitted(AppForm $form)
+  public function pageEditFormSubmitted(Form $form)
   {
     if (!$this->editAllowed()) {
       return;

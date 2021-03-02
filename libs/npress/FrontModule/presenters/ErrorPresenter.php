@@ -7,9 +7,14 @@
  * @package    nPress
  */
 
+namespace FrontModule;
+
+use Nette\Application\BadRequestException;
+use Nette\Diagnostics\Debugger;
+
 /** Error presenter.
  */
-class Front_ErrorPresenter extends Front_BasePresenter
+class ErrorPresenter extends BasePresenter
 {
   /**
    * @param  Exception

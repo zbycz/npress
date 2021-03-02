@@ -7,9 +7,13 @@
  * @package    nPress
  */
 
+namespace FrontModule;
+
+use Nette\Application\BadRequestException;
+
 /** Pages display presenter
  */
-class Front_PagesPresenter extends Front_BasePresenter
+class PagesPresenter extends BasePresenter
 {
   /** @var PagesModelNode
    */
@@ -17,7 +21,7 @@ class Front_PagesPresenter extends Front_BasePresenter
 
   public function actionDefault($id_page)
   {
-    $this->page = PagesModel::getPageById($id_page);
+    $this->page = \PagesModel::getPageById($id_page);
     if ($this->page === false) {
       throw new BadRequestException(
         "Stránka nenalezena. (id=$id_page lang=$this->lang)"

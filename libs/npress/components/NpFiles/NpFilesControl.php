@@ -7,6 +7,12 @@
  * @package    nPress
  */
 
+use Nette\Application\Responses\TextResponse;
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Diagnostics\Debugger;
+use Nette\Http\Request;
+
 /** Pages admin presenter
  */
 class NpFilesControl extends Control
@@ -14,7 +20,7 @@ class NpFilesControl extends Control
   public $page;
   private $httpRequest;
 
-  public function __construct(HttpRequest $httpRequest, $page)
+  public function __construct(Request $httpRequest, $page)
   {
     $this->httpRequest = $httpRequest;
     $this->page = $page;
@@ -40,7 +46,7 @@ class NpFilesControl extends Control
   //upload form
   public function createComponentUploadForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->addHidden("id_page");
     $form->addUpload("file", "soubor");
     $form->addSubmit("submit1", "Nahrát");
@@ -48,7 +54,7 @@ class NpFilesControl extends Control
     return $form;
   }
 
-  public function uploadFormSubmitted(AppForm $form)
+  public function uploadFormSubmitted(Form $form)
   {
     if (!$this->presenter->editAllowed()) {
       return;
@@ -113,7 +119,7 @@ class NpFilesControl extends Control
 
   public function createComponentEditFileForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax'); //todo:zlobí
     $form->addHidden("id");
     $form->addSelect(
@@ -137,7 +143,7 @@ class NpFilesControl extends Control
     return $form;
   }
 
-  public function editFileFormSubmitted(AppForm $form)
+  public function editFileFormSubmitted(Form $form)
   {
     if (!$this->presenter->editAllowed()) {
       return;
@@ -165,7 +171,7 @@ class NpFilesControl extends Control
   //preview Upload form
   public function createComponentPreviewUploadForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax_upload');
     $form->addHidden("id");
     $form->addUpload("file", "soubor");
@@ -174,7 +180,7 @@ class NpFilesControl extends Control
     return $form;
   }
 
-  public function previewUploadFormSubmitted(AppForm $form)
+  public function previewUploadFormSubmitted(Form $form)
   {
     if (!$this->presenter->editAllowed()) {
       return;

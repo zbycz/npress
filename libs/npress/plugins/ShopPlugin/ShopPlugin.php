@@ -1,4 +1,10 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Application\UI\Presenter;
+use Nette\InvalidStateException;
+
 /**
  * nPress - opensource cms
  *
@@ -46,7 +52,7 @@ class ShopPlugin extends Control
     $this->template->setTranslator(new TranslationsModel($presenter->lang));
   }
 
-  function filterPageEditForm_create(AppForm $form)
+  function filterPageEditForm_create(Form $form)
   {
     if ($this->page->getParent()->getMeta('.category') == 'shop') {
       $form->addSelect(
@@ -60,7 +66,7 @@ class ShopPlugin extends Control
     return $form;
   }
 
-  function filterPageEditForm_defaults(AppForm $form)
+  function filterPageEditForm_defaults(Form $form)
   {
     if ($this->page->getParent()->getMeta('.category') == 'shop') {
       $form['price']->setValue($this->page->getMeta('price'));
@@ -70,7 +76,7 @@ class ShopPlugin extends Control
     return $form;
   }
 
-  function filterPageEditForm_render(AppForm $_form)
+  function filterPageEditForm_render(Form $_form)
   {
     if ($this->page->getParent()->getMeta('.category') == 'shop') { ?>
 				<div class="control-group">

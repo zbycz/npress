@@ -7,6 +7,10 @@
  * @package    nPress
  */
 
+use Nette\Application\IRouter;
+use Nette\Http\Request;
+use Nette\Object;
+
 /** Service for processing np-macros (#-xxx-#)
  */
 class LinkHelper extends Object
@@ -15,7 +19,7 @@ class LinkHelper extends Object
   private $request;
   private $i18n;
 
-  function __construct(IRouter $router, HttpRequest $request, I18n $i18n)
+  function __construct(IRouter $router, Request $request, I18n $i18n)
   {
     $this->router = $router;
     $this->request = $request;
@@ -37,7 +41,7 @@ class LinkHelper extends Object
 
     $pagesRouter = new PagesRouter(); //$this->router; then 'Front:Pages'
     $url = $pagesRouter->constructUrl(
-      new PresenterRequest('Pages', 'GET', $params),
+      new Nette\Application\Request('Pages', 'GET', $params),
       $this->request->url
     );
     return $url;

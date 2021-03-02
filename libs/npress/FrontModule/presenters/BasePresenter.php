@@ -7,9 +7,12 @@
  * @package    nPress
  */
 
+namespace FrontModule;
+
+
 /** Base class for front presnters
  */
-abstract class Front_BasePresenter extends CommonBasePresenter
+abstract class BasePresenter extends \CommonBasePresenter
 {
   public function startup()
   {

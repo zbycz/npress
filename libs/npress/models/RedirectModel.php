@@ -1,4 +1,12 @@
 <?php
+
+use Nette\Application\IRouter;
+use Nette\Application\Request;
+use Nette\Environment;
+use Nette\Http\IRequest;
+use Nette\Http\Url;
+use Nette\Object;
+
 /**
  * nPress - opensource cms
  *
@@ -62,7 +70,7 @@ class RedirectModel extends Object
 
 class RedirectRouter implements IRouter
 {
-  function match(IHttpRequest $httpRequest)
+  function match(IRequest $httpRequest)
   {
     $path = $httpRequest->getUrl()->getPath();
 
@@ -92,7 +100,7 @@ class RedirectRouter implements IRouter
     return null;
   }
 
-  function constructUrl(PresenterRequest $appRequest, Url $ref)
+  function constructUrl(Request $appRequest, Url $ref)
   {
     return null;
   }

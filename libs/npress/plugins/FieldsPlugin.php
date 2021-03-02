@@ -1,4 +1,11 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Application\UI\Presenter;
+use Nette\InvalidStateException;
+use Nette\Utils\Neon;
+
 /**
  * nPress - opensource cms
  *
@@ -30,7 +37,7 @@ class FieldsPlugin extends Control
   protected function attached($presenter)
   {
     parent::attached($presenter);
-    if (!($presenter instanceof /*Nette\Application\UI\*/ Presenter)) {
+    if (!($presenter instanceof Presenter)) {
       return;
     }
 
@@ -77,7 +84,7 @@ class FieldsPlugin extends Control
     }
   }
 
-  function filterPageEditForm_create(AppForm $form)
+  function filterPageEditForm_create(Form $form)
   {
     foreach ($this->fields as $k => $v) {
       $label = is_array($v) && isset($v['label']) ? $v['label'] : $k;
@@ -94,7 +101,7 @@ class FieldsPlugin extends Control
     return $form;
   }
 
-  function filterPageEditForm_defaults(AppForm $form)
+  function filterPageEditForm_defaults(Form $form)
   {
     foreach ($this->fields as $k => $v) {
       $form["fields_$k"]->setValue($this->page->getMeta($k));
@@ -103,7 +110,7 @@ class FieldsPlugin extends Control
     return $form;
   }
 
-  function filterPageEditForm_render(AppForm $_form)
+  function filterPageEditForm_render(Form $_form)
   {
     echo $this->error;
     foreach ($this->fields as $k => $v) { ?>

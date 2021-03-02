@@ -52,7 +52,7 @@
 		{label heading "class"=>"control-label" /}
 		<div class="controls">{input heading class=>xxl}
 	</div></div>
-	
+
 	<div class="control-group">
 		{label name "class"=>"control-label" /}
 		<div class="controls"><input n:input="name">
@@ -100,7 +100,7 @@
 			 {input text rows=>10,style=>"width:100%;height:300px"}
 	{/if}
 	</div>
-	
+
 
 	<div class="form-actions">
 		{input submit1 class=>"btn btn-primary btn-large", title=>"Ctrl + s"}
@@ -114,7 +114,7 @@
 
 
 {if $page->getMeta('.category') == 'yes'}
-<h2 id="toc-subpages">výpis článků: <a n:href='add $page->id' class='small btn btn-info'>+ přidat</a></h2>
+<h2 id="toc-subpages">výpis článků: <a n:href='add $page->id' class='btn btn-info'>+ přidat</a></h2>
 <ul id="js-subpageslist" data-sortlink='{link subpagessort!}'>
 {foreach $page->getChildNodes() as $r}
 	<li id='pageid-{$r->id}'>{if !$r[published]}<img src="{$basePath}/static/images/iconEyeNo.png">{/if}
@@ -130,7 +130,7 @@
 <h2 id='toc-files'>přílohy:</h2>
 {control npFilesControl}
 
-			
+
 
 {control metaControl}
 

@@ -1,4 +1,9 @@
 <?php
+
+use Nette\Application\UI\Control;
+use Nette\Application\UI\Form;
+use Nette\Mail\Message;
+
 /**
  * nPress - opensource cms
  *
@@ -25,7 +30,7 @@ class ContactFormPlugin extends Control
 
   public function createComponentContactForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->addText("name", "Jméno");
     $form
       ->addText("email", "E-mail")
@@ -41,11 +46,11 @@ class ContactFormPlugin extends Control
     return $form;
   }
 
-  public function contactFormSubmitted(AppForm $form)
+  public function contactFormSubmitted(Form $form)
   {
     //posíláme
-    $mail = new Mail();
-    $mail->setEncoding(Mail::ENCODING_QUOTED_PRINTABLE);
+    $mail = new Message();
+    $mail->setEncoding(Message::ENCODING_QUOTED_PRINTABLE);
     $mail->setFrom($form['email']->value, $form['name']->value);
     $mail->addTo($this->parent->page->getMeta('ContactFormPlugin'));
     $mail->setSubject(

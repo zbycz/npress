@@ -7,9 +7,14 @@
  * @package    nPress
  */
 
+namespace AdminModule;
+
+use Nette\Application\UI\Form;
+use TranslationsModel;
+
 /** Translations presenter
  */
-class Admin_TranslationsPresenter extends Admin_BasePresenter
+class TranslationsPresenter extends BasePresenter
 {
   public function startup()
   {
@@ -50,7 +55,7 @@ class Admin_TranslationsPresenter extends Admin_BasePresenter
 
   public function createComponentTranslationsAddForm()
   {
-    $form = new AppForm();
+    $form = new Form();
     $form->getElementPrototype()->class('ajax');
 
     $form->addHidden('id');
