@@ -63,7 +63,8 @@ class FilesPresenter extends BasePresenter
 
     $imageResponse = $file->getPreviewHttpResponse($opts); // persists image on disk as a sideeffect
 
-    if ($imageResponse instanceof RedirectResponse) { // type "control" sometimes redirects
+    if ($imageResponse instanceof RedirectResponse) {
+      // type "control" sometimes redirects
       $this->sendResponse($imageResponse);
     }
 

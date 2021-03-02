@@ -75,7 +75,7 @@ class PagesPresenter extends BasePresenter
       'text' => '',
       'ord' => 0,
       'published' => 0,
-      'deleted' => 0,
+      'deleted' => 0
     ));
     $this->redirect('edit#newpage', $newid);
   }

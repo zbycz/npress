@@ -800,7 +800,7 @@ class PagesModelNode extends Object implements
       'text' => '',
       'ord' => 0,
       'published' => 0,
-      'deleted' => 0,
+      'deleted' => 0
     );
     dibi::query('INSERT INTO pages', $data);
 

@@ -9,7 +9,6 @@
 
 namespace FrontModule;
 
-
 /** Base class for front presnters
  */
 abstract class BasePresenter extends \CommonBasePresenter
