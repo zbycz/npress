@@ -268,7 +268,7 @@ class FilesModel extends Object
       'keywords' => '',
       'info' => '',
       'dimensions' => 0,
-      'timestamp' => 0,
+      'timestamp%SQL' => 'NOW()',
       'origpath' => 0,
       'deleted' => 0,
       'gallerynum' => 0
