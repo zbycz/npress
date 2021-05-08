@@ -7,26 +7,26 @@
 
 common:
 	parameters:
-	
+
 		# Language settings
 		defaultLang: cs  # TODO also hardcoded in code (https://github.com/nette/nette/pull/445)
 		langs!:
 			cs: Česky
 			en: English
-		
+
 		# Language specific prefixes/domains
 		# If differ only in suffix - the more specific goes first
 		langDomains!:
 
-		
+
 		# list or hash of Plugin classes
 		plugins:
 
-	
-		npress:											
+
+		npress:
 			webTitle: My new nPress website
 			adminPassword: secret-goes-here
-			analytics:      # google analytics tracking number (like UA-123-1) 
+			analytics:      # google analytics tracking number (like UA-123-1)
 			clicky:
 			preferCdnJquery: false
 			wysiwyg:
@@ -52,11 +52,11 @@ production < common:
 			database: npress
 			username: production-user
 			password: production-password
-	
+
 		npress:
 			preferCdnJquery: true
-		
-		
+
+
 
 development < common:
 console < common:
