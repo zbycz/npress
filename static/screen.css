@@ -215,3 +215,42 @@ a:small:hover {
 .modal-backdrop {
   top: 40px;
 }
+
+.history_link {
+  float: right;
+  margin-right: 149px;
+  margin-top: 10px;
+}
+ul .list {
+  margin-bottom: 3px;
+}
+.revertVersion {
+  color: white;
+  background: orange;
+  border: 1px solid orange;
+  border-radius: 6px;
+  padding: 1px 17px;
+  margin-left: 13px;
+}
+.revertVersion a {
+  color: white;
+}
+.history_text {
+  margin-top: 14px;
+  margin-left: 9px;
+}
+.history_container {
+  margin: 17px 0;
+  border-top: 1px solid lightgray;
+}
+.fa-undo-alt
+{
+  margin-right: 5px;
+}
+.back{
+  margin-top: 20px;
+  margin-left: -12px;
+}
+#ml-2{
+  margin-left: 10px;
+}

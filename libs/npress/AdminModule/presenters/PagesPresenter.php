@@ -155,6 +155,7 @@ class PagesPresenter extends BasePresenter
 
     return $form;
   }
+
   public function pageEditFormSubmitted(Form $form)
   {
     if (!$this->editAllowed()) {
@@ -198,6 +199,14 @@ class PagesPresenter extends BasePresenter
     $this->invalidateControl('editform_seoname');
 
     //save values
+    PagesModel::addVersion(
+      $values['id_page'],
+      $this->lang,
+      $values['name'],
+      $values['seoname'],
+      $values['heading'],
+      $values['text']
+    );
     unset($values['id_page']);
     $this->page->save($values);
     $this->flashMessage('Obsah stránky uložen (' . date('y-m-d H:i:s') . ')');
@@ -206,6 +215,7 @@ class PagesPresenter extends BasePresenter
       $this->redirect('this');
     }
   }
+
   public function npMacroControlOptions($macro)
   {
     //TODO combine with Front_BasePresenter (extract to class NpMacros)
@@ -240,6 +250,59 @@ class PagesPresenter extends BasePresenter
       $this->redirect("this");
     }
   }
+
+  public function actionHistory($id_page)
+  {
+    $this->page = PagesModel::getPageById($id_page);
+    if (!$this->page) {
+      return $this->displayMissingPage($id_page, $this->lang);
+    }
+
+    $this->template->page = $this->page;
+    $this->template->pagesHistory = PagesModel::getAllVersions();
+  }
+
+  public function handleRevertVersionUndo($id_page)
+  {
+    if (!$this->editAllowed()) {
+      return;
+    }
+
+    PagesModel::deleteLastVersion($id_page); // this version was just created in revertVersion!
+
+    $lastVersion = PagesModel::getLastVersion($id_page);
+    $this->page->save(array(
+      "name" => $lastVersion->name,
+      "seoname" => $lastVersion->seoname,
+      "heading" => $lastVersion->heading,
+      "text" => $lastVersion->text,
+    ));
+
+    $this->flashMessage('Návrat na předchozí verzi byl zrušen', 'danger');
+    $this->redirect('edit', $id_page);
+  }
+
+  public function handleRevertVersion($id_version)
+  {
+    if (!$this->editAllowed()) {
+      return;
+    }
+
+    $version = PagesModel::getVersionData($id_version);
+    $this->page->save(array(
+      "name" => $version->name,
+      "seoname" => $version->seoname,
+      "heading" => $version->heading,
+      "text" => $version->text,
+    ));
+    PagesModel::addVersion($version->id_page, $version->lang, $version->name, $version->seoname, $version->heading, $version->text);
+
+    $undolink = $this->link('revertVersionUndo!', $version->id_page);
+    $flashMessage = $this->flashMessage('Obsah stranky z ' . $version->updated_at . ' ', 'danger');
+    $flashMessage->undolink = $undolink;
+    $this->redirect('edit', $this->page->id);
+  }
+
 
   //subpageslist - sorting
   public function handleSubpagessort()

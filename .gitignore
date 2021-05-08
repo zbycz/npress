@@ -1,8 +1,10 @@
 /libs/Nette/lockfile
 /nbproject
 /.idea
-/app/service/twitter/cache/ 
+/app/service/twitter/cache/
 /data/config.local.neon
 node_modules
 /static/adminer.php
 yarn.lock
+/vendor
+package-lock.json

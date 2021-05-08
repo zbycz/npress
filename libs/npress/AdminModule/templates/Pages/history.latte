@@ -1,0 +1,26 @@
+
+{block content}
+
+<h2>Historie stránky: {$page->name}</h2>
+<div class="history_container">
+  <p class="history_text">Zde můžete provést návrat k libovolné verzi této stránky.</p>
+  {if !count($pagesHistory) }
+    <p>Žádné záznamy o historii této stránky. Jakmile jí uložíte, bude zde vidět.</p>
+
+  {else}
+    <ul>
+    {foreach $pagesHistory as $r}
+      <li class="list">
+        verze {$r->updated_at}
+        {if $iterations == 0}
+          - toto je aktuální verze
+        {else}
+          <a class="btn btn-mini btn-warning" href="{link revertVersion! $r->id_version}">Návrat k této verzi  </a>
+        {/if}
+      </li>
+    {/foreach}
+    </ul>
+  {/if}
+
+  <div class="back"><i class="fas fa-arrow-left"></i> <a href="{link edit $page->id}" class="likeh3" id="ml-2">Vrátit se zpět k editaci</a></div>
+</div>

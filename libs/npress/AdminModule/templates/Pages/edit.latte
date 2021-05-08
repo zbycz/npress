@@ -105,7 +105,8 @@
 	<div class="form-actions">
 		{input submit1 class=>"btn btn-primary btn-large", title=>"Ctrl + s"}
 		<a n:href="deletePage!" class='ajax del' title="vyhodí do koše i všechny podstránky">smazat</a>
-	</div>
+    <span class="history_link"><i class="fa fa-history" aria-hidden="true" style="color: black;"></i> <a href="{link Pages:history $page->id}">Historie úprav</a></span>
+  </div>
 {/form}
 
 

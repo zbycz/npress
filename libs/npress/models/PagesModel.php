@@ -235,6 +235,57 @@ class PagesModel extends Object
     }
   }
 
+  public static function addVersion(
+    $id_page,
+    $lang,
+    $name,
+    $seoname,
+    $heading,
+    $text
+  ) {
+    dibi::query('INSERT INTO pages_history', array(
+      'id_page' => $id_page,
+      'lang' => $lang,
+      'id_parent' => 0,
+      'name' => $name,
+      'seoname' => $seoname,
+      'heading' => $heading,
+      'text' => $text,
+      'updated_at%SQL' => 'NOW()'
+    ));
+  }
+
+  public static function getAllVersions()
+  {
+    $history = dibi::fetchAll("SELECT * FROM pages_history ORDER BY updated_at DESC");
+    return $history;
+  }
+
+  public static function getVersionData($id_version)
+  {
+    $version = dibi::fetch(
+      "SELECT * FROM pages_history WHERE id_version = %i",
+      $id_version
+    );
+    return $version;
+  }
+
+  public static function getLastVersion($id_page){
+    $prevVer = dibi::fetch("SELECT * FROM `pages_history` WHERE id_page=%i",
+        $id_page,
+        " AND lang=%s",
+        self::$lang,"
+        ORDER BY id_version DESC
+        LIMIT 1
+        ");
+    return $prevVer;
+  }
+
+  public static function deleteLastVersion($id_page){
+    $deleteLastVersion = dibi::query("DELETE FROM `pages_history` WHERE id_page = $id_page ORDER BY id_version DESC LIMIT 1");
+    return $deleteLastVersion;
+  }
+
   //creates&cache new pagesModelNode or returns cached
   public static function pagesModelNode($data, $meta = null)
   {
