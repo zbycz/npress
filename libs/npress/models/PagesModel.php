@@ -270,6 +270,15 @@ class PagesModel extends Object
     return $version;
   }
 
+  public static function getThisVersion($id_page,$id_version){
+    $thisVersion = dibi::fetch(
+      "SELECT * FROM pages_history WHERE %and",[
+      'id_page' => $id_page,
+      'id_version'=> $id_version,
+    ]);
+    return $thisVersion;
+  }
+
   public static function getLastVersion($id_page){
     $prevVer = dibi::fetch("SELECT * FROM `pages_history` WHERE id_page=%i",
         $id_page,
@@ -519,6 +528,7 @@ class PagesModelNode extends Object implements
   {
     return $this->data['lang'];
   }
+
   public function getContent()
   {
     return Environment::getNpMacros()->process($this->data['text'], $this);
@@ -684,7 +694,7 @@ class PagesModelNode extends Object implements
     return $pagelink;
   }
 
-  public function link($absolute = false)
+  public function link($id_version,$absolute = false )
   {
     $redirect = $this->getRedirectLink();
     if ($redirect) {
@@ -693,7 +703,7 @@ class PagesModelNode extends Object implements
 
     $presenter = Environment::getApplication()->getPresenter();
     $target = ($absolute ? '//' : '') . ':Front:Pages:';
-    return $presenter->link($target, array($this->id, 'lang' => $this->lang));
+    return $presenter->link($target, array($this->id,'id_version' => $id_version ,'lang' => $this->lang));
   }
 
   //active record
