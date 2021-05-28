@@ -270,7 +270,7 @@ class PagesModel extends Object
     return $version;
   }
 
-  public static function getThisVersion($id_page,$id_version){
+  public static function getVersion($id_page,$id_version){
     $thisVersion = dibi::fetch(
       "SELECT * FROM pages_history WHERE %and",[
       'id_page' => $id_page,
@@ -694,7 +694,7 @@ class PagesModelNode extends Object implements
     return $pagelink;
   }
 
-  public function link($id_version,$absolute = false )
+  public function link($absolute = false,$id_version = false )
   {
     $redirect = $this->getRedirectLink();
     if ($redirect) {

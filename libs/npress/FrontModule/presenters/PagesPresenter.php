@@ -34,8 +34,8 @@ class PagesPresenter extends BasePresenter
       );
     }
 
-    $history = \PagesModel::getThisVersion($id_page,$id_version);
-    $this->template->history = $history;
+    $historyVersion = \PagesModel::getVersion($id_page,$id_version);
+    $this->template->historyVersion = $historyVersion;
 
     //page should display different URL?
     $this->doPageRedirects();
@@ -45,8 +45,8 @@ class PagesPresenter extends BasePresenter
     $this->template->crumbs = $this->page->getParents();
     $this->template->page = $this->page;
 
-    if ($history) {
-     $this->template->page = new \PagesModelNode($history, $this->page->meta) ;
+    if ($historyVersion) {
+     $this->template->page = new \PagesModelNode($historyVersion, $this->page->meta) ;
    }
 
   }
