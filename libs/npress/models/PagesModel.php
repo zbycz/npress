@@ -257,7 +257,9 @@ class PagesModel extends Object
 
   public static function getAllVersions()
   {
-    $history = dibi::fetchAll("SELECT * FROM pages_history ORDER BY updated_at DESC");
+    $history = dibi::fetchAll(
+      "SELECT * FROM pages_history ORDER BY updated_at DESC"
+    );
     return $history;
   }
 
@@ -270,28 +272,35 @@ class PagesModel extends Object
     return $version;
   }
 
-  public static function getVersion($id_page,$id_version){
-    $thisVersion = dibi::fetch(
-      "SELECT * FROM pages_history WHERE %and",[
+  public static function getVersion($id_page, $id_version)
+  {
+    $thisVersion = dibi::fetch("SELECT * FROM pages_history WHERE %and", [
       'id_page' => $id_page,
-      'id_version'=> $id_version,
+      'id_version' => $id_version
     ]);
     return $thisVersion;
   }
 
-  public static function getLastVersion($id_page){
-    $prevVer = dibi::fetch("SELECT * FROM `pages_history` WHERE id_page=%i",
-        $id_page,
-        " AND lang=%s",
-        self::$lang,"
+  public static function getLastVersion($id_page)
+  {
+    $prevVer = dibi::fetch(
+      "SELECT * FROM `pages_history` WHERE id_page=%i",
+      $id_page,
+      " AND lang=%s",
+      self::$lang,
+      "
         ORDER BY id_version DESC
         LIMIT 1
-        ");
+        "
+    );
     return $prevVer;
   }
 
-  public static function deleteLastVersion($id_page){
-    $deleteLastVersion = dibi::query("DELETE FROM `pages_history` WHERE id_page = $id_page ORDER BY id_version DESC LIMIT 1");
+  public static function deleteLastVersion($id_page)
+  {
+    $deleteLastVersion = dibi::query(
+      "DELETE FROM `pages_history` WHERE id_page = $id_page ORDER BY id_version DESC LIMIT 1"
+    );
     return $deleteLastVersion;
   }
 
@@ -694,7 +703,7 @@ class PagesModelNode extends Object implements
     return $pagelink;
   }
 
-  public function link($absolute = false,$id_version = false )
+  public function link($absolute = false, $id_version = false)
   {
     $redirect = $this->getRedirectLink();
     if ($redirect) {
@@ -703,7 +712,11 @@ class PagesModelNode extends Object implements
 
     $presenter = Environment::getApplication()->getPresenter();
     $target = ($absolute ? '//' : '') . ':Front:Pages:';
-    return $presenter->link($target, array($this->id,'id_version' => $id_version ,'lang' => $this->lang));
+    return $presenter->link($target, array(
+      $this->id,
+      'id_version' => $id_version,
+      'lang' => $this->lang
+    ));
   }
 
   //active record

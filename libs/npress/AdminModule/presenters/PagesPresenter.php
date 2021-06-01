@@ -275,7 +275,7 @@ class PagesPresenter extends BasePresenter
       "name" => $lastVersion->name,
       "seoname" => $lastVersion->seoname,
       "heading" => $lastVersion->heading,
-      "text" => $lastVersion->text,
+      "text" => $lastVersion->text
     ));
 
     $this->flashMessage('Návrat na předchozí verzi byl zrušen', 'danger');
@@ -293,16 +293,25 @@ class PagesPresenter extends BasePresenter
       "name" => $version->name,
       "seoname" => $version->seoname,
       "heading" => $version->heading,
-      "text" => $version->text,
+      "text" => $version->text
     ));
-    PagesModel::addVersion($version->id_page, $version->lang, $version->name, $version->seoname, $version->heading, $version->text);
+    PagesModel::addVersion(
+      $version->id_page,
+      $version->lang,
+      $version->name,
+      $version->seoname,
+      $version->heading,
+      $version->text
+    );
 
     $undolink = $this->link('revertVersionUndo!', $version->id_page);
-    $flashMessage = $this->flashMessage('Obsah stranky z ' . $version->updated_at . ' ', 'danger');
+    $flashMessage = $this->flashMessage(
+      'Obsah stranky z ' . $version->updated_at . ' ',
+      'danger'
+    );
     $flashMessage->undolink = $undolink;
     $this->redirect('edit', $this->page->id);
   }
-
 
   //subpageslist - sorting
   public function handleSubpagessort()
