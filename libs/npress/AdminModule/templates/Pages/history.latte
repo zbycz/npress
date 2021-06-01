@@ -15,13 +15,16 @@
         {if $iterations == 0}
           - toto je aktuální verze
         {else}
-           <a href="{$page->link(false,$r->id_version)}" rel="tooltip" title="{$page->link(true)}" class="">Nahled</a>  <a class="btn btn-mini btn-warning" href="{link revertVersion! $r->id_version}">Návrat k této verzi  </a>
+           <a href="{$page->link(false,$r->id_version)}" rel="tooltip" title="{$page->link(true)}">Náhled</a>
+           <a class="btn btn-mini btn-warning" href="{link revertVersion! $r->id_version}">Návrat k této verzi</a>
         {/if}
       </li>
     {/foreach}
     </ul>
   {/if}
 
-  <div class="back"><i class="fas fa-arrow-left"></i> <a href="{link edit $page->id}" class="likeh3" id="ml-2">Vrátit se zpět k editaci</a>
+  <div class="back">
+    <i class="fas fa-arrow-left"></i>
+    <a href="{link edit $page->id}" class="likeh3" id="ml-2">Vrátit se zpět k editaci</a>
   </div>
 </div>
