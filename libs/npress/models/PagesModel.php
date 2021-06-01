@@ -255,10 +255,15 @@ class PagesModel extends Object
     ));
   }
 
-  public static function getAllVersions()
+  public static function getAllVersions($id_page)
   {
     $history = dibi::fetchAll(
-      "SELECT * FROM pages_history ORDER BY updated_at DESC"
+      "SELECT * FROM pages_history WHERE %and",
+      array(
+        'id_page' => $id_page,
+        'lang' => self::$lang
+      ),
+      "ORDER BY updated_at DESC"
     );
     return $history;
   }

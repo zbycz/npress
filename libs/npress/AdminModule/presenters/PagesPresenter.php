@@ -47,10 +47,12 @@ class PagesPresenter extends BasePresenter
   {
     $this->redirect("Admin:");
   }
+
   public function actionTrash()
   {
     $this->template->deletedPages = PagesModel::getDeletedPages();
   }
+
   public function actionAdd($id_parent, $sibling = false)
   {
     if ($id_parent) {
@@ -117,7 +119,7 @@ class PagesPresenter extends BasePresenter
       $this->template->page = $this->page;
     }
 
-    // bread crumbs
+    // bread crumbs - it opens right folder in the left menu
     $this->template->crumbs = $this->page->getParents();
 
     //default values for editform
@@ -258,8 +260,9 @@ class PagesPresenter extends BasePresenter
       return $this->displayMissingPage($id_page, $this->lang);
     }
 
+    $this->template->crumbs = $this->page->getParents(); // bread crumbs - it opens right folder in the left menu
     $this->template->page = $this->page;
-    $this->template->pagesHistory = PagesModel::getAllVersions();
+    $this->template->pagesHistory = PagesModel::getAllVersions($id_page);
   }
 
   public function handleRevertVersionUndo($id_page)
