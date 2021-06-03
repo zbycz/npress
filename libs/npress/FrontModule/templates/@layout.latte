@@ -7,7 +7,7 @@
 	<meta name="robots" content="{$robots}" n:ifset="$robots">
 	<meta name="generator" content="nPress {!NPRESS|striptags}">
 	<link rel="shortcut icon" href="{$basePath}/favicon.ico" type="image/x-icon">
-	
+
 	{* css stylesheet *}
 	{block layout_stylesheet}
 		<link rel="stylesheet" media="screen,projection,tv" href="{$basePath}/static/screen.css">
@@ -26,7 +26,7 @@
 		<link rel="alternate" href="{$presenter->langSwitch($l)}" hrefLang="{$l}">
 	{/foreach}
 
-	
+
 	<!-- npress frontend javascripts -->
 	{include $frontjslatte}
 	{block layout_js}{/block}
@@ -76,13 +76,13 @@
 
 
 {block editlink}
-<a n:if="isset($presenter->page) && $presenter->user->isLoggedIn()"
-	 n:href=":Admin:Pages:edit $presenter->page->id, lang=>$presenter->page->lang"
-	 style="position:fixed;left:0;bottom:0;padding:1em;background:#000;color:#685DE7;opacity:0.5;z-index:1000">
-	edit</a>
+  <span n:if="isset($presenter->page) && $presenter->user->isLoggedIn()" style="position:fixed;left:0;bottom:0;padding:1em;background:#000;color:#685DE7;opacity:0.5;z-index:1000">
+    <a n:href=":Admin:Pages:edit $presenter->page->id, lang=>$presenter->page->lang">edit</a>
+    <b n:if="$historyVersion" style="color:#fff;padding-left: 1.5em;">Zobrazen náhled verze z {$historyVersion->updated_at}</b>
+  </span>
 {/block}
 
-	
+
 
 {* analytics tracking code *}
 {if $config[clicky]}

@@ -47,10 +47,12 @@ class PagesPresenter extends BasePresenter
   {
     $this->redirect("Admin:");
   }
+
   public function actionTrash()
   {
     $this->template->deletedPages = PagesModel::getDeletedPages();
   }
+
   public function actionAdd($id_parent, $sibling = false)
   {
     if ($id_parent) {
@@ -117,7 +119,7 @@ class PagesPresenter extends BasePresenter
       $this->template->page = $this->page;
     }
 
-    // bread crumbs
+    // bread crumbs - it opens right folder in the left menu
     $this->template->crumbs = $this->page->getParents();
 
     //default values for editform
@@ -258,8 +260,9 @@ class PagesPresenter extends BasePresenter
       return $this->displayMissingPage($id_page, $this->lang);
     }
 
+    $this->template->crumbs = $this->page->getParents(); // bread crumbs - it opens right folder in the left menu
     $this->template->page = $this->page;
-    $this->template->pagesHistory = PagesModel::getAllVersions();
+    $this->template->pagesHistory = PagesModel::getAllVersions($id_page);
   }
 
   public function handleRevertVersionUndo($id_page)
@@ -275,7 +278,7 @@ class PagesPresenter extends BasePresenter
       "name" => $lastVersion->name,
       "seoname" => $lastVersion->seoname,
       "heading" => $lastVersion->heading,
-      "text" => $lastVersion->text,
+      "text" => $lastVersion->text
     ));
 
     $this->flashMessage('Návrat na předchozí verzi byl zrušen', 'danger');
@@ -293,16 +296,25 @@ class PagesPresenter extends BasePresenter
       "name" => $version->name,
       "seoname" => $version->seoname,
       "heading" => $version->heading,
-      "text" => $version->text,
+      "text" => $version->text
     ));
-    PagesModel::addVersion($version->id_page, $version->lang, $version->name, $version->seoname, $version->heading, $version->text);
+    PagesModel::addVersion(
+      $version->id_page,
+      $version->lang,
+      $version->name,
+      $version->seoname,
+      $version->heading,
+      $version->text
+    );
 
     $undolink = $this->link('revertVersionUndo!', $version->id_page);
-    $flashMessage = $this->flashMessage('Obsah stranky z ' . $version->updated_at . ' ', 'danger');
+    $flashMessage = $this->flashMessage(
+      'Obsah stranky z ' . $version->updated_at . ' ',
+      'danger'
+    );
     $flashMessage->undolink = $undolink;
     $this->redirect('edit', $this->page->id);
   }
-
 
   //subpageslist - sorting
   public function handleSubpagessort()

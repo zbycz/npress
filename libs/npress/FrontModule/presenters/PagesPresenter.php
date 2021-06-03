@@ -19,7 +19,7 @@ class PagesPresenter extends BasePresenter
    */
   public $page = false;
 
-  public function actionDefault($id_page)
+  public function actionDefault($id_page, $id_version)
   {
     $this->page = \PagesModel::getPageById($id_page);
     if ($this->page === false) {
@@ -34,14 +34,23 @@ class PagesPresenter extends BasePresenter
       );
     }
 
+    $historyVersion = \PagesModel::getVersion($id_page, $id_version);
+    $this->template->historyVersion = $historyVersion;
+
     //page should display different URL?
     $this->doPageRedirects();
-
     $this->invalidateControl('content');
 
     // bread crumbs
     $this->template->crumbs = $this->page->getParents();
     $this->template->page = $this->page;
+
+    if ($historyVersion) {
+      $this->template->page = new \PagesModelNode(
+        $historyVersion,
+        $this->page->meta
+      );
+    }
   }
 
   public function doPageRedirects()

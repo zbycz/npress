@@ -221,8 +221,8 @@ a:small:hover {
   margin-right: 149px;
   margin-top: 10px;
 }
-ul .list {
-  margin-bottom: 3px;
+.history_container li {
+  line-height: 1.8;
 }
 .revertVersion {
   color: white;
@@ -235,22 +235,12 @@ ul .list {
 .revertVersion a {
   color: white;
 }
-.history_text {
-  margin-top: 14px;
-  margin-left: 9px;
-}
 .history_container {
   margin: 17px 0;
-  border-top: 1px solid lightgray;
 }
-.fa-undo-alt
-{
+.fa-undo-alt {
   margin-right: 5px;
 }
-.back{
-  margin-top: 20px;
-  margin-left: -12px;
-}
-#ml-2{
+#ml-2 {
   margin-left: 10px;
 }
