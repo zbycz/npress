@@ -4,16 +4,24 @@ nPress je systém pro správu obsahu postavený na Nette Frameworku z roku 2012.
 
 **Proč používat:**
 
-- úprava strukturu ve více jazycích
+- úprava strukturu ve více jazycích, s historií revizí
 - dobrá práce s přílohami
 - rozšiření pomocí Nette Latte šablon (složka theme a meta `.template`, `.sectionTemplate`)
-- běží 2010-2016 cca na 10 webech k plné spokojenosti majitelů (z nekomerečních třeba [openstreetmap.cz](http://openstreetmap.cz), [blanik.info](http://blanik.info) či [smetanovokvarteto.cz](http://smetanovokvarteto.cz))
+- běží 2010-2022 cca na 10 webech k plné spokojenosti majitelů (z nekomerečních třeba [openstreetmap.cz](http://openstreetmap.cz), [blanik.info](http://blanik.info) či [smetanovokvarteto.cz](http://smetanovokvarteto.cz))
 
 **Proč nepoužívat:**
 
 - staré nette
 - kdo neumí Latte šablony, moc to nerozšíří
 - vývoj nepokračuje
+
+
+### Migrace 1.0 ➡️ 2.0
+```
+INSERT INTO  `pages_history` (`id_page`, `lang`, `id_parent`, `name`, `seoname`, `heading`, `text`, `updated_at`)
+SELECT `id_page`, `lang`, `id_parent`, `name`, `seoname`, `heading`, `text`, NOW()
+FROM `pages`
+```
 
 # Instalace
 

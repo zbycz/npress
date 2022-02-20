@@ -9,3 +9,11 @@ yarn.lock
 /vendor
 package-lock.json
 adminer.php
+
+/app/temp/cache/*
+/app/log/*
+/data/files/*
+/data/thums/*
+
+!*/.gitignored
+
