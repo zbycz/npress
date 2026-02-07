@@ -5,7 +5,7 @@ use Nette\Application\Request;
 use Nette\Environment;
 use Nette\Http\IRequest;
 use Nette\Http\Url;
-use Nette\Object;
+use Nette\LegacyObject;
 
 /**
  * nPress - opensource cms
@@ -15,7 +15,7 @@ use Nette\Object;
  * @package    nPress
  */
 
-class RedirectModel extends Object
+class RedirectModel extends LegacyObject
 {
   public static function getAll()
   {

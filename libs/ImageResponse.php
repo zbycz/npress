@@ -1,10 +1,6 @@
 <?php
 
-use Nette\Application\IResponse;
-use Nette\Http\IRequest;
-use Nette\Object;
-
-class ImageResponse extends Object implements IResponse
+class ImageResponse extends Object implements IPresenterResponse
 {
   private $source;
   private $mime;
@@ -25,7 +21,7 @@ class ImageResponse extends Object implements IResponse
     return $this->mime;
   }
 
-  function send(IRequest $httpRequest, Nette\Http\IResponse $httpResponse)
+  function send(IHttpRequest $httpRequest, IHttpResponse $httpResponse)
   {
     if ($this->mime) {
       $httpResponse->setContentType($this->mime);
@@ -33,3 +29,4 @@ class ImageResponse extends Object implements IResponse
     echo $this->source;
   }
 }
+?>

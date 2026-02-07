@@ -67,7 +67,7 @@ a.small {
   font-size: 80%;
   color: #777 !important;
 }
-a.small:hover {
+a:small:hover {
   color: #777 !important;
 }
 
@@ -214,33 +214,4 @@ a.small:hover {
 
 .modal-backdrop {
   top: 40px;
-}
-
-.history_link {
-  float: right;
-  margin-right: 149px;
-  margin-top: 10px;
-}
-.history_container li {
-  line-height: 1.8;
-}
-.revertVersion {
-  color: white;
-  background: orange;
-  border: 1px solid orange;
-  border-radius: 6px;
-  padding: 1px 17px;
-  margin-left: 13px;
-}
-.revertVersion a {
-  color: white;
-}
-.history_container {
-  margin: 17px 0;
-}
-.fa-undo-alt {
-  margin-right: 5px;
-}
-#ml-2 {
-  margin-left: 10px;
 }

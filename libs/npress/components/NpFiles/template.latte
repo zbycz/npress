@@ -54,7 +54,7 @@
 		{continueIf $presenter->isAjax() AND $filelistMaxNum !=-1 AND $filelistMaxNum!=$num}
 		<div class="list" n:snippet="editform_filelist-$num" data-num="{$num}" data-afterUpdate="filelist">
 			{foreach $files as $f}
-				<div class="item" id='fileid-{$f->id}' n:class="$f->getType(), 'ext-'.$f->suffix">
+				<div id='fileid-{$f->id}' n:class="item, $f->getType(), 'ext-'.$f->suffix">
 					<a n:href="deleteFile! $f->id" class='del ajax' title='smazat'>×</a>
 					<div><a n:href="editFile!#toc-files $f->id" class='ajax' title='upravit'><img src='{$f->previewLink('120x120')}'></a></div>
 					<span>

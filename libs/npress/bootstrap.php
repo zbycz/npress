@@ -63,7 +63,7 @@ if (file_exists(WWW_DIR . '/data/config.local.neon')) {
 $container = $configurator->createContainer();
 
 // Connect to the database
-dibi::connect($container->params['database']);
+dibi::connect($container->parameters['database']);
 
 // Setup router
 $flag = isset($_SERVER['HTTPS']) ? Route::SECURED : false;

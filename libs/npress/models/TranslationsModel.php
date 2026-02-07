@@ -2,7 +2,7 @@
 
 use Nette\Environment;
 use Nette\Localization\ITranslator;
-use Nette\Object;
+use Nette\LegacyObject;
 
 /**
  * nPress - opensource cms
@@ -12,7 +12,7 @@ use Nette\Object;
  * @package    nPress
  */
 
-class TranslationsModel extends Object implements ITranslator
+class TranslationsModel extends LegacyObject implements ITranslator
 {
   public static function getAll()
   {

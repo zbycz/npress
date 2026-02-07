@@ -823,7 +823,7 @@ class VideoFile extends File
 
     // custom templating
     $template =
-      Environment::getContext()->params["themeDir"] . '/control-video.latte';
+      Environment::getContext()->parameters["themeDir"] . '/control-video.latte';
     if (file_exists($template)) {
       $tpl = Environment::getApplication()->presenter->createTemplate();
       $tpl->setFile($template);

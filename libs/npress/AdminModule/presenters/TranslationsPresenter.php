@@ -61,7 +61,7 @@ class TranslationsPresenter extends BasePresenter
     $form->addHidden('id');
     $form->addText('key', 'Klíč');
 
-    foreach ($this->context->params["langs"] as $l => $txt) {
+    foreach ($this->context->parameters["langs"] as $l => $txt) {
       $form->addText($l, $txt);
     }
     $form->addSubmit('submit1', 'OK');

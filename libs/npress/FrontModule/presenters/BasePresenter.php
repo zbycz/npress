@@ -27,9 +27,9 @@ abstract class BasePresenter extends \CommonBasePresenter
     $list = parent::formatLayoutTemplateFiles();
     array_unshift(
       $list,
-      $this->context->params["npDir"] . "/FrontModule/templates/@layout.latte"
+      $this->context->parameters["npDir"] . "/FrontModule/templates/@layout.latte"
     );
-    array_unshift($list, $this->context->params["themeDir"] . "/@layout.latte");
+    array_unshift($list, $this->context->parameters["themeDir"] . "/@layout.latte");
     return $list;
   }
 }

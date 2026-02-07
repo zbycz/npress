@@ -42,7 +42,7 @@ class NewsletterPlugin extends Form
     $email = $this['email']->value;
 
     file_put_contents(
-      $presenter->context->params['dataDir'] . "/newsletter_0a5cf.txt",
+      $presenter->context->parameters['dataDir'] . "/newsletter_0a5cf.txt",
       "$this->lang, $email,\n",
       FILE_APPEND
     );

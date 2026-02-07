@@ -7,11 +7,11 @@
  * @package    nPress
  */
 
-use Nette\Object;
+use Nette\LegacyObject;
 
 /** Service for triggering events and Plugins management
  */
-class Plugins extends Object
+class Plugins extends LegacyObject
 {
   private $plugins = array();
 

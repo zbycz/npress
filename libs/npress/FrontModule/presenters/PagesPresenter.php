@@ -19,7 +19,7 @@ class PagesPresenter extends BasePresenter
    */
   public $page = false;
 
-  public function actionDefault($id_page, $id_version)
+  public function actionDefault($id_page)
   {
     $this->page = \PagesModel::getPageById($id_page);
     if ($this->page === false) {
@@ -75,15 +75,15 @@ class PagesPresenter extends BasePresenter
 
     array_unshift(
       $list,
-      $this->context->params["themeDir"] . "/defaultPage.latte"
+      $this->context->parameters["themeDir"] . "/defaultPage.latte"
     );
 
     if ($tpl = $this->page->getInheritedMeta(".sectionTemplate")) {
-      array_unshift($list, $this->context->params["themeDir"] . "/$tpl.latte");
+      array_unshift($list, $this->context->parameters["themeDir"] . "/$tpl.latte");
     }
 
     if ($tpl = $this->page->getMeta(".template")) {
-      array_unshift($list, $this->context->params["themeDir"] . "/$tpl.latte");
+      array_unshift($list, $this->context->parameters["themeDir"] . "/$tpl.latte");
     }
 
     return $list;

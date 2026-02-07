@@ -35,7 +35,7 @@ abstract class CommonBasePresenter extends Presenter
 
     //lang settings
     $template->lang = $this->lang;
-    $template->langs = $this->context->params["langs"];
+    $template->langs = $this->context->parameters["langs"];
     $template->setTranslator(new TranslationsModel($this->lang));
 
     //pages tree
@@ -43,13 +43,60 @@ abstract class CommonBasePresenter extends Presenter
     $template->crumbs = array();
 
     //configuration
-    $template->config = $this->context->params['npress'];
+    $template->config = $this->context->parameters['npress'];
     $template->frontjslatte =
-      $this->context->params['npDir'] . '/FrontModule/templates/frontjs.latte';
+      $this->context->parameters['npDir'] . '/FrontModule/templates/frontjs.latte';
     $template->npLayoutFile =
-      $this->context->params['npDir'] . '/FrontModule/templates/@layout.latte';
+      $this->context->parameters['npDir'] . '/FrontModule/templates/@layout.latte';
 
     //bardump(array($this->formatLayoutTemplateFiles(), $this->formatTemplateFiles()));
+    
+    $template->getLatte()->addFilter('timeago', function (
+      $s,
+      $format = false,
+      $formatAfterDays = 15
+    ) {
+      return Helpers::timeAgoInWords($s, $format, $formatAfterDays);
+    });
+
+    $template->getLatte()->addFilter('modified', function ($s) {
+      return $s . "?" . dechex(filemtime(WWW_DIR . $s));
+    });
+
+    $template->getLatte()->addFilter('talkstub', function ($mail) {
+      return strstr($mail, '@', true) . "-" . substr(md5($mail), -5);
+    });
+
+    $template->getLatte()->addFilter('gravatar', function ($mail) {
+      return "https://www.gravatar.com/avatar/" . md5(strtolower($mail)) . "?s=32&d=mm";
+    });
+
+    $template->getLatte()->addFilter('excerpt', function ($text, $query) {
+      return Helpers::excerpt($text, $query);
+    });
+
+    $template->getLatte()->addFilter('talkMailBody', function ($s) {
+      return Helpers::talkMailBody($s);
+    });
+
+    $template->getLatte()->addFilter('czechMonth', function ($num) {
+      $mesicetxt = array(
+        1 => "Leden",
+        "Únor",
+        "Březen",
+        "Duben",
+        "Květen",
+        "Červen",
+        "Červenec",
+        "Srpen",
+        "Září",
+        "Říjen",
+        "Listopad",
+        "Prosinec"
+      );
+      return $mesicetxt[$num];
+    });
+    
     return $template;
   }
 
@@ -91,16 +138,20 @@ abstract class CommonBasePresenter extends Presenter
     return parent::createComponent($name);
   }
 
+/*
   //Allow to use helpers as a latte macros
   public function templatePrepareFilters($template)
   {
-    $template->registerFilter($e = new Nette\Latte\Engine());
-    $s = new Nette\Latte\Macros\MacroSet($e->compiler);
+    $e = $template->getEngine();
+    $s = new Nette\Latte\Macros\MacroSet($e->getCompiler());
     $s->addMacro('helper', 'ob_start()', function ($n) {
       $w = new \Nette\Latte\PhpWriter($n->tokenizer, $n->args);
       return $w->write('echo %modify(ob_get_clean())');
     });
+    //$template->registerFilter($e);
+    //
   }
+ */
 
   /** Trigger plugin event as filter supplied value
    * @param $eventname
@@ -166,7 +217,7 @@ abstract class CommonBasePresenter extends Presenter
     $list = parent::formatTemplateFiles();
     array_unshift(
       $list,
-      $this->context->params["appDir"] . "/templates/$name.$this->view.latte"
+      $this->context->parameters["appDir"] . "/templates/$name.$this->view.latte"
     );
     return $list;
   }
@@ -180,9 +231,9 @@ abstract class CommonBasePresenter extends Presenter
     $arr = array();
     do {
       $arr[] =
-        $this->context->params["appDir"] . "/templates/$name.@layout.latte";
+        $this->context->parameters["appDir"] . "/templates/$name.@layout.latte";
     } while ($name = substr($name, 0, strrpos($name, '.')));
-    $arr[] = $this->context->params["appDir"] . "/templates/@layout.latte";
+    $arr[] = $this->context->parameters["appDir"] . "/templates/@layout.latte";
 
     return array_merge($arr, parent::formatLayoutTemplateFiles());
   }

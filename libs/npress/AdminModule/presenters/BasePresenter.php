@@ -20,7 +20,7 @@ abstract class BasePresenter extends \CommonBasePresenter
   {
     //check permission
     if (!$this->user->isLoggedIn()) {
-      $backlink = $this->application->storeRequest();
+      $backlink = $this->storeRequest();
       $this->redirect(':Front:Login:', array('backlink' => $backlink));
     }
 
@@ -47,7 +47,7 @@ abstract class BasePresenter extends \CommonBasePresenter
     //admin things
     PagesModel::$showUnpublished = true;
     $this->template->wysiwygConfig =
-      $this->context->params['npress']['wysiwyg'];
+      $this->context->parameters['npress']['wysiwyg'];
 
     //adminMenu
     $classes = $this->context->plugins->getEventTriggers('adminMenu');
@@ -90,7 +90,7 @@ abstract class BasePresenter extends \CommonBasePresenter
     $list = parent::formatLayoutTemplateFiles();
     array_unshift(
       $list,
-      $this->context->params["npDir"] . "/AdminModule/templates/@layout.latte"
+      $this->context->parameters["npDir"] . "/AdminModule/templates/@layout.latte"
     );
     return $list;
   }

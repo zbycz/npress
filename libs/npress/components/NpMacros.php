@@ -12,12 +12,12 @@ use Nette\Application\Request;
 use Nette\Diagnostics\Debugger;
 use Nette\Environment;
 use Nette\Http\Request as HttpRequest;
-use Nette\Object;
+use Nette\LegacyObject;
 use Nette\Templating\FileTemplate;
 
 /** Service for processing np-macros (#-xxx-#)
  */
-class NpMacros extends Object
+class NpMacros extends LegacyObject
 {
   private $macros = array(
     'file' => 'NpMacros::fileMacro'
@@ -116,12 +116,14 @@ class NpMacros extends Object
   function processTemplateMacro($macro, $file, $optstr)
   {
     $template = new FileTemplate($file);
-    $template->registerFilter(Environment::getNette()->createLatte());
+    $template->registerFilter(new Latte\Engine);
+    //$template->registerFilter(Environment::getNette()->createLatte());
     $template->registerHelperLoader('Nette\\Templating\\Helpers::loader');
+/*
     $template->setCacheStorage(
       Environment::getContext()->nette->templateCacheStorage
     );
-
+ */
     $template->page = $this->pageContext; //TODO disable macros in getContent()
     $template->opts = $opts = self::parseOptions($optstr);
 

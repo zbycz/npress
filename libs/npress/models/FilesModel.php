@@ -1,7 +1,7 @@
 <?php
 
 use Nette\Environment;
-use Nette\Object;
+use Nette\LegacyObject;
 use Nette\Utils\Finder;
 
 /**
@@ -12,7 +12,7 @@ use Nette\Utils\Finder;
  * @package    nPress
  */
 
-class FilesModel extends Object
+class FilesModel extends LegacyObject
 {
   public static $cache = array();
   public static $cacheByPage = array();
@@ -268,7 +268,7 @@ class FilesModel extends Object
       'keywords' => '',
       'info' => '',
       'dimensions' => 0,
-      'timestamp%SQL' => 'NOW()',
+      'timestamp' => 0,
       'origpath' => 0,
       'deleted' => 0,
       'gallerynum' => 0
@@ -308,7 +308,7 @@ class FilesModel extends Object
         $new = true;
         $f = self::createNew($id_page, $origpath, 'end');
         $f->origpath = str_replace('\\', '/', $origpath);
-        // $f->visible = 1;
+        $f->visible = 1;
       }
 
       if ($new or $f->fileMetricsChanged()) {

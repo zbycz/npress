@@ -9,11 +9,11 @@
 
 use Nette\Application\IRouter;
 use Nette\Http\Request;
-use Nette\Object;
+use Nette\LegacyObject;
 
 /** Service for processing np-macros (#-xxx-#)
  */
-class LinkHelper extends Object
+class LinkHelper extends LegacyObject
 {
   private $router;
   private $request;

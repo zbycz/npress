@@ -7,13 +7,13 @@
  * @package    nPress
  */
 
-use Nette\Object;
+use Nette\LegacyObject;
 
 /** Service maintaining all language specific features
  *
  * @TODO currently not in use
  */
-class I18n extends Object
+class I18n extends LegacyObject
 {
   private $opts;
   private $currentLang;

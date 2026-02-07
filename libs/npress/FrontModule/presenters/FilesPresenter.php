@@ -11,8 +11,6 @@ namespace FrontModule;
 
 use FilesModel;
 use Nette\Application\BadRequestException;
-use Nette\Application\Responses\TextResponse;
-use Nette\Application\Responses\RedirectResponse;
 
 /** Files presenter
  *
@@ -61,15 +59,8 @@ class FilesPresenter extends BasePresenter
       throw new BadRequestException("File not found", 404);
     }
 
-    $imageResponse = $file->getPreviewHttpResponse($opts); // persists image on disk as a sideeffect
-
-    if ($imageResponse instanceof RedirectResponse) {
-      // type "control" sometimes redirects
-      $this->sendResponse($imageResponse);
-    }
-
-    //discard the $imageResponse and let apache serve it (so all headers are there)
-    $this->redirect('this', array($id, $opts));
+    $file->getPreviewHttpResponse($opts);
+    $this->redirect('this', array($id, $opts)); // we redirect so all correct apache headers are shown
   }
 
   public function actionPreviewPage($id)

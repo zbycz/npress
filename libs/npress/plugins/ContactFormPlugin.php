@@ -54,7 +54,7 @@ class ContactFormPlugin extends Control
     $mail->setFrom($form['email']->value, $form['name']->value);
     $mail->addTo($this->parent->page->getMeta('ContactFormPlugin'));
     $mail->setSubject(
-      'Zpráva z webu ' . $this->parent->context->params['npress']['webTitle']
+      'Zpráva z webu ' . $this->parent->context->parameters['npress']['webTitle']
     );
     $mail->setHtmlBody($form['text']->value);
     $mail->send();

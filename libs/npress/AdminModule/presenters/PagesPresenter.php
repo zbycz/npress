@@ -74,10 +74,7 @@ class PagesPresenter extends BasePresenter
     $newid = PagesModel::addPage(array(
       'id_parent' => $id_parent,
       'lang' => $this->lang,
-      'text' => '',
-      'ord' => 0,
-      'published' => 0,
-      'deleted' => 0
+      'text' => ''
     ));
     $this->redirect('edit#newpage', $newid);
   }

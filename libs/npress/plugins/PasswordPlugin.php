@@ -16,7 +16,7 @@ class PasswordPlugin extends Control
 
   function getConfig()
   {
-    return $this->parent->context->params['plugins']['PasswordPlugin'] + array(
+    return $this->parent->context->parameters['plugins']['PasswordPlugin'] + array(
       'logoutlink' => true
     ); //default
   }
